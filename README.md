@@ -11,7 +11,7 @@ I hope you can translate it into English Language again if you need it. Result i
 
 # KOREAN
 ## 이게 뭐죠?
-HaxPuck은 AtnNn가 제작한 맵 제작 에디터입니다. 하지만 HaxPuck의 도메인이 닫혔을 때, 더 이상의 맵 제작 활동을 지체할 수 없어서 오프라인으로나마 편하게 작업하고 싶어서 소스 코드 내용을 차곡차곡 수정해 놓았습니다.
+HaxPuck은 AtnNn님이 제작한 맵 제작 에디터입니다. 하지만 HaxPuck의 도메인이 닫혔을 때, 더 이상의 맵 제작 활동을 지체할 수 없어서 오프라인으로나마 편하게 작업하고 싶어서 소스 코드 내용을 차곡차곡 수정해 놓았습니다.
 (AtnNn님 허락 없이 써서 죄송합니다. 그 때는 HaxPuck이 공식 사이트인 줄 알았습니다.)
 
 ## 원본과 뭐가 다른가요?
