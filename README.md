@@ -5,9 +5,9 @@
 HaxPuck is created by AtnNn. Since the domain has expired, I decided to make compatible HTML5 version from his code. (sorry for editing without permission, AtnNn. I didn't know that you are the creator.)
 
 ## WHAT IS NEW?
-Unfortunately, this version is translated and optimized in Korean.
+Unfortunately, this version is translated and optimized in Korean Language..
 Unintentionally, there are a lot of distractions compared to the original.
-I hope you can translate it into English again if you need it. Result in, it cause anyone can create or edit some stadiums easily.
+I hope you can translate it into English Language again if you need it. Result in, it cause anyone can create or edit some stadiums easily.
 
 # KOREAN
 ## 이게 뭐죠?
