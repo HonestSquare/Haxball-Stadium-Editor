@@ -3,6 +3,8 @@
 // Copyright 2011 Etienne Laurin
 // All rights reserved
 
+var test_me;
+
 // TODO:
 // when looking for mirrors, segments aren't found
 // cut/delete in mirror mode: delete enabled mirrors, save enabled directions list in snippet
@@ -51,8 +53,810 @@
 // TODO: tool to swap vertices of a segment
 // TODO: copy properties/paste properties
 
+
+$('.btn-example').click(function(){
+    var $href = $(this).attr('href');
+    layer_popup($href);
+});
+
+function layer_popup(el){
+    var $el = $(el);        //레이어의 id를 $el 변수에 저장
+    var isDim = $el.prev().hasClass('dimBg');   //dimmed 레이어를 감지하기 위한 boolean 변수
+
+    isDim ? $('.dim-layer').fadeIn() : $el.fadeIn();
+
+    var $elWidth = ~~($el.outerWidth()),
+        $elHeight = ~~($el.outerHeight()),
+        docWidth = $(document).width(),
+        docHeight = $(document).height();
+
+    // 화면의 중앙에 레이어를 띄운다.
+    if ($elHeight < docHeight || $elWidth < docWidth) {
+        $el.css({
+            marginTop: -$elHeight /2,
+            marginLeft: -$elWidth/2
+        })
+    } else {
+        $el.css({top: 0, left: 0});
+    }
+
+    switch($el){
+        case 'layer_lang': return openPop_lang($el);
+        case 'layer_exit': return openPop_txtovs($el);
+    }
+}
+
+function openPop_lang(el){
+    el.find('button.button_lang_ko').click(function(){
+        setLanguage("ko");
+        //$('#table').fadeIn();
+        //$('#table').show();
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut();
+        return false;
+    });
+
+    el.find('a.btn-layerClose').click(function(){
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+        return false;
+    });
+
+    $('.layer .dimBg').click(function(){
+        $('.dim-layer').fadeOut();
+        return false;
+    });
+}
+
+function openPop_txtovs(el){
+    el.find('button.button_yes').click(function(){
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 아니오
+        return false;
+    });
+    el.find('button.button_no').click(function(){
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 아니오
+        return false;
+    });
+    el.find('a.btn-layerYes').click(function(){
+        confirm("yes");
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 예
+        return true;
+    });
+    el.find('a.btn-layerNo').click(function(){
+        confirm("no");
+        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 아니오
+        return false;
+    });
+}
+
+function closePop(el){              // 팝업 닫기
+    $(el).fadeOut();
+}
+
+// 언어팩 선언
+var currentLang;
+var newLine = "\n";
+$.lang = {};
+
+//  한국어
+$.lang.ko = {
+    // 공통
+    0: "HaxPuck(오프라인)",
+    1: "v1.19(베타) " + newLine + "2022년 3월 18일 최종 업데이트",
+    2: "언어를 선택하십시오",
+    3: "알림", 4: "주의", 5: "경고",
+    6: "Haxball Stadium Editor를 닫을까요?",
+    7: "파일을 내보내는 도중 오류가 발생하였습니다. 나중에 다시 시도하십시오.",
+    8: "오브젝트의 수가 너무 많아서 저장할 수 없습니다.",
+
+    // 상단 퀵툴
+    10: "게임 업데이트 페이지입니다.",
+    11: "게임에 바로 접속할 수 있습니다. 맵 테스트를 위해 빠른 이동이 가능합니다.",
+    12: "게임 소개 페이지입니다.",
+    13: "전세계에 있는 커뮤니티 목록입니다.",
+    14: "플래시 기반의 구버전으로 접속이 가능합니다. 단 호환성에 문제가 있을 수 있습니다.",
+    15: "봇방을 생성할 수 있습니다. 코드는 기본적으로 제공하지 않으므로 코드 파일이 따로 있어야 합니다.",
+    16: "버그 제보ㆍ문의",
+
+    // 하단 퀵툴
+    17: "실행 취소", 
+    18: "다시 실행", 
+    19: "복사", 
+    20: "붙여넣기", 
+    21: "지우기", 
+    22: "모두 선택", 
+    23: "선택 취소", 
+    24: "선택 영역 반전", 
+    25: "복사하여 붙여넣기", 
+    26: "잘라내기", 
+
+    // 우측 하단부 버튼
+    30: "선택",     31: "회전",     32: "크기 조정",
+    33: "세그먼트", 34: "버텍스",   35: "디스크",
+    36: "골 영역",  37: "플레인",   38: "조인트",
+
+    // 좌측 하단부 버튼
+    40: "속성",         41: "도구",
+    42: "거울 복사",    43: "미리 보기",
+    44: "Find an Object by Index",
+
+    // 경기장 이름
+    50: "새 경기장",
+
+    // 텍스트 모드 내부 버튼
+    110: "텍스트 모드",
+    111: "시각 모드", 112: "저장", 113: "모두 선택", 114: "모두 지우기", 115: "좌표 이동",
+    120: "변경 내용을 저장하지 않고 시각 모드로 돌아가겠습니까?",
+    121: "정말로 모든 내용을 지우겠습니까?",
+    122: "찾아 갈 좌표 위치를 입력하세요.",
+    123: "초과한 오브젝트의 수: ",
+
+    // 도움말 내부 버튼
+    130: "도움말",  131: "버전 정보",
+
+    // 설정
+    140: "설정",
+
+    // 경기장 속성
+    220: "경기장 속성",
+    221: "일반",                    // --------------------------
+    222: "스폰 거리 간격",
+    223: "가로 × 세로",
+    225: "가로 × 세로(카메라)",
+    227: "최대 시야 너비",
+    228: "저장 명령어",
+    229: "카메라 시점",
+    230: "백그라운드",              // --------------------------
+    231: "테마",
+    232: "가로 × 세로",
+    234: "코너 반경", 235: "킥오프 반경",
+    236: "색상",
+    237: "기본", 238: "잔디", 239: "하키", 
+    240: "플레이어 피직스",         // --------------------------
+    241: "중력",
+    242: "반경",
+    243: "바운스",    244: "역질량",    245: "제동",
+    246: "충돌 그룹",
+    247: "가속",
+    250: "플레이어 피직스(킥)",     // --------------------------
+    251: "킥 가속",   252: "킥 제동",   253: "킥 강도",   254: "킥 반동",
+    260: "디스크 피직스",           // --------------------------
+    261: "중력",
+    262: "반경",
+    263: "바운스",    264: "역질량",    265: "제동",
+    266: "색상",
+    267: "충돌 마스크",   268: "충돌 그룹",
+    269: "킥오프 초기화",
+    
+    270: "실험 기능",               // --------------------------
+    271: "사용자 지정 색상",
+    272: "색 미리보기 1", 273: "색 미리보기 2", 274: "색 미리보기 3", 275: "색 미리보기 4", 276: "색 미리보기 5",
+    
+    280: "환경 설정",               // --------------------------
+    281: "언어 변경",
+    282: "오브젝트 진단",
+    283: "Object List",
+
+    // 기타
+    300: "열기", 301: "저장", 302: "닫기", 303: "내보내기",
+    304: "예", 305: "아니오", 306: "취소", 307: "확인",
+    310: "활성화", 311: "비활성화",
+    315: "볼", 316: "플레이어",
+    317: "최소", 318: "최대",
+
+    // 언어
+    400: "영어", 401: "한국어",
+
+    // 속성 객체
+    500: "바운스",
+    501: "중력",
+    502: "속도",
+    503: "충돌 마스크",
+    504: "충돌 그룹",
+    505: "프리셋",
+    506: "x", 
+    507: "y",
+    508: "0번째 버텍스", 
+    509: "1번째 버텍스",
+    510: "곡률",
+    511: "곡률F",
+    512: "충돌 방향",
+    513: "시각화",
+    514: "색상",
+    515: "방향 벡터",
+    516: "거리",
+    517: "반경", 
+    518: "역질량",
+    519: "좌표",
+    520: "0번째 좌표", 
+    521: "1번째 좌표",
+    522: "팀",
+    523: "제동",
+    524: "0번째 디스크",
+    525: "1번째 디스크",
+    526: "길이",
+    527: "강도",
+
+    600: "선택할 대상을 클릭하여 선택하십시오."
+    + newLine + "여러 개를 선택하려면 Shift를 누른 상태에서 클릭하십시오."
+    + newLine + "여러 개를 선택하려면 클릭한 상태에서 드래그하십시오."
+    + newLine + "곡선을 그리려면 세그먼트를 클릭한 상태에서 끌고 가십시오."
+    + newLine + "돌리려면 클릭하고 드래그하여 이동하십시오."
+    + newLine + "이동하려면 세그먼트를 클릭하여 선택한 다음 버텍스를 끌어다 놓으십시오.",
+    610: "회전 중심을 배치하려면 클릭하십시오."
+    + newLine + "대상을 회전하려면 클릭하고 드래그 하십시오.",
+    620: "크기 조정점을 배치하려면 클릭하십시오."
+    + newLine + "크기를 조정하거나 변경하려면 클릭하고 드래그 하십시오."
+    + newLine + "몇몇 오브젝트는 조절이 잘 되지 않습니다."
+    + newLine + "디스크와 곡선 세그먼트는 수직 또는 수평으로 스케일을 조절할 때 타원형 모양으로 두는 게 균형이 맞습니다."
+    + newLine + "Haxball이 타원을 지원하지 않아서 형태를 정확하게 맞춰야 합니다."
+    + newLine + "디스크는 크기 조정했을 때 균형적인 영역을 가집니다."
+    + newLine + "곡선 세그먼트는 첫 번째 점에서 동일한 접선을 유지합니다."
+    + newLine + "세그먼트, 버텍스, 플레인은 완벽하게 조정됩니다.",
+    630: "세그먼트는 두 버텍스를 연결합니다. 장식이나 벽으로 쓸 수 있습니다."
+    + newLine + "세그먼트를 추가하려면 클릭하고 드래그 하십시오."
+    + newLine + "세그먼트를 연결하려면 양끝의 두 버텍스를 클릭하십시오.",
+    640: "버텍스는 특별한 속성을 가질 수 있는 꼭짓점입니다."
+    + newLine + "버텍스를 배치하려면 클릭하십시오.",
+    650: "디스크는 움직일 수있는 공과 플레이어를 제외한 유일한 오브젝트입니다."
+    + newLine + "장식으로 꾸미거나 다른 오브젝트와 충돌시킬 수 있습니다."
+    + newLine + "임의의 크기로 디스크를 생성하려면 클릭하고 드래그 하십시오.."
+    + newLine + "임의의 크기로 디스크를 생성하려면 클릭하고 드래그 하십시오.",
+    660: "골 영역에 디스크가 들어가면 상대팀이 득점을 얻습니다."
+    + newLine + "골 영역을 배치하려면 클릭하고 드래그 하십시오."
+    + newLine + "레드팀은 왼쪽, 블루팀은 오른쪽에 두는 게 일반적입니다."
+    + newLine + "레드팀과 블루팀의 골 영역에 골이 판정되면 각각 블루팀과 레드팀이 득점합니다.",
+    670: "플레인은 길이 제한이 없는 투명한 벽입니다."
+    + newLine + "플레인을 배치하려면 클릭하십시오. 경기장 중앙을 향합니다.",
+    680: "Joints are physical connections between two Discs."
+    + newLine + "joint_content.",
+    681: "반전 복사 기능입니다.",
+    682: "게임 플레이에 보이는 맵의 모습입니다.",
+
+    700: "오브젝트의 튕김 수준입니다.",
+    701: "gravity", 
+    702: "디스크의 초기 속도입니다. 기본값은 (0, 0) 입니다.",
+    703: "대상이 충돌하는 그룹 목록입니다."
+    + newLine + "플레이어, 공은 \"ball, red, blue, wall\"의 마스크를 가지고 있습니다."
+    + newLine + "레드팀 킥오프 중에 모든 플레이어는 \"redKO\"라는 추가적인 충돌 마스크(cMask)를 갖습니다."
+    + newLine + "블루팀 킥오프 중에 모든 플레이어는 \"blueKO\"라는 추가적인 충돌 마스크(cMask)를 갖습니다.",
+    704: "오브젝트가 속한 그룹입니다."
+    + newLine + "ball - the puck"
+    + newLine + "red - 레드팀 플레이어"
+    + newLine + "blue - 블루팀 플레이어"
+    + newLine + "wall - 벽입니다."
+    + newLine + "redKO - 레드팀 킥오프 벽입니다."
+    + newLine + "blueKO - 레드팀 킥오프 벽입니다."
+    + newLine + "all - 특별한 역할은 없는 임의의 속성입니다."
+    + newLine + "c0~c3 - 특별한 역할은 없는 임의의 속성입니다.",
+    705: "오브젝트 공통 속성입니다.", 
+    706: "x축, 가로 위치입니다.",
+    707: "y축, 세로 위치입니다.",
+    708: "Index of a vertex in the stadium vertex list to be used as first point of the segment.", 
+    709: "Index of a vertex in the stadium vertex list to be used as the second point of the segment.", 
+    710: "세그먼트의 곡선 각도입니다. -340~340의 범위에서 수치값을 입력할 수 있습니다.",
+    711: "세그먼트의 곡률을 대체하는 속성입니다. 값이 있으면 기존의 곡률 값은 무시됩니다.",
+    712: "값에 따라 세그먼트가 충돌 처리 방향이나 세그먼트의 두께를 결정합니다.",
+    713: "오브젝트를 보이거나 숨길 수 있습니다.",
+    714: "세그먼트와 디스크의 색상입니다. 16진수 헥스 코드로 값을 줄 수 있습니다.",
+    715: "플레인이 향하는 방향입니다.",
+    716: "맵 중앙을 기준으로 한 거리입니다.",
+    717: "디스크의 반지름입니다.",
+    718: "디스크의 역질량입니다. 값이 0이면 움직이지 않습니다."
+    + newLine + "값을 높일수록 디스크의 무게가 가벼워집니다."
+    + newLine + "값이 0 미만으로 둘 때는 주의가 필요합니다."
+    + newLine + "디스크의 기본값은 0입니다.",
+    719: "디스크의 중심 x, y 좌표입니다.",
+    720: "골대 한 쪽 끝의 좌표입니다.",
+    721: "골대 반대쪽 끝의 좌표입니다.",
+    722: "레드팀, 블루팀. 이렇게 두 팀밖에 없는데 뭘 바라세요?",
+    723: "디스크의 감속률입니다. 1은 감속이 없으며, 기본값은 0.99입니다.",
+    724: "Index of one of the two discs connected by the joint.", 
+    725: "Index of one of the two discs connected by the joint.", 
+    726: "조인트의 길이입니다.",
+    727: "strength makes that the joint acts like a solid or spring.",
+    
+    822: "두 팀이 경기장 중앙에서 얼마나 멀리 떨어져야 할까요?",
+    823: "경기장의 크기입니다.",
+    824: "레드팀 킥오프에 사용하는 스폰 지점 목록입니다.",
+    826: "블루팀 킥오프에 사용하는 스폰 지점 목록입니다.",
+    827: "최대 너비의 정도입니다."
+    + newLine + "플레이시 화면이 최대 시야 너비의 값보다 넓으면, 화면도 거기에 맞게 확대됩니다.",
+    828: "게임 내 명령어 활성화 여부를 설정합니다.",
+    829: "카메라가 향할 시점을 지정합니다.",
+    831: "백그라운드 테마입니다.",
+    832: "백그라운드 크기입니다.",
+    847: "일반적으로 움직일 때의 가속도입니다.",
+    851: "킥 상태에서의 가속입니다.",
+    852: "킥 상태에서의 제동입니다.",
+    853: "킥 상태에서의 강도입니다.",
+    869: "\"최대\" or \"최소\"로 지정할 수 있습니다.",
+
+    // 도움말 세부
+    1000: "소스 코드", 1001: "정보", 1002: "업데이트 내역", 
+    1003: "HaxPuck의 소스 코드는 github에서 사용할 수 있습니다.",
+    1100: "저장",
+    1101: "내보내기 버튼으로 맵을 파일로 저장할 수 있습니다.",
+    1200: "도구",
+    1201: "한 맵에 최대 255개까지의 오브젝트를 둘 수 있습니다." + newLine + "괄호 안은 단축키입니다.",
+    1300: "속성 편집기",
+    1301: "특정 대상을 선택하면 해당 공통 속성이 왼쪽 하단의 속성 탭에 나열됩니다."
+    + newLine + "여기서 하나가 바뀌면 선택된 대상 모두에 적용됩니다."
+    + newLine + "새로 만들어진 오트젝트의 속성은 해당 대상에 적용됩니다.",
+    1400: "속성",
+    1500: "상단 퀵툴",
+    1501: "상단 퀵툴을 통해 맵 테스트를 위해 게임에 바로 접속하거나 버그 제보 및 문의도 할 수 있습니다.",
+    1550: "하단 퀵툴",
+    1551: "하단 퀵툴을 통해 빠른 작업 동작이 가능합니다." + newLine + "괄호 안은 단축키입니다.",
+    1600: "키보드 단축키",
+    1601: "일부 웹 브라우저 플러그인은 단축키와 호환되지 않습니다.",
+    1700: "텍스트 모드",
+    1701: "텍스트 편집기는 어떻게 보면 메모장보다 간단하지만, Haxball Statium Editor만의 특장점을 지니고 있습니다.",
+    1702: "코드는 쉽게 편집할 수 있도록 포맷되어 있습니다."
+    + newLine + "버텍스는 주석으로 번호를 달았습니다."
+    + newLine + "시각 모드에서 선택한 개체는 코드에 표시됩니다."
+    + newLine + "텍스트 모드를 사용하면 시각 모드에서 맵을 바로 미리 볼 수 있습니다."
+    + newLine + "좌표 찾기를 통해 빠르게 코드 위치를 찾을 수 있습니다.",
+    1800: "경기장 속성",
+    1801: "괄호 안은 기본값입니다.",
+    1900: "요구사항",
+    1901: "Haxball Stadium Editor는 구글 크롬과 그 외 비슷한 여타 최신 브라우저도 작동합니다.",
+    1902: "HaxBall은 basro가 개발한 온라인 멀티플레이 게임입니다.",
+
+    // 업데이트 내역
+    // 2011.12.19
+    2070: "Fixed many bugs" + newLine + "Added more information in the help file." + newLine + "Added Automatic Mirror Mode" + newLine + "Switched to HaxPuck.com",
+    // 2011.12.29
+    2080: "New parameters from the official HaxBall update" + newLine + "User accounts" + newLine + "Save button" + newLine + "Download Button" + newLine + "Library" + newLine + "Fixed some bugs",
+    // 2012.02.02
+    2090: "Order keys in text mode",
+    // 2019-08-09 
+    2100: "2019-08-09 업데이트",
+    2101: "haxpuck.com이 만료되었습니다. 계정 및 라이브러리는 더 이상 사용이 불가합니다." + newLine + "기반 버전은 2012-02-02입니다.",
+    2102: "본 업데이트는 여기서 쓸 수 있습니다.",
+    2103: "이 에디터는 AtnNm 원작인 AtnNn's Haxball Stadium Editor에서 2차 수정하였습니다.",
+    // (2019-03-23) v1.04 
+    2111: "상단 바로가기 창이 제거되었습니다. " + newLine + "로그인 및 회원가입이 이제 더 이상 작동되지 않습니다. " + newLine + "테마가 업데이트되었습니다. " + newLine + "Haxball Stadium Editor가 한국어를 지원합니다.",
+    // (2019-03-23) v1.05 
+    2121: "[속성] → [백그라운드] → [색상] 기능이 추가되었습니다. " + newLine + "[텍스트 모드]에서 [시각 모드]로 돌아갈 때 메시지가 추가되었습니다. " + newLine + "[편집] → [사본]의 명칭을 [복사하여 붙여넣기]로 변경되었습니다. " + newLine + "일부 번역이 개선되었습니다. " + newLine + "상단에 haxball UseMap cafe 바로가기 아이콘이 추가되었습니다.",
+    // (2019-03-24) v1.06 
+    2131: "디자인이 개선되었습니다.", 2132: "편집 탭의 위치가 하단으로 조정되었습니다. " + newLine + "속성 탭이 작동되지 않던 문제가 해결되었습니다. " + newLine + "일부 번역이 개선되었습니다.",
+    // (2019-03-30) v1.07 
+    2141: "[속성] > [백그라운드] > [최대 시야 너비] 기능이 추가되었습니다. " + newLine + "[속성] > [백그라운드] > [카메라 시점] 기능이 추가되었습니다. " + newLine + "[속성] > [백그라운드] > [테마]에서 [잔디] 또는 [하키]로 설정했을 때 맵이 공백으로 뜨는 문제가 해결되었습니다. " + newLine + "일부 번역이 개선되었습니다.",
+    // (2019-04-06) v1.08 
+    2151: "상단바를 HaxBall과 유사하게 개편 및 추가되었습니다. " + newLine + "작업대 아이콘이 추가되었습니다. " + newLine + "일부 번역이 개선되었습니다.",
+    // (2019-04-13) v1.09 
+    2161: "[도움말] > [파일 추출하기] 목록이 추가되었습니다. " + newLine + "[도구] > [미리보기]의 팀 색상이 일부 조정되었습니다. " + newLine + "[버그 제보ㆍ문의]의 경로가 이전되었습니다. " + newLine + "[속성]의 작업 목록이 이중으로 나오던 문제가 해결되었습니다.",
+    // (2019-05-04) v1.10 
+    2171: "상단 퀵툴에 [HaxBall 호스트]가 추가되었습니다. " + newLine + "도움말이 갱신되었습니다. " + newLine + "Google Chrome에서 일부 버튼이 잘리는 문제가 해결되었습니다. " + newLine + "일부 번역이 개선되었습니다.",
+    // (2019-05-11) v1.11 
+    2181: "[상단 퀵툴]에 아이콘이 추가되었습니다. " + newLine + "[경기장 속성]에 실험 기능 탭이 추가되었습니다. " + newLine + "[도움말]이 갱신되었습니다. " + newLine + "도움말 UI가 개선되었습니다. " + newLine + "[버그 제보ㆍ문의]의 경로가 이전되었습니다. " + newLine + "일부 번역이 개선되었습니다.", 
+    // (2019-06-06) v1.12 
+    2191: "커서 드래그 색상이 변경되었습니다.",
+    // (2019-07-29) v1.13 
+    2201: "[속성] > [일반]에서 [카메로 세로], [카메라 가로], [maxViewWidth], [저장 명령어]가 추가되었습니다. " + newLine + "충돌 마스크(cMask) 및 충돌 그룹(cGroup)에 일부 지원 기능이 추가되었습니다." + newLine + "-kick, score, c0, c1, c2, c3" + newLine + "도움말이 일부 업데이트되었습니다.",
+    // (2019-11-02) v1.14
+    2211: "[속성] > [플레이어 피직스]에서 [반경]이 추가되었습니다." 
+    + newLine + "[속성] > [플레이어 피직스]에서 [킥 반동]이 추가되었습니다." 
+    + newLine + "[속성] > [플레이어 피직스]에서 [중력]이 추가되었습니다." 
+    + newLine + "[속성] > [디스크 피직스]에서 [중력]이 추가되었습니다." 
+    + newLine + "[도구] > [오토메틱 미러]에서 아이콘이 추가되었습니다." 
+    + newLine + "[도구] > [미리보기]에서 아이콘이 추가되었습니다." 
+    + newLine + "[텍스트 모드] > [지우기]가 [모두 지우기]로 변경되었습니다." 
+    + newLine + "[텍스트 모드] > [모두 지우기]를 클릭했을 때 경고 창이 추가되었습니다." 
+    + newLine + "[상단 퀵툴] > [버그 제보ㆍ문의]에서 아이콘이 변경되었습니다.",
+    // (2019-12-28) v1.15
+    2221: "[상단 퀵툴] > [정보]가 추가되었습니다." 
+    + newLine + "[상단 퀵툴] > [커뮤니티]가 추가되었습니다." 
+    + newLine + "[상단 퀵툴] > [플레이(플래시)]가 추가되었습니다." 
+    + newLine + "[상단 퀵툴]의 일부 탭의 아이콘이 변경되었습니다." 
+    + newLine + "[상단 퀵툴]의 목록 정렬을 통해 시인성이 개선되었습니다." 
+    + newLine + "[도움말]이 갱신되었습니다." 
+    + newLine + "일부 항목에 연결된 링크가 갱신되었습니다." 
+    + newLine + "일부 번역이 개선되었습니다.",
+    // (2020-02-06) v1.16
+    2231: "곡률(curveF) 기능이 추가되었습니다." 
+    + newLine + "충돌 방향(bias) 기능이 추가되었습니다." 
+    + newLine + "중력의 값을 소수점까지 입력하지 못하던 문제가 개선되었습니다." 
+    + newLine + "[도움말]이 갱신되었습니다." 
+    + newLine + "일부 항목에 연결된 링크가 갱신되었습니다." 
+    + newLine + "일부 번역이 개선되었습니다.",
+    // (2022.02.06) v1.17
+    2241: "미리보기 기능이 개선되었습니다."
+    + newLine + "파일 저장 기능이 추가되었습니다."
+    + newLine + "[설정]이 추가되었습니다."
+    + newLine + "[속성] > [일반] > [킥오프 초기화]가 추가되었습니다."
+    + newLine + "[속성] > [백그라운드] > [색상] 값에 따라 미리보기도 적용되는 구조가 추가되었습니다."
+    + newLine + "[속성] > [일반]에서 [저장 명령어]가 작동되지 않던 문제가 해결되었습니다."
+    + newLine + "[속성]에서 [중력] 값을 편집할 수 없었던 문제가 해결되었습니다."
+    + newLine + "일부 상황에서 창 크기를 조절하면 불필요하게 여백이 생기던 문제가 해결되었습니다."
+    + newLine + "가독성 및 시인성이 개선되었습니다."
+    + newLine + "전반적인 인터페이스가 개선되었습니다."
+    + newLine + "일부 번역이 개선되었습니다.",
+    // (2022.02.15) v1.18
+    2251: "[텍스트 모드]에서 [내보내기] 버튼이 추가되었습니다."
+    + newLine + "[텍스트 모드] 진입 직후 곧바로 [시각 모드] 버튼을 클릭하면 불필요한 알림이 뜨던 구조가 개선되었습니다."
+    + newLine + "세그먼트가 특정 상황에서 색상이 올바르지 않게 나오던 문제가 해결되었습니다.",
+    // (2022.03.18) v1.19
+    2261: "상태 표시줄 최소화 기능이 추가되었습니다."
+    + newLine + "[도움말]이 갱신되었습니다."
+    + newLine + "마우스를 드래그 할 때 표시되는 선택 박스의 시인성이 향상되었습니다."
+    + newLine + "사용성이 향상되었습니다.",
+};
+//  영어
+$.lang.en = {
+    // Common
+    0: "HaxPuck(OFFLINE)",
+    1: "v1.19(Beta); " + newLine + "This software was updated on 18th Mar, 2022",
+    2: "Select your language",
+    3: "Confirm", 4: "Alert", 5: "Warning",
+    6: "Are you sure want to leave from HBSE?",
+    7: "Error during exporting process of the file. Please try again later.",
+    8: "Failed to save the file due to too many objects!",
+
+    // Top quick-tool
+    10: "the game version update page.",
+    11: "You can access the game right away. Fast movement is possible for map testing.",
+    12: "the game introduction page.",
+    13: "a community list page around the world.",
+    14: "an old version based on flash. do not visit this even though if you got a curse that must have no web browsers except IE on your PC.",
+    15: "a page where you can run a script with Headless Host. to host a script, you need a separate file as Code is not provided by HBS.",
+    16: "Report a bug",
+
+    // Bottom qiuck-tool
+    17: "UNDO", 
+    18: "REDO", 
+    19: "COPY", 
+    20: "PASTE", 
+    21: "DELECT", 
+    22: "SELECT ALL", 
+    23: "SELECT NONE", 
+    24: "INVERT SELECTION", 
+    25: "DUPLICATE", 
+    26: "CUT",
+
+    // 우측 하단부 버튼
+    30: "Select",   31: "Rotate",   32: "Sclae",
+    33: "Segment",  34: "Vertex",   35: "Disc",
+    36: "Goal",     37: "Plane",    38: "Joint",
+
+    // 좌측 하단부 버튼
+    40: "Properties",          41: "Tools",
+    42: "Automatic Mirror",    43: "Preview",
+    44: "Find an Object by Index",
+
+    // a name of defalut stadium
+    50: "New Stadium",
+
+    // in Text Mode
+    110: "Text Mode",
+    111: "Visual Mode", 112: "Save", 113: "Select All", 114: "Clear All", 115: "Goto Character",
+    120: "Are you sure want to back to visual mode without saving?",
+    121: "Clear all data?",
+    122: "Character Position?",
+    123: "Overflowed: ",
+
+    // 도움말 내부 버튼
+    130: "Help",  131: "Info",
+
+    // Settings
+    140: "Settings",
+
+    // Stadium Properties
+    220: "Stadium Properties",
+    221: "General",                // --------------------------
+    222: "Spawn Distance: ",
+    223: "Height × Width: ",
+    224: "redSpawnPoints: ",
+    225: "H × W(Camera): ",
+    226: "blueSpawnPoints: ",
+    227: "maxViewWidth: ",
+    228: "CanBeStored: ",
+    229: "CameraFollow: ",
+    230: "Background",             // --------------------------
+    231: "Type: ",
+    232: "Height × Width: ",
+    234: "Corner Radius: ", 235: "Kick-off Radius: ",
+    236: "Color: ",
+    237: "None", 238: "Glass", 239: "Hockey", 
+    240: "Player Physics",         // --------------------------
+    241: "Gravity",
+    242: "Radius",
+    243: "Bounce",    244: "Inverse Mass",    245: "Damping",
+    246: "Collision Group",
+    247: "Acceleration: ",
+    250: "Player Physics(Kick)",   // --------------------------
+    251: "Kicking Acceleration",   252: "Kicking Damping",   253: "Kick Strength",   254: "Kickback",
+    260: "Ball Physics",           // --------------------------
+    261: "Gravity",
+    262: "Radius",
+    263: "Bounce",    264: "Inverse Mass",    265: "Damping",
+    266: "Color",
+    267: "Collision Mask",   268: "Collision Group",
+    269: "kickOffReset",
+    
+    270: "Lab+",       // --------------------------
+    271: "Custom Color",
+    272: "#1: ", 273: "#2: ", 274: "#3: ", 275: "#4: ", 276: "#5: ", 
+    
+    280: "Preferences",               // --------------------------
+    281: "Change language",
+    282: "Object diagnosis",
+    283: "Object List",
+
+    // ETC
+    300: "Open", 301: "Save", 302: "Close", 303: "Download",
+    304: "Yes", 305: "No", 306: "Cancel", 307: "OK",
+    310: "Enable", 311: "Disable",
+    315: "Ball", 316: "Player",
+    317: "Partial", 318: "Full",
+
+    // Languages
+    400: "English", 401: "Korean",
+
+    // Indexs of Properties
+    500: "bCoef", 
+    501: "gravity", 
+    502: "speed",
+    503: "cMask", 
+    504: "cGroup", 
+    505: "trait", 
+    506: "x", 
+    507: "y", 
+    508: "v0", 
+    509: "v1", 
+    510: "curve", 
+    511: "curveF", 
+    512: "bias", 
+    513: "vis", 
+    514: "color", 
+    515: "normal", 
+    516: "dist", 
+    517: "radius", 
+    518: "invMass", 
+    519: "pos", 
+    520: "p0", 
+    521: "p1", 
+    522: "team", 
+    523: "damping",
+    524: "d0", 
+    525: "d1", 
+    526: "length", 
+    527: "strength",
+
+    600: "Click on objects to select them."
+    + newLine + "Shift-click to select multiple objects."
+    + newLine + "Click and drag to select multiple objects."
+    + newLine + "Click and drag on segments to curve them."
+    + newLine + "Click and drag on selected objects to move them around."
+    + newLine + "To move segment, first click on it to select it, then drag its vertices.",
+    610: "Click to place the center of rotation."
+    + newLine + "Click and drag to rotate the selected objects.",
+    620: "Click to place the center of transformation."
+    + newLine + "Click and drag to scale or flip the selected objects."
+    + newLine + "Some types of objects do not scale well."
+    + newLine + "Ideally, discs and curved segments become oval-shaped when scaled vertically or horizontally."
+    + newLine + "Haxball does not support ovals, so their image needs to be approximated."
+    + newLine + "A scaled disc will have the same area as it's ideal oval."
+    + newLine + "A curved segment will keep the same tangent on it's first point."
+    + newLine + "Segments, vertices, planes and goals scale perfectly.",
+    630: "A segment connects two vertices. They can be used as decorations or as walls."
+    + newLine + "Click and drag to create segments."
+    + newLine + "Click on existing vertices to connect segments to them.",
+    640: "A vertex is a point on the stadium that can have special properties."
+    + newLine + "Click to place a new vertex.",
+    650: "Discs are the only object apart from the puck and the players that can be made to move."
+    + newLine + "They can be used as decorations or be allowed to collide with other objects."
+    + newLine + "Click to create normal-sized discs."
+    + newLine + "Click and drag to create custom-sized discs.",
+    660: "When the puck crosses a goal, the opposite team scores a point."
+    + newLine + "Click and drag to place a goal."
+    + newLine + "Left side goals will start out red, right side goals will start out blue."
+    + newLine + "Blue players score in the red goal, and vice-versa.",
+    670: "Planes are invisible walls of infinite length."
+    + newLine + "Click to place a plane. The plane will face the center of the stadium (it will have a negative dist).",
+    680: "Joints are physical connections between two Discs."
+    + newLine + "joint_content.",
+    681: "Most edits are mirrored horizontally and vertically to help design symmetrical stadiums.",
+    682: "Preview the stadium without any invisible shapes.",
+
+    700: "How much bounce an object has."
+    + newLine + "Officially, this is a number between 0 and 1. Values below 0 and above 1 can also be used with care (and haxketball nets)."
+    + newLine + "The standard value for walls is 1."
+    + newLine + "The standard value for goal nets is 0.1.",
+    701: "gravity", 
+    702: "The initial speed of a disc. The default value is 0,0.",
+    703: "A list of groups that the object collides with."
+    + newLine + "The puck and the players have a cMask of \"ball, red, blue, wall\"."
+    + newLine + "During a red kick-off, all players have an additional cMask of \"redKO\"."
+    + newLine + "During the blue kick-off, all players have an additional cMask of \"blueKO\".",
+    704: "The groups that an object belongs to"
+    + newLine + "ball - the puck"
+    + newLine + "red - red players"
+    + newLine + "blue - blue players"
+    + newLine + "wall - walls"
+    + newLine + "redKO - kick-off barriers for red's kick-off"
+    + newLine + "blueKO - kick-off barriers for blue's kick-off"
+    + newLine + "all - all of the above"
+    + newLine + "c0 to c3 - Has no special meaning and can be used for any purpose.",
+    705: "A named set of properties common to many objects.", 
+    706: "The horizontal position of a vertex.", 
+    707: "The vertical position of a vertex.", 
+    708: "Index of a vertex in the stadium vertex list to be used as first point of the segment.", 
+    709: "Index of a vertex in the stadium vertex list to be used as the second point of the segment.", 
+    710: "The angle (in degrees) at which a segment curves. Possible values are between -340 and 340.",
+    711: "Alternative representation of the segment's curve. If this value is present the curve value will be ignored.",
+    712: "The bias can be useful to create boundaries that small and fast moving balls are unable to pass through.",
+    713: "true or false. Is this object visible?",
+    714: "The color of segments and discs. Specified as a 6-character hexidecimal string.", 
+    715: "The direction faced by a plane.",
+    716: "The distance of a plane from the center of the stadium. When it is positive, it keeps objects away from the center."
+    + newLine + "When it is negative it keeps object close to the center.",
+    717: "The half-size of a disc.",
+    718: "The inverse mass of an disc. 0 means that the disc doesn't move."
+    + newLine + "The higher the invMass, the lighter the disc."
+    + newLine + "Values below 0 are possible but must be used with care (and bobsleds)."
+    + newLine + "The default for discs is 1.",
+    719: "The x and y coordinates of the center of a disc.",
+    720: "The coordinates of one end of a goal.",
+    721: "The coordinates of the other end of a goal.",
+    722: "The team whose goal it is, either blue or red.",
+    723: "The deceleration rate of a disc. 1 means no deceleration. The default value is 0.99.",
+    724: "Index of one of the two discs connected by the joint.", 
+    725: "Index of one of the two discs connected by the joint.", 
+    726: "the length of the joint.",
+    727: "strength makes that the joint acts like a solid or spring.",
+    
+    822: "How far to the right and left of the center should the players start?",
+    823: "The half size of the stadium.",
+    824: "List of spawn points used for the red team kickoff.",
+    826: "List of spawn points used for the blue team kickoff.",
+    827: "The maximum allowed width viewable width for the level." 
+    + newLine +"If the player screen were wide enough for him to see more width than maxViewWidth then the the game will zoom in to prevent that.",
+    828: "This value defines whether this stadium can be stored with the /store command.",
+    829: "Changes the camera following behaviour.",
+    831: "The style of backgroud to use, either grass or hockey.",
+    832: "The half size of the background.",
+    847: "Acceleration when moving normally.",
+    851: "Acceleration when trying to kick.",
+    852: "Damping while trying to kick.",
+    853: "Strength of kicks.",
+    869: "Can be set to either \"full\" or \"partial\".",
+
+    // Help contents
+    1000: "Source Code", 1001: "About", 1002: "What's new",
+    1003: "The source code for HaxPuck is available on github.",
+    1100: "Save",
+    1101: "The Download button allows you to download the stadium to your computer.",
+    1200: "Tools",
+    1201: "A stadium can have a maximum of 255 of each type of object." + newLine + "numbers in parenthesis represent the keyboard shortcut.",
+    1300: "Property Editor",
+    1301: "When objects are selected, their common properties are listed in the properties tab on the bottom left."
+    + newLine + "When one of these properties is changed, it will be applied to all the selected objects."
+    + newLine + "When a new object is created, the properties will be applied to it.",
+    1400: "Properties",
+    1500: "Top quick-tool",
+    1501: "Some actions may need a process via this bar.",
+    1550: "Bottom quick-tool",
+    1551: "Some actions may need a process via this bar." + newLine + "numbers in parenthesis represent the keyboard shortcut.",
+    1600: "Keyboard Shortcuts",
+    1601: "Some browser plugins are not compatible with keyboard shortcuts.",
+    1700: "Text Mode",
+    1701: "The text editor is simpler than notepad in some ways, but has some HBS-specific features.",
+    1702: "The code is formatted for easy editing."
+    + newLine + "Vertexes are annotated with their index number."
+    + newLine + "Objects selected in the visual editor are marked in the code."
+    + newLine + "The Import button lets you instantly preview your stadium in the visual editor."
+    + newLine + "The Goto Character button allows you to quickly find a position in the file. This can be the position of an error reported by Haxball.",
+    1800: "Stadium Properties",
+    1801: "Default Values are in parenthesis.",
+    1900: "Requirements",
+    1901: "This editor works in Google Chrome and possibly other modern browsers.",
+    1902: "HaxBall is an online multiplayer game created by basro.",
+
+    // 2011.12.19
+    2070: "Fixed many bugs" + newLine + "Added more information in the help file." + newLine + "Added Automatic Mirror Mode" + newLine + "Switched to HaxPuck.com",
+    // 2011.12.29
+    2080: "New parameters from the official HaxBall update" + newLine + "User accounts" + newLine + "Save button" + newLine + "Download Button" + newLine + "Library" + newLine + "Fixed some bugs",
+    // 2012.02.02
+    2090: "Order keys in text mode",
+    // Update Notes
+    2100: "Update 2019-08-09",
+    2101: "haxpuck.com has expired. Accounts and libraries are no longer available." + newLine + "This is the version released on 2012-02-02.",
+    2102: "the Update is now available here.",
+    2103: "This Editor edited by HonestSquare from AtnNn\'s Haxball Stadium Editor created by AtnNn.",
+    // v1.04(2019-03-23) 
+    2111: "Removed the top shortcut window. " + newLine + "Accounts and libraries are no longer available " + newLine + "Updated theme.",
+    // v1.05(2019-03-23) 
+    2121: "Added [color] of [Background] in [Stadium Properties]." + newLine + "Added a confirm when [Visual Mode] button selected in [Text Mode].",
+    // v1.06(2019-03-24) 
+    2131: "Enhanced GUI.", 2132: "Improved some structures." + newLine + "Fixed a problem that [Properties] did not working.",
+    // v1.07(2019-03-30) 
+    2141: "Added [maxViewWidth] of [Background] in [Stadium Properties]." + newLine + "Add [CameraFollow] of [Background] in [Stadium Properties]." + newLine + "Fixed a problem that nothing was shown in [Visual Mode] after [Type] of [Background] in [Stadium Properties] applies the value: [Grass] or [Hockey].",
+    // v1.08(2019-04-06) 
+    2151: "Enhanced GUI as HaxBall." + newLine + "Add all actions' icons of [Bottom quick-tool].",
+    // v1.09(2019-04-13) 
+    2161: "Add the content of [How to Export a File] in [Help]. " + newLine + "changed team colors when [Preview] is activating in [Tools]." + newLine + "Fixed a problem that the [Stadium Properties] window shows double.",
+    // v1.10(2019-05-04) 
+    2171: "Added a shortcut links Headless Host in [Top quick-tool]." + newLine + "Updated contents of [Help]." + newLine + "Fixed a problem that a glitch causes in Google Chrome.",
+    // v1.11(2019-05-11) 
+    2181: "Added icons of shortcuts in [Top quick-tool]." + newLine + "Added [Lab+] in [Stadium Properties]. " + newLine + "Updated contents of [Help].", 
+    // v1.12(2019-06-06) 
+    2191: "Selection Box has applied the new color.",
+    // v1.13(2019-07-29) 
+    2201: "Added [H × W(Camera)] and [CanBeStored] of [General] in [Stadium Properties]." + newLine + "Added new flags of cMask and cGroup:" + newLine + "-kick, score, c0, c1, c2, c3" + newLine + "Updated contents of [Help].",
+    // v1.14(2019-11-02)
+    2211: "Added [radius] in [Player Physics] of [Stadium Properties]."
+    + newLine + "Added [Kickback] of [Player Physics] in [Stadium Properties]." 
+    + newLine + "Added [Gravity] of [Player Physics] in [Stadium Properties]." 
+    + newLine + "Added [Gravity] of [Disc Physics] in [Stadium Properties]." 
+    + newLine + "Added an icon of [Automatic Mirror] in [Tools]." 
+    + newLine + "Added an icon of [Preview] in [Tools]."
+    + newLine + "Added pop-up on click [Clear All] button in [Text Mode].",
+    // v1.15(2019-12-28)
+    2221: "Added [About] in [Top quick-tool]." 
+    + newLine + "Added [Community] in [Top quick-tool]." 
+    + newLine + "Added [Flash] in [Top quick-tool]." 
+    + newLine + "Updated contents of [Help].",
+    // v1.16(2020-02-06)
+    2231: "Added curveF from properties" 
+    + newLine + "Added bias from properties."
+    + newLine + "Fixed the bug that could not input the value of gravity to decimal point." 
+    + newLine + "Updated contents of [Help].",
+    // v1.17(2022.02.06)
+    2241: "Enhanced Preview feature"
+    + newLine + "Added Download feature that save stadium data to export a file into Local Storage."
+    + newLine + "Added Settings menu."
+    + newLine + "Added [kickOffReset] of [General] in [Stadium Properties]."
+    + newLine + "Added a structure that background color applying as by the value of [Color] of [Background] in [Stadium Properties] automatically."
+    + newLine + "Fixed a problem that [canBeStored] of [General] in [Stadium Properties] did not working."
+    + newLine + "Fixed a problem that the value of [Gravity] in [Stadium Properties] won't edit or sync."
+    + newLine + "Fixed a problem that needless margin had been appeared during a window resize in some situations."
+    + newLine + "enhanced readability/visibility."
+    + newLine + "the new enhanced UI is now available.",
+    // (2022.02.15) v1.18
+    2251: "Add [download] button in [Text Mode]."
+    + newLine + "Fixed a problem that a confirm window always shown at every time when you try to open [Visual Mode] in [Text Mode]."
+    + newLine + "Fixed a problem that a segment couldn't render some color.",
+    // (2022.03.18) v1.19
+    2261: "Added a feature minimize a Status Window."
+    + newLine + "Updated contents of [Help]."
+    + newLine + "Updated a Mouse Selection Box."
+    + newLine + "Enchaned and Improved UX.",
+};
+
+/**
+* setLanguage 
+* use $.lang[currentLanguage][languageNumber]
+*/
+
+function setLanguage(currentLanguage) {
+    console.log('setLanguage', arguments);
+    if(currentLanguage == "ko")
+        $('#umIntro').removeClass('hidden');
+    else
+        $('#umIntro').addClass('hidden');
+    
+    $('[data-langNum]').each(function() {
+      var $this = $(this); 
+      $this.html($.lang[currentLanguage][$this.data('langnum')]); 
+    });
+    currentLang = currentLanguage;
+}  
+
+// 언어 변경
+//$('button').click(function() {
+//    setLanguage($(this).data('lang'));
+//});
+
+// 팝업 창 내용 변경
+function setContext(str){
+    let dialog = document.getElementById("dialog_context");
+    if(!str) return false;
+    dialog.innerText = $.lang[getLang()][str];
+    return true;
+}
+
 // DEBUG
-//console={log:function(){}};
+console={log:function(){}};
 function tracef(name, f){
     return function(){
         var ret = f.apply(this, arguments);
@@ -88,10 +892,12 @@ var colors = {
     red: {thick: 'rgba(255,127,127,1)',
           thin: 'rgba(255,0,0,0.8)'},
     blue:{thick: 'rgba(127,127,255,1)',
-          thin: 'rgba(0,0,255,0.8)'}
+          thin: 'rgba(0,0,255,0.8)'},
+    selection_box:{
+        bgc: 'rgba(71,126,154,0.5)',
+        bdr: 'rgba(47,94,133,0.5)'
+    }
 };
-
-
 
 //===== Haxball Values
 
@@ -112,38 +918,38 @@ var haxball = {
 };
 
 var properties = (function(p){return {
-    bCoef: p(false, 'number'),
-    gravity: p(false, 'point'),
-    speed: p(false, 'point'),
-    cMask: p(false, 'layers'),
-    cGroup: p(false, 'layers'),
-    trait: p(false, 'trait'),
-    x: p(true, 'number', true),
-    y: p(true, 'number', true),
-    v0: p(true, 'ref', true),
-    v1: p(true, 'ref', true),
-    curve: p(true, 'number'),
-    curveF: p(true, 'number'),
-    bias : p(true, 'number'),
-    vis: p(false, 'bool'),
-    color: p(false, 'color'),
-    normal: p(true, 'point', true),
-    dist: p(true, 'number', true),
-    radius: p(false, 'number'),
-    invMass: p(false, 'number'),
-    pos: p(true, 'point'),
-    p0: p(true, 'point', true),
-    p1: p(true, 'point', true),
-    team: p(true, 'team'),
-    damping: p(true, 'number'),
-    //d0: p(true, 'ref'),
-    //d1: p(true, 'ref'),
-    d0: p(true, 'number'),
-    d1: p(true, 'number'),
-    //length: p(true, 'length'),
-    strength: p(true, 'strength')
-};})(function(required, type, nodefault){
-    return { required: required, type: type, def: !nodefault };
+    bCoef:      p($.lang[getLang()][500], false, 'number'),
+    gravity:    p($.lang[getLang()][501], false, 'point'),
+    speed:      p($.lang[getLang()][502], false, 'point'),
+    cMask:      p($.lang[getLang()][503], false, 'layers'),
+    cGroup:     p($.lang[getLang()][504], false, 'layers'),
+    trait:      p($.lang[getLang()][505], false, 'trait'),
+    x:          p($.lang[getLang()][506], true, 'number', true),
+    y:          p($.lang[getLang()][507], true, 'number', true),
+    v0:         p($.lang[getLang()][508], true, 'ref', true),
+    v1:         p($.lang[getLang()][509], true, 'ref', true),
+    curve:      p($.lang[getLang()][510], true, 'number'),
+    curveF:     p($.lang[getLang()][511], true, 'number'),
+    bias :      p($.lang[getLang()][512], true, 'number'),
+    vis:        p($.lang[getLang()][513], false, 'bool'),
+    color:      p($.lang[getLang()][514], false, 'color'),
+    normal:     p($.lang[getLang()][515], true, 'point', true),
+    dist:       p($.lang[getLang()][516], true, 'number', true),
+    radius:     p($.lang[getLang()][517], false, 'number'),
+    invMass:    p($.lang[getLang()][518], false, 'number'),
+    pos:        p($.lang[getLang()][519], true, 'point'),
+    p0:         p($.lang[getLang()][520], true, 'point', true),
+    p1:         p($.lang[getLang()][521], true, 'point', true),
+    team:       p($.lang[getLang()][522], true, 'team'),
+    damping:    p($.lang[getLang()][523], true, 'number'),
+    d0:       p($.lang[getLang()][524], true, 'ref'),
+    d1:       p($.lang[getLang()][525], true, 'ref'),
+    //d0:         p($.lang[getLang()][524], true, 'number'),
+    //d1:         p($.lang[getLang()][525], true, 'number'),
+    //length:     p($.lang[getLang()][526], true, 'length'),
+    strength:   p($.lang[getLang()][527], true, 'strength')
+};})(function(name, required, type, nodefault){
+    return { innerText: name, required: required, type: type, def: !nodefault };
 });
 
 var type_properties = {
@@ -175,6 +981,7 @@ var maximum_curve = 340;
 
 // the stadium json (with additional _data fields)
 var stadium = {};
+var oldTxtaraVal = {};
 
 // user info when logged in
 var user_info = false;
@@ -237,6 +1044,7 @@ triggers = {
 
 // Property data
 var property_data = {};
+var property_dataLabel = {};
 
 // cache of patterns
 var bg_patterns = {};
@@ -285,6 +1093,7 @@ var sin = Math.sin;
 //==== Initilisation
 
 $(function(){
+    initLang();
     check_logged_in();
 
     $('#stadium_editor_link').click(function(){
@@ -365,7 +1174,10 @@ $(function(){
 
     $(window).bind('beforeunload', function(){
         if(!can_leave)
-            return "Haxball Stadium Editor를 닫을까요?";
+            return alert($.lang[getLang()][6]);
+    });
+    $(window).resize(function(){                    //  창 크기 조절
+        setTimeout(() => resize(), 100);
     });
 
     reset_selection();
@@ -388,7 +1200,8 @@ $(function(){
     connect_field($('#prop_cameraWidth'), 'cameraWidth', parseFloat);
     connect_field($('#prop_cameraHeight'), 'cameraHeight', parseFloat);
     connect_field($('#prop_cameraFollow'), 'cameraFollow', parseCameraFollow);
-    connect_field($('#prop_canBeStored'), 'canBeStored', parseDetectedCommand);
+    connect_field($('#prop_canBeStored'), 'canBeStored', parseCanBeStored);
+    connect_field($('#prop_kickOffReset'), 'kickOffReset', parseKickOffReset);
     connect_field($('#prop_bg_type'), 'bg.type');
     connect_field($('#prop_bg_height'), 'bg.height', parseFloat);
     connect_field($('#prop_bg_width'), 'bg.width', parseFloat);
@@ -400,7 +1213,7 @@ $(function(){
     connect_field($('#prop_pp_invMass'), 'playerPhysics.invMass', parseFloat);
     connect_field($('#prop_pp_damping'), 'playerPhysics.damping', parseFloat);
     connect_field($('#prop_pp_acceleration'), 'playerPhysics.acceleration', parseFloat);
-    connect_field($('#prop_pp_gravity'), 'playerPhysics.gravity', parseFloat);
+    connect_field($('#prop_pp_gravity'), 'playerPhysics.gravity', parseVector);
     connect_field($('#prop_pp_kickingAcceleration'), 'playerPhysics.kickingAcceleration', parseFloat);
     connect_field($('#prop_pp_kickingDamping'), 'playerPhysics.kickingDamping', parseFloat);
     connect_field($('#prop_pp_kickStrength'), 'playerPhysics.kickStrength', parseFloat);
@@ -409,10 +1222,11 @@ $(function(){
     connect_field($('#prop_bp_bCoef'), 'ballPhysics.bCoef', parseFloat);
     connect_field($('#prop_bp_invMass'), 'ballPhysics.invMass', parseFloat);
     connect_field($('#prop_bp_damping'), 'ballPhysics.damping', parseFloat);
-    connect_field($('#prop_bp_gravity'), 'ballPhysics.gravity', parseFloat);
-    connect_field($('#prop_bp_color'), 'ballPhysics.color', parseColor);
+    connect_field($('#prop_bp_gravity'), 'ballPhysics.gravity', parseVector);
+    connect_field($('#prop_bp_color'), 'ballPhysics.color', parseColorExt);
     connect_field($('#prop_bp_cMask'), 'ballPhysics.cMask', parseMaskList);
     connect_field($('#prop_bp_cGroup'), 'ballPhysics.cGroup', parseMaskList);
+    connect_field($('#prop_vis'), 'vis', parseVis);
     load(new_stadium());
     modified();
 
@@ -424,28 +1238,110 @@ $(function(){
         modified();
     });
 
-    $('#button_import').click(function(){
-        $('#textarea_import').val(pprint(stadium));
-        show_box('import');
+    // 공통 응답: 예
+    $("#button_yes").click(function(){
+        switch(getIndexPop()){
+            case 120:           // 텍스트 모드: 시각 모드
+                hide_box("import");
+                closePop('#layer_exit');
+                break;
+            case 121:           // 텍스트 모드: 모두 지우기
+                $('#textarea_import').val('');
+                closePop('#layer_exit');
+                break;
+        }
+    });
+    // 공통 응답: 아니오
+    $("#button_no").click(function(){
+        switch(getIndexPop()){
+            case 120:           // 텍스트 모드: 시각 모드
+                break;
+            case 121:           // 텍스트 모드: 모두 지우기
+                break;
+        }
+        closePop("#layer_exit");
     });
 
-    $('#button_import_cancel').click(function(){
-        var detect_desn = confirm('변경 내역을 저장하지 않고 시각 모드로 돌아가겠습니까?');
-        if(detect_desn) hide_box();
-        else return false;
+    // 언어 변경
+    $("#button_lang").click(function(){
+        //$('#table').hide();
+        //$('#dw_lang').show();
+        layer_popup($(this).attr('href'));
+    });
+    
+    $("#button_lang_en").click(function(){
+        closePop("#layer_lang");
+        setLanguage("en");
+    });
+    $("#button_lang_ko").click(function(){
+        closePop("#layer_lang");
+        setLanguage("ko");
     });
 
-    $('#button_import_select_all').click(function(){
+    // 텍스트 모드
+    $("#textarea_import").keyup(function() {
+        /*
+        var currentVal = $(this).val();
+        if(currentVal != oldTxtaraVal)
+            $("#button_import_cancel").addClass("btn_accnt");
+        else 
+            $("#button_import_cancel").removeClass("btn_accnt");
+        */
+    });
+
+    $("#button_import").click(function(){
+        $("#textarea_import").val(pprint(stadium));
+        oldTxtaraVal = $("#textarea_import").val();
+        show_box("import");
+    });
+    
+    $("#button_import_close").click(function(){        //  시각 모드
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        var currentVal;
+        try {
+            //st = eval('[' + $('#textarea_import').val() + ']')[0];
+            currentVal = $("#textarea_import").val();
+        } catch (error) {
+            currentVal = undefined;
+        }
+        //  저장 여부에 따라 팝업 출력
+        if(oldTxtaraVal == currentVal)
+            return hide_box("import");
+        setContext(120);
+        layer_popup("#layer_exit");
+    });
+
+    /*
+    $("#button_import_cancel").click(function(){        //  시각 모드
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        var currentVal;
+        try {
+            //st = eval('[' + $('#textarea_import').val() + ']')[0];
+            currentVal = $("#textarea_import").val();
+        } catch (error) {
+            currentVal = undefined;
+        }
+        //  저장 여부에 따라 팝업 출력
+        if(oldTxtaraVal == currentVal)
+            return hide_box("import");
+        setContext(120);
+        layer_popup("#layer_exit");
+    });
+    */
+
+    $('#button_import_select_all').click(function(){    //  모두 선택
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
         $('#textarea_import').select();
     });
 
-    $('#button_import_clear').click(function(){
-        var detect_desn = confirm('정말로 모든 내용을 지우겠습니까?');
-        if(detect_desn) $('#textarea_import').val('');
-        else return false;
+    $('#button_import_clear').click(function(){         //  모두 지우기
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        setContext(121);
+        layer_popup("#layer_exit");
     });
 
-    $('#button_import_import').click(function(){
+    $("#button_import_import").click(function(){        //  저장
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
         var st;
         try {
             st = eval('[' + $('#textarea_import').val() + ']')[0];
@@ -453,46 +1349,139 @@ $(function(){
             st = undefined;
         }
         if(!st){
-            alert('맵에 예기치 않은 오류가 발생했습니다.');
+            alert("맵에 예기치 않은 오류가 발생했습니다.");
             return;
         }
+        oldTxtaraVal = $("#textarea_import").val();
+        //$("#button_import_cancel").removeClass("btn_accnt");
         load(st);
         modified();
-        hide_box();
+        //hide_box();
     });
 
-    $('#button_about').click(function(){
-        alert('v1.16(Beta) \n2019년 12월 29일 최종 업데이트');
-    });
-    
-    $('#button_import_goto').click(function(){
-        var pos = prompt('찾아 갈 좌표 위치를 입력하세요.'); 
+    $('#button_import_goto').click(function(){          //  좌표 이동
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        var pos = prompt($.lang[getLang()][122]); 
         if(pos)
             set_selection_range($('#textarea_import')[0], parseInt(pos, 10), parseInt(pos, 10)+10);
     });
-    
-    $('#report_feedbacks').click(function(){
-            alert('문의 이메일: djdft1456@gmail.com');
-    });
 
-    $('#button_properties').click(function(){
-        toggle_properties();
+    // 정보
+    $('#button_about').click(function(){
+        return alert($.lang[getLang()][1]);
+    });
+    
+    
+    $('#button_feedback').click(function(){
+        switch(getLang()){
+            case "ko":
+                window.open("https://umhxbl.wixsite.com/storage/forum/pideubaeg");
+                break;
+            default:
+                alert('contact djdft1456@gmail.com if you have something such as a bug or another problem.');
+        }
     });
 
     $('#button_save').click(function(){
         save();
     });
 
+    $('#button_download_text').click(function(){
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        download(stadium);
+    });
     $('#button_download').click(function(){
-        download();
+        download(stadium);
     });
 
+    $('#button_open').click(function(){        
+        //download(stadium);
+    });
+
+    // 도움말
     $('#button_help').click(function(){
-        show_box('help');
+        $("#button_help").addClass("active");
+        show_box("help");
+    });
+
+    // 경기장 속성
+    $('#button_properties').click(function(){
+        $("#button_properties").addClass("active");
+        show_box("properties");
+        //toggle_properties();
+    });
+
+    // 설정
+    $("#button_options").click(function(){
+        $("#button_options").addClass("active");
+        show_box("options");
+        let maxLimit = 255;
+        let types = [
+            'segments', 'vertexes', 'discs', 'goals', 'planes'
+        ];
+        let showObjectInfo = function(type){
+            let st_prop = stadium[type];
+            let task_prop = document.getElementById("task" + '_' + type);
+            task_prop.innerText = st_prop.length + '/' + maxLimit;
+        }
+        types.forEach(t => showObjectInfo(t));
+    });
+ 
+    //  최대화
+    $('.btn_show').click(function(){
+        let selectors = $(this).parents("div");
+        let parents = selectors[selectors.length - 1];
+        let btnHide = parents.getElementsByClassName('btn_hide')[0];
+        if(btnHide.style.display == 'none') btnHide.style.display = 'block';
+        this.style.display = 'none';
+        $(parents.getElementsByTagName("div")[1]).toggle();
+        switch(parents.id){
+            case 'titlebar':        //  상단 헤드라인
+                $('#input_name').toggle();
+                break;
+            case 'bottomboxes':     //  하단 작업표시줄
+                $('#mousepos').toggle();
+                $('#mouseposClone').toggle();
+                break;
+        }
+        resize();                //  UI 조정
+    });
+    //  최소화
+    $('.btn_hide').click(function(){
+        let selectors = $(this).parents("div");
+        let parents = selectors[selectors.length - 1];
+        let btnShow = parents.getElementsByClassName('btn_show')[0];
+        if(btnShow.style.display == 'none') btnShow.style.display = 'block';
+        this.style.display = 'none';
+        $(parents.getElementsByTagName("div")[1]).toggle();
+        switch(parents.id){
+            case 'titlebar':        //  상단 헤드라인
+                $('#input_name').toggle();
+                break;
+            case 'bottomboxes':     //  하단 작업표시줄
+                $('#mouseposClone').toggle();
+                $('#mousepos').toggle();
+                break;
+        }
+        resize();                //  UI 조정
     });
 
     $('#button_help_close').click(function(){
+        $('#layer_lang')
         hide_box();
+        $("#button_help").removeClass("active");
+    });
+
+    $('#button_properties_close').click(function(){
+        hide_box("properties");
+        $("#button_properties").removeClass("active");
+    });
+
+    $('#button_options_close').click(function(){
+        if($('#layer_lang').css('display') == 'block') return;
+        hide_box("options");
+        $("#button_options").removeClass("active");
+        //closePop('#button_options');
     });    
 
     add_tool(tool_select);
@@ -581,6 +1570,31 @@ $(function(){
     $(window).resize(resize);
 });
 
+function initLang(){
+    let userLang = navigator.language;
+    switch(userLang.toLowerCase()){
+        case "ko":
+        case "en":
+            setLanguage(userLang);
+            break;
+        default:    setLanguage("en");
+    }
+}
+
+function getLang(){
+    if(currentLang == undefined){
+        initLang();
+    }
+    return currentLang;
+}
+
+function getIndexPop(){
+    let dialog = document.getElementById("dialog_context");
+    for(let i = 0; i < Object.keys($.lang[getLang()]).length; i++)
+        if(dialog.innerText == $.lang[getLang()][i]) return i;
+    return false;
+}
+
 // Replace the current stadium with a new stadium
 function load(st){
     stadium = st;
@@ -591,7 +1605,7 @@ function load(st){
     if(!st.discs) st.discs = {};
     if(!st.goals) st.goals = {};
     if(!st.planes) st.planes = {};
-    if(!st.joints) st.joints = {};
+    //if(!st.joints) st.joints = {};
     if(!st.traits) st.traits = {};
 
     field_setters = $.grep(field_setters, function(f){ return f(); });
@@ -614,19 +1628,26 @@ function load(st){
 
 // handler for the window resize event
 function resize(){
-    var h = $(window).height();
-    $('#table').height(h - 46);
-    $('#box').height(h - 126);
+    var h = $(window).outerHeight();
+    //let bottomArea = $('#bottomboxes').outerHeight(true) + $('#tab_sub').outerHeight();
+    let header = $('#top_header').outerHeight(true);
+    let canvasHeight = header + $('#titlebar').outerHeight(true) + $('#bottomboxes').outerHeight(true);
+    $('#table').innerHeight(h - canvasHeight);
+    //$('#table').height(h - 35);
+    //$('#box').height(h - 126);    //  크기 조절
     var w = $(window).width();
     window_width = w;
     var cdp = $('#canvas_div_placeholder');
     var off = cdp.offset();
     var cd = $('#canvas_div');
-    cd.css(off);
+    //cd.css(off);
+    cd.css({'top' : header});
     w = cdp.width();
-    cd.width(w);
-    h = cdp.height();
-    cd.height(h);
+    cd.width(cdp.width());
+    //h = cdp.outerHeight();
+    //cd.height(h - canvasHeight - qtArea);
+    cd.height(h - header);
+    //alert("h(" + h + ") + cavasHeight(" + canvasHeight + ")== " + cd.height());
     resize_canvas();
 }
 
@@ -634,18 +1655,16 @@ function resize(){
 function new_stadium(){
 
     return {
-        name: "새 경기장",
+        name: $.lang[getLang()][50],
         width: 420,
         height: 200,
         cameraWidth: 0,
-        cameraHeight: { "x" : 0, "y" : 0},
+        cameraHeight: 0,
         maxViewWidth: 0,
         cameraFollow: "ball",
         spawnDistance: 170,
-        redSpawnPoints: [],
-        blueSpawnPoints: [],
         canBeStored: true,
-        kickoffreset: "partial",
+        kickOffReset: "partial",
         bg: { "color" : "718C5A" },
         traits: {
             "ballArea" : { "vis" : false, "bCoef" : 1, "cMask" : ["ball"] },
@@ -653,12 +1672,16 @@ function new_stadium(){
             "goalNet" : { "vis" : true, "bCoef" : 0.1, "cMask" : ["ball"] }, 
             "kickOffBarrier" : { "vis" : false, "bCoef" : 0.1, "cGroup" : ["redKO", "blueKO"], "cMask" : ["red", "blue"] }
         },
+
         vertexes: [],
         segments: [],
         goals: [],
         discs: [],
         planes: [],
         joints: [],
+
+        redSpawnPoints: [],
+        blueSpawnPoints: [],
 
         "playerPhysics" : {
             "radius" : 15,
@@ -672,7 +1695,6 @@ function new_stadium(){
             "kickingDamping" : 0.96,
             "kickStrength" : 5,
             "kickback" : 0,
-    
         },
     
         "ballPhysics" : {
@@ -681,7 +1703,7 @@ function new_stadium(){
             "cMask" : [ "all" ],
             "damping" : 0.99,
             "invMass" : 1,
-            "gravity": [0, 0],
+            "gravity": [ 0, 0 ],
             "color" : "ffffff",
             "cGroup" : [ "ball"]
         }
@@ -690,15 +1712,30 @@ function new_stadium(){
 
 function show_box(name){
     $('#table').addClass('hidden');
+    //$('#layer_objl').addClass('hidden');
     $('#box' + name).removeClass('hidden').siblings().addClass('hidden');
     $('#box').removeClass('hidden');
+    $('#titlebar').hide();
+    $('#tab_sub').hide();
+    $('#bottomboxes').hide();
+    if($('#mouseposClone')[0].style.display == 'none') $('#mousepos').hide();
 }
 
 function hide_box(name){
     $('#box').addClass('hidden');
+    //$('#layer_objl').addClass('hidden');
     $('#table').removeClass('hidden');
+    $('#titlebar').show();
+    $('#tab_sub').show();
+    $('#bottomboxes').show();
+    if($('#mouseposClone')[0].style.display == 'none') $('#mousepos').show();
     resize();
 }
+
+$('#objl_segment_0').click(function(){
+    select_shape(stadium, Shape('segments', stadium.segments[0], 0));
+    queue_render();
+});
 
 function order_keys(parent, keys){
     var order = type_properties[parent];
@@ -737,11 +1774,13 @@ function pprint(j, l, tag, parent){
         var first = true;
         $.each(j, function(i, x){
             var d = "";
+            let index = (parent == 'discs' ? 1 : 0) + i;
+            //let index = i;
             if(x.trait != trait){
                 d = indent(l);
                 trait = x.trait;
             }
-            ret += (first ? "" : "," + d + indent(l)) + (tag ? "/* " + i +" */ " : "") + pprint(x, l, false, parent);
+            ret += (first ? "" : "," + d + indent(l)) + (tag ? "/* " + index +" */ " : "") + pprint(x, l, false, parent);
             first = false;
         });
         return ret + indent(l-1) + "]";
@@ -754,7 +1793,8 @@ function pprint(j, l, tag, parent){
             var v = j[k];
             if(v !== undefined && k != '_data'){
                 var i = k == 'bg' ? 2 : l;
-                ret += (first ? "" : "," + indent(l)) + quote(k) + " : " + pprint(v, i, k == 'vertexes' && i < 10, k);
+                let hasType = k == 'vertexes' || k == 'discs';
+                ret += (first ? "" : "," + indent(l)) + quote(k) + " : " + pprint(v, i, hasType && i < 10, k);
                 first = false;
             }
         });
@@ -764,7 +1804,7 @@ function pprint(j, l, tag, parent){
 }
 
 function indent(l, b){
-    return l === 0 ? "\n" : l == 1 ? "\n\n\t" : l == 2 && !b ? "\n\t\t" : l == 3 || b ? " " : "";
+    return l === 0 ? newLine : l == 1 ? "" + newLine + "" + newLine + "\t" : l == 2 && !b ? "" + newLine + "\t\t" : l == 3 || b ? " " : "";
 }
 
 
@@ -790,6 +1830,14 @@ function quote(string) {
 }
 
 // end of json2.js code //
+
+function hexToRgb(hex){
+    if(!hex) return haxball['grass'].bg_color;
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    let strToDual = (n) => parseInt(n, 16);
+    return result ? ("rgb" + '(' + strToDual(result[1]) + ',' + strToDual(result[2]) + ',' + strToDual(result[3]) + ')') : null;
+}
+
 
 function center_canvas(pt){
     // TODO: this functions doesn't work when the div is hidden
@@ -872,6 +1920,15 @@ function render(st){
         });
     });
 
+    /*
+    $.each(st.joints, function(i, joint){
+        transform(Shape('joints', joint, i), function(){
+            joint = complete(st, joint);
+            render_joint_arc(ctx, joint, joint_arc(st, joint));
+        });
+    });
+    */
+
     if(!settings.preview) $.each(st.goals, function(i, goal){
         transform(Shape('goals', goal, i), function(){
             goal = complete(st, goal);
@@ -905,7 +1962,7 @@ function render(st){
             }
             ctx.strokeStyle = 'rgb(0,0,0)';
             ctx.lineWidth = 2;
-            ctx.fillStyle = color_to_style(disc.color, haxball.disc_color);
+            ctx.fillStyle = color_to_style(disc.color, haxball.disc_color, true);
             ctx.fill();
             ctx.stroke();
         });
@@ -916,10 +1973,11 @@ function render(st){
     if(settings.preview){
         // TODO: use exact colors and sizes
 
-        // 미리 보기 그리기
+        // 프리뷰 그리기
         ctx.beginPath();
-        ctx.arc(0, 0, 10, 0, Math.PI*2, true);
-        ctx.fillStyle = 'rgb(255,255,255)';
+        ctx.arc(0, 0, st.ballPhysics.radius, 0, Math.PI*2, true);
+        //test_me = st.ballPhysics;
+        ctx.fillStyle = hexToRgb(st.ballPhysics.color);
         ctx.strokeStyle = 'rgb(0,0,0)';
         ctx.lineWidth = 2;
         ctx.fill();
@@ -927,7 +1985,7 @@ function render(st){
         
         // 레드 그리기
         ctx.beginPath();
-        ctx.arc(-st.spawnDistance, 0, 15, 0, Math.PI*2, true);
+        ctx.arc(-st.spawnDistance, 0, st.playerPhysics.radius, 0, Math.PI*2, true);
         ctx.fillStyle = 'rgb(229,110,86)';
         ctx.lineWidth = 2.5;
         ctx.fill();
@@ -935,7 +1993,7 @@ function render(st){
 
         // 블루 그리기
         ctx.beginPath();
-        ctx.arc(st.spawnDistance, 0, 15, 0, Math.PI*2, true);
+        ctx.arc(st.spawnDistance, 0, st.playerPhysics.radius, 0, Math.PI*2, true);
         ctx.fillStyle = 'rgb(86,137,229)';
         ctx.lineWidth = 2.5;
         ctx.fill();
@@ -965,7 +2023,8 @@ function render_segment_arc(ctx, segment, arc){
             ctx.stroke();
         }
         ctx.lineWidth = 3;
-        ctx.strokeStyle = color_to_style(segment.color, haxball.segment_color);
+        let strokeColor = color_to_style(segment.color, haxball.segment_color);
+        ctx.strokeStyle = strokeColor == 'transparent' ? haxball.segment_color : strokeColor;
         ctx.stroke();
     }else if(!settings.preview){
         if(selected(segment)){
@@ -982,56 +2041,11 @@ function render_segment_arc(ctx, segment, arc){
     }
 }
 
-function renderbg(st, ctx){
-    var bg = st.bg;
-    ctx.save();
-
-    if(bg.type == 'grass' || bg.type == 'hockey'){
-
-        ctx.fillStyle = haxball[bg.type].bg_color;
-        ctx.fillRect(-st.width, -st.height,
-                     2 * st.width, 2 * st.height);
-
-        ctx.beginPath();
-        
-        ctx.moveTo(-bg.width + bg.cornerRadius, -bg.height);
-        // TODO: this border doesn't render well in iceweasel
-        ctx.arcTo(bg.width, -bg.height, bg.width, -bg.height + bg.cornerRadius, bg.cornerRadius);
-        ctx.arcTo(bg.width, bg.height, bg.width - bg.cornerRadius, bg.height, bg.cornerRadius);
-        ctx.arcTo(-bg.width, bg.height, -bg.width, bg.height - bg.cornerRadius, bg.cornerRadius);
-        ctx.arcTo(-bg.width, -bg.height, -bg.width + bg.cornerRadius, -bg.height, bg.cornerRadius);
-
-        ctx.save();
-        ctx.clip();
-        ctx.fillStyle = bg_patterns[bg.type];
-        ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
-        ctx.restore();
-
-        ctx.moveTo(0, -bg.height);
-        ctx.lineTo(0, -bg.kickOffRadius);
-        ctx.moveTo(bg.kickOffRadius, 0);
-        ctx.arc(0, 0, bg.kickOffRadius, 0, Math.PI*2, true);
-        ctx.moveTo(0, bg.kickOffRadius);
-        ctx.lineTo(0, bg.height);
-
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = haxball[bg.type].border_color;
-        ctx.stroke();
-    }else{
-        ctx.fillStyle = haxball.grass.bg_color;
-        ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
-    }
-
-    ctx.restore();
-}
 function render_joint_arc(ctx, joint, arc){
     ctx.beginPath();
-    if(arc.curve){
-        ctx.arc(arc.center[0], arc.center[1], arc.radius, arc.from, arc.to, false);
-    }else{
-        ctx.moveTo(arc.a[0], arc.a[1]);
-        ctx.lineTo(arc.b[0], arc.b[1]);
-    }
+    ctx.moveTo(arc.a[0], arc.a[1]);
+    ctx.lineTo(arc.b[0], arc.b[1]);
+    //test_me = arc;   //  버그
     if(!settings.preview){
         if(selected(joint)){
             ctx.lineWidth = 3;
@@ -1045,6 +2059,56 @@ function render_joint_arc(ctx, joint, arc){
         ctx.strokeStyle = colors.invisible_thin;
         ctx.stroke();
     }
+}
+function renderbg(st, ctx){
+    var bg = st.bg;
+    ctx.save();
+
+    switch(bg.type){
+        case 'grass':
+            let bgc = hexToRgb(bg.color);
+            if(bgc != haxball['grass'].bg_color){
+                ctx.fillStyle = bgc;
+                ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
+                break;
+            }
+        case 'hockey':
+            ctx.fillStyle = haxball[bg.type].bg_color;      //  배경 색상(grass, hockey)
+            ctx.fillRect(-st.width, -st.height,
+                         2 * st.width, 2 * st.height);
+
+            ctx.beginPath();
+            
+            ctx.moveTo(-bg.width + bg.cornerRadius, -bg.height);
+            // TODO: this border doesn't render well in iceweasel
+            ctx.arcTo(bg.width, -bg.height, bg.width, -bg.height + bg.cornerRadius, bg.cornerRadius);
+            ctx.arcTo(bg.width, bg.height, bg.width - bg.cornerRadius, bg.height, bg.cornerRadius);
+            ctx.arcTo(-bg.width, bg.height, -bg.width, bg.height - bg.cornerRadius, bg.cornerRadius);
+            ctx.arcTo(-bg.width, -bg.height, -bg.width + bg.cornerRadius, -bg.height, bg.cornerRadius);
+
+            ctx.save();
+            ctx.clip();
+            ctx.fillStyle = bg_patterns[bg.type];
+            ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
+            ctx.restore();
+
+            ctx.moveTo(0, -bg.height);
+            ctx.lineTo(0, -bg.kickOffRadius);
+            ctx.moveTo(bg.kickOffRadius, 0);
+            ctx.arc(0, 0, bg.kickOffRadius, 0, Math.PI*2, true);
+            ctx.moveTo(0, bg.kickOffRadius);
+            ctx.lineTo(0, bg.height);
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = haxball[bg.type].border_color;
+            ctx.stroke();
+            break;
+        default:
+            ctx.fillStyle = hexToRgb(bg.color);
+            ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
+    }
+
+    ctx.restore();
 }
 
 
@@ -1207,8 +2271,10 @@ function handle_move(ev){
         if(current_tool.moving && current_tool.moving(pt, ev) === false)
             update_pos = false;
     }
-    if(update_pos)
-        div_mousepos.text(pt[0] + ', ' + pt[1]);
+    if(update_pos){
+        let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+        $(mpObj).text(pt[0] + ', ' + pt[1]);
+    }
 }
 
 var tool_select = {
@@ -1284,7 +2350,8 @@ var tool_select = {
                 false);
         queue_render();
         if(this.drag_type == 'select'){
-            $('#mousepos').text(Math.abs(from[0]-to[0])+' x '+Math.abs(from[1]-to[1]));
+            let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+            $(mpObj).text(Math.abs(from[0]-to[0])+' x '+Math.abs(from[1]-to[1]));
             return false;
         }else if(this.drag_type == 'move'){
             // bad idea
@@ -1298,8 +2365,11 @@ var tool_select = {
         if(mouse_dragging && this.drag_type == 'select'){
             var a = this.drag_from;
             var b = this.drag_to;
-            ctx.fillStyle = 'rgba(201,224,247,0.5)';
-            ctx.fillRect(a[0], a[1], b[0]-a[0], b[1]-a[1]);
+            ctx.fillStyle = colors.selection_box.bgc;
+            ctx.strokeStyle = colors.selection_box.bdr;
+            //  x, y, w, h
+            ctx.fillRect(a[0], a[1], b[0] - a[0], b[1] - a[1]);
+            ctx.strokeRect(a[0] + 1, a[1] + 1, b[0] - a[0] - 2, b[1] - a[1] - 2);
         }
     }
 };
@@ -1313,7 +2383,8 @@ function transform_drag_curve(st, ctx, shape, draw){
     var seg = complete(st, shape.object);
     var arc = segment_arc_to_point(st, seg, this.drag_to);
 
-    $('#mousepos').text(Math.round(arc.curve) + '°');
+    let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+    $(mpObj).text(Math.round(arc.curve) + '°');
 
     render_segment_arc(ctx, seg, arc);
 }
@@ -1350,7 +2421,8 @@ var tool_rotate = {
     render: render_transformation_center,
     dragging: function(from, to, ev){
         this.drag_to = to;
-        $('#mousepos').text(round(three_point_angle(from, transformation_center, to)*180/pi)+'°');
+        let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+        $(mpObj).text(round(three_point_angle(from, transformation_center, to)*180/pi)+'°');
         queue_render();
         return false;
     },
@@ -1387,24 +2459,49 @@ function set_tool(t){
 
 function unselect_shape(st, shape){
     shape_set_selected(shape, false);
-    if(shape.type == 'segments'){
-        var s = shape.object;
-        if(selected(st.vertexes[s.v0]) == 'segment')
-            shape_set_selected(Shape('vertexes', st.vertexes[s.v0], s.v0), false);
-        if(selected(st.vertexes[s.v1]) == 'segment')
-            shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), false);
+    switch(shape.type){
+        case 'segments':
+            var s = shape.object;
+            if(selected(st.vertexes[s.v0]) == 'segment')
+                shape_set_selected(Shape('vertexes', st.vertexes[s.v0], s.v0), false);
+            if(selected(st.vertexes[s.v1]) == 'segment')
+                shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), false);
+            break;
+        
+        case 'joints':
+            var s = shape.object;
+            if(selected(st.discs[s.v0]) == 'joint')
+                shape_set_selected(Shape('discs', st.discs[s.d0], s.d0), false);
+            if(selected(st.discs[s.v1]) == 'joint')
+                shape_set_selected(Shape('discs', st.discs[s.d1], s.d1), false);
+            break;
+        
     }
-
 }
 
 function select_shape(st, shape){
-    shape_set_selected(shape,true);
-    if(shape.type == 'segments'){
-        var s = shape.object;
-        if(!selected(st.vertexes[s.v0]))
-            shape_set_selected(Shape('vertexes', st.vertexes[s.v0], s.v0), 'segment');
-        if(!selected(st.vertexes[s.v1]))
-            shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), 'segment');
+    //test_me = [st, shape.object];
+    shape_set_selected(shape, true);
+    switch(shape.type){
+        case 'segments':
+            var s = shape.object;
+
+            //shape_set_selected(Shape('vertexes', stadium.vertexes[shape.object.v0], shape.object.v0), 'segment');
+
+            if(!selected(st.vertexes[s.v0]))
+                shape_set_selected(Shape('vertexes', st.vertexes[s.v0], s.v0), 'segment');
+            if(!selected(st.vertexes[s.v1]))
+                shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), 'segment');
+            break;
+        
+        case 'joints':
+            var s = shape.object;
+            if(!selected(st.discs[s.d0 - 1]))
+                shape_set_selected(Shape('discs', st.discs[s.d0 - 1], s.d0 - 1), 'joint');
+            if(!selected(st.discs[s.d1 - 1]))
+                shape_set_selected(Shape('discs', st.discs[s.d1 - 1], s.d1 - 1), 'joint');
+            break;
+        
     }
 }
 
@@ -1508,6 +2605,20 @@ function under_point(st, pt, type){
 
         if(obj) return Shape('planes', obj, index);
     }
+
+    /*
+    if(!type || type == 'joint'){
+        eachRev(st.joints, function(i, joint){
+            if(joint_contains(st, joint, pt, maximum_click_distance)){
+                obj = joint;
+                index = i;
+                return false;
+            }
+        });
+        if(obj) return Shape('joints', obj, index);
+    }
+    */
+    
 }
 
 function selected(obj){
@@ -1550,7 +2661,7 @@ function for_selected(st, f, a, b, c){
 function for_all_shapes(st, types, f){
     if(!f){
         f = types;
-        types = ['vertexes', 'segments', 'goals', 'discs', 'planes'];
+        types = ['vertexes', 'segments', 'goals', 'discs', 'planes', 'joints'];
     }
 
     $.each(types, function(i, name){
@@ -1601,6 +2712,14 @@ function select_rect(st, a, b){
                 shape_set_selected(shape, true);
                 count ++;
             }
+            break;
+        
+        case 'joints':
+            if(selected(st.discs[o.d0]) && selected(st.discs[o.d1])){
+                shape_set_selected(shape, true);
+                count ++;
+            }
+            break;
         }
     });
 
@@ -1633,10 +2752,6 @@ function move_obj(st, shape, from, to){
     if(type == 'planes'){
         obj.dist += dot_product(vd, o.normal) / norm(o.normal);
     }
-
-    if(type == 'joints'){
-
-    }
 }
 
 var tool_segment = {
@@ -1646,6 +2761,7 @@ var tool_segment = {
     click: function(){},
     end_drag: function(from, to, ev){
         var shape = add_segment(stadium, from, to);
+        //test_me = shape;
         select_shape(stadium, shape);
         var v = segment_vertices(stadium, shape);
         select_shape(stadium, v[0]);
@@ -1659,14 +2775,15 @@ var tool_segment = {
     },
     dragging: function(from, to, ev){
         this.drag_to = to;
-        $('#mousepos').text(Math.round(dist(from,to))+'; '+Math.round(angle_to(from, to)/Math.PI*180)+'°');
+        let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+        $(mpObj).text(Math.round(dist(from,to))+'; '+Math.round(angle_to(from, to)/Math.PI*180)+'°');
         queue_render();
         return false;
     },
     render: function(ctx){
         if(mouse_dragging){
             ctx.lineWidth = 3;
-            ctx.strokeStyle = color_to_style(get_prop_val('color', '000000')); 
+            ctx.strokeStyle = color_to_style(get_prop_val('color', '000000'));
             var arc = calculate_arc(this.drag_from, this.drag_to, this.curve);
             ctx.beginPath();
             if(arc.radius){
@@ -1722,9 +2839,10 @@ var tool_joint = {
     end_drag: function(from, to, ev){
         var shape = add_joint(stadium, from, to);
         select_shape(stadium, shape);
-        var v = add_disc(stadium, pt);
-        select_shape(stadium, v[0]);
-        select_shape(stadium, v[1]);
+        var d = joint_discs(stadium, shape);
+        select_shape(stadium, d[0]);
+        //test_me = d;
+        select_shape(stadium, d[1]);
         modified();
     },
     key: function(){},
@@ -1733,7 +2851,8 @@ var tool_joint = {
     },
     dragging: function(from, to, ev){
         this.drag_to = to;
-        $('#mousepos').text(Math.round(dist(from,to))+'; '+Math.round(angle_to(from, to)/Math.PI*180)+'°');
+        let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+        $(mpObj).text(Math.round(dist(from,to))+'; '+Math.round(angle_to(from, to)/Math.PI*180)+'°');
         queue_render();
         return false;
     },
@@ -1741,7 +2860,7 @@ var tool_joint = {
         if(mouse_dragging){
             ctx.lineWidth = 3;
             ctx.strokeStyle = color_to_style(get_prop_val('color', '000000')); 
-            var arc = calculate_arc(this.drag_from, this.drag_to, this.curve);
+            var arc = calculate_arc(this.drag_from, this.drag_to);
             ctx.beginPath();
             if(arc.radius){
                 ctx.arc(arc.center[0], arc.center[1], arc.radius, arc.from, arc.to, false);
@@ -1762,9 +2881,9 @@ function add_joint(st, from, to, no_mirror){
     var b = jb || add_disc(stadium, to, 10);
 
     var obj = {
-        d0: a.index,
-        d1: b.index,
-        length: null,
+        d0: a.index + 1,    //  버그
+        d1: b.index + 1,
+        //length: null,
         strength: "rigid",
         color: "000000"
     };
@@ -1773,22 +2892,35 @@ function add_joint(st, from, to, no_mirror){
 
     st.joints.push(obj);
     
-    var shape = Shape('joints', obj, st.segments.length - 1);
+    var shape = Shape('joints', obj, st.joints.length - 1);
 
-    if(mirror_mode && !is_mirror){
+    if(mirror_mode && !no_mirror){
         $.each(mirror_directions, function(i, dir){
-            if(!mirroring_disabled(dir) && can_mirror_vertex(pt, dir)){
-                var dis = add_disc(st, mirror_point(pt, dir), r, true);
-                link_shapes(shape, dis, dir);
+            if(!mirroring_disabled[dir] && can_mirror_joint(from, to, dir, obj.curve)){
+                var jnt = add_joint(st, mirror_point(from, dir), mirror_point(to, dir), true);
+                link_shapes(shape, jnt, dir);
+                var d = joint_discs(st, jnt);
+                link_shapes(a, d[1], dir);
+                link_shapes(b, d[2], dir);
             }
         });
     }
-    render_joint_arc(ctx, segment, arc);
     return shape;
 }
 
 
 function can_mirror_segment(a, b, dir){
+    var ret = true;
+    if(sign(a[0]) * sign(b[0]) == -1){
+        ret = ret && dir != 'horizontal' && dir != 'across'; 
+    }
+    if(sign(a[1]) * sign(b[1]) == -1){
+        ret = ret && dir != 'vertical' && dir != 'across';
+    }
+    return ret;
+}
+
+function can_mirror_joint(a, b, dir){
     var ret = true;
     if(sign(a[0]) * sign(b[0]) == -1){
         ret = ret && dir != 'horizontal' && dir != 'across'; 
@@ -1899,14 +3031,11 @@ function load_tile(name){
     tile.src = name+'tile.png';
 }
 
-function color_to_style(color, def){
-    if(!color){
-        return def ? def : 'rgb(0,0,0)';
-    }else if(color.substr){
-        return '#' + color;
-    }else{
-        return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
-    }
+function color_to_style(color, def, type){
+    if(color == 'transparent') return color;    //  투명색
+    if(!color) return def ? def : 'rgb(0,0,0)';
+    if(color.substr) return '#' + color;
+    return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
 }
 
 function segment_arc(st, segment){
@@ -1929,6 +3058,26 @@ function segment_arc(st, segment){
 
     return arc;
 }
+
+function joint_arc(st, joint){
+    var jnt = joint_points(st, joint);
+
+    var arc = data(joint, 'arc');
+
+    if(arc && (arc.a[0] == jnt.a[0]) && (arc.a[1] == jnt.a[1]) &&
+       (arc.b[0] == jnt.b[0]) && (arc.b[1] == jnt.b[1])){
+        return arc;
+    }
+
+    arc = {a: jnt.a, b: jnt.b};
+
+    $.extend(arc, calculate_arc(jnt.a, jnt.b));
+    
+    data(joint, 'arc', arc);
+
+    return arc;
+}
+
 
 function calculate_arc(a, b, curve){
     var arc = {};
@@ -2004,6 +3153,18 @@ function segment_contains(st, segment, pt, d){
         return point_next_to_line(pt, seg.a, seg.b, d);
     }else{
         var arc = segment_arc(st, s);
+        return distance_circle_point(arc.center, arc.radius, pt) <= d &&
+            clockwise_between(arc.from, arc.to, angle_to(arc.center, pt)); 
+    }
+}
+
+function joint_contains(st, joint, pt, d){
+    s = complete(st, joint);
+    if(!s.curve || s.curve === 0){
+        var jnt = joint_points(st, joint);
+        return point_next_to_line(pt, jnt.a, jnt.b, d);
+    }else{
+        var arc = joint_arc(st, s);
         return distance_circle_point(arc.center, arc.radius, pt) <= d &&
             clockwise_between(arc.from, arc.to, angle_to(arc.center, pt)); 
     }
@@ -2213,6 +3374,15 @@ function segment_points(st, segment){
     };
 }
 
+function joint_points(st, joint){
+    var a = st.discs[joint.d0];
+    var b = st.discs[joint.d1];
+    return {
+        a: [a.x, a.y],
+        b: [b.x, b.y]
+    };
+}
+
 function rectangle_contains(a, b, pt){
     return between(a[0], b[0], pt[0]) &&
         between(a[1], b[1], pt[1]);
@@ -2364,7 +3534,8 @@ var tool_goal = {
     },
     dragging: function(from, to, ev){
         this.drag_to = to;
-        $('#mousepos').text(Math.round(dist(from,to))+'; '+Math.round(angle_to(from, to)/Math.PI*180)+'°');
+        let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+        $(mpObj).text(Math.round(dist(from,to))+'; '+Math.round(angle_to(from, to)/Math.PI*180)+'°');
         queue_render();
         return false;
     },
@@ -2415,7 +3586,9 @@ var tool_plane = {
     },
     moving: function(pt, ev){
         this.mouse_pos = pt;
-        $('#mousepos').text(pt[0] + ', ' + pt[1] + '; ' + Math.round(angle_to(pt, [0,0])/Math.PI*180)+'°');
+        let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+        test_me = mpObj;
+        $(mpObj).text(pt[0] + ', ' + pt[1] + '; ' + Math.round(angle_to(pt, [0,0])/Math.PI*180)+'°');
         queue_render();
         return false;
     }
@@ -2488,12 +3661,14 @@ function toggle_properties(){
         $(canvas).hide();
         prop.show();
         $('#button_properties').addClass('active');
+        $('#tab_sub').hide();
         $('#bottomboxes').hide();
     }else{
         prop.hide();
         $(canvas).show();
         $('#button_properties').removeClass('active');
         $('#bottomboxes').show();
+        $('#tab_sub').show();
         queue_render();
     }
 }
@@ -2597,7 +3772,9 @@ function rotate_obj(st, shape, center, cos, sin){
     }
 
     if(type == 'joints'){
-
+        var n = point_rotate([o.d0, o.d1], center, cos, sin);
+        obj.d0 = n[0];
+        obj.d1 = n[1];
     }
 }
 
@@ -2669,6 +3846,21 @@ function height_plane_point(st, plane, pt){
 
 function add_tool(tool){
     $('#button_tool_'+tool.name).click(function(){
+        switch(tool.name){
+            case "select":
+                //$('#layer_objl').removeClass('hidden');
+                break;
+            case "rotate":
+            case "scale":
+            case "segment":
+            case "vertex":
+            case "joint":
+            case "disc":
+            case "goal":
+            case "plane":
+                //$('#layer_objl').addClass('hidden');
+                break;
+        }
         set_tool(tool);
     });
 }
@@ -2728,7 +3920,8 @@ function resize_canvas(){
     });
 
     var cd = $('#canvas_div');
-    var canvas_div_size = [cd.innerWidth() - 20, cd.innerHeight() - 20];
+    //var canvas_div_size = [cd.innerWidth() - 20, cd.innerHeight() - 20];
+    var canvas_div_size = [cd.innerWidth(), cd.innerHeight()];
     
     rect = [
         round(min(rect[0] - margin, -canvas_div_size[0]/2)),
@@ -2784,8 +3977,8 @@ var tool_scale = {
             ctx.scale(v[0], v[1]);
             ctx.translate(-o[0], -o[1]);
 
-            $('#mousepos').text(Math.round(v[0]*100) + '% x ' +
-                                Math.round(v[1]*100) + '%');
+            let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
+            $(mpObj).text(Math.round(v[0]*100) + '% x ' + Math.round(v[1]*100) + '%');
         }
         draw();
     }
@@ -2975,7 +4168,7 @@ function initialise_properties_css(){
         });
     });
 
-    $('<style type="text/css">' + rules.join('\n') + '</style>').appendTo($('head'));
+    $('<style type="text/css">' + rules.join(newLine) + '</style>').appendTo($('head'));
 }
 
 function populate_tab_properties(){
@@ -2983,8 +4176,8 @@ function populate_tab_properties(){
     $.each(properties, function(prop, opts){
         var type = opts.type;
         if(type != 'ref'){
-            var div = $('<div class="property prop_'+prop+'"></div>').appendTo(tp);
-            var label = $('<label class="prop">'+prop+'</label>').appendTo(div);
+            var div = $('<div class="property prop_' + prop + '"></div>').appendTo(tp);
+            var label = $('<label for="' + prop + '" class="prop">' +  properties[prop].innerText + '</label>').appendTo(div);
             var apply = function(){
                 property_apply(prop, property_data[prop]);
             };
@@ -2992,6 +4185,18 @@ function populate_tab_properties(){
                 
                 // TODO: number point color team trait bool
 
+            case 'bool':/*
+                var inp = $('<input type="checkbox" class="prop">').appendTo(div);
+                property_data[prop] = inp;
+                inp.change(apply);
+                break;
+                */
+                /*
+                <select class="prop" style="width: 104px;" id="prop_kickOffReset">
+                  <option data-langNum="317", value="partial">Partial</option>
+                  <option data-langNum="318", value="full">Full</option>
+                </select>
+                */
             case 'point':
             case 'number':
             case 'color':
@@ -3000,8 +4205,8 @@ function populate_tab_properties(){
             case 'length':
             case 'strength':
             case 'trait':
-            case 'bool':
-                var inp = $('<input type="text" class="prop">').appendTo(div);
+                var inp = $('<input name="' + prop + '"' + 'id="' + prop + '"' + 'type="text" class="prop">').appendTo(div);
+                property_dataLabel[prop] = label;
                 property_data[prop] = inp;
                 inp.change(apply);
             }
@@ -3013,7 +4218,12 @@ function property_apply(prop, inp){
     val = get_prop_val(prop);
     if(val !== undefined){
         for_selected(stadium, function(st, shape){
-            shape.object[prop] = val;
+            let hasValid = function(tp, pr, v){
+                if(pr != 'color' || v != 'transparent') return true;
+                return !(tp == 'segments' || tp == 'vertexes');
+            }
+            //  segments 또는 vertexese 투명색 적용 불가 처리
+            shape.object[prop] = (hasValid(shape.type, prop, val) ? val : '000000');
             // TODO: mirror the property update
         });
         modified();
@@ -3022,6 +4232,7 @@ function property_apply(prop, inp){
 
 function get_prop_val(prop, def){
     var inp = property_data[prop];
+    var label = property_dataLabel[prop];
     if(!inp)
         return def;
     var type = properties[prop].type;
@@ -3036,8 +4247,11 @@ function get_prop_val(prop, def){
         if(m) return parseFloat(m[1]);
         break;
     case 'color':
-        var m = val.match(/^[A-Z0-9]{6}$/i);
-        if(m) return m[0];
+        //var m = val.match(/^[A-Z0-9]{6}$/i);
+        //if(m) return m[0];
+        //test_me = def;
+        var m = parseColorExt(val);
+        if(m != '') return m;
         break;
     case 'team':
         var m = val.match(/^red|blue$/i);
@@ -3053,12 +4267,13 @@ function get_prop_val(prop, def){
         if(good) return layers;
         break;
     case 'length':
-        var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)|null$/i);
-        if(m) return m[0];
+        var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)$/);
+        if(m) return parseFloat(m[1]);
         break;
     case 'strength':
-        var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)|rigid$/i);
-        if(m) return m[0];
+        if(val == 'rigid') return val[0];
+        var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)$/);
+        if(m) return parseFloat(m[1]);
         break;
     case 'trait':
         if(stadium.traits[val])
@@ -3070,18 +4285,22 @@ function get_prop_val(prop, def){
         if(m=='false') return false;
         break;
     }
-    if(val !== ''){
-        inp.addClass('error');
-    }
+    if(val !== '')
+        setError(prop, true);
     return def;
+}
+
+function setError(prop, isShow){
+    if(!prop) return;
+    let propList = [property_data[prop], property_dataLabel[prop]];
+    propList.forEach(e => isShow == true ? e.addClass('error') : e.removeClass('error'));
 }
 
 function set_prop_val(prop, val){
     var inp = property_data[prop];
-    if(!inp)
-        return;
+    if(!inp) return;
 
-    inp.removeClass('error');
+    setError(prop, false);
 
     if(val === undefined){
         inp.val('');
@@ -3097,9 +4316,11 @@ function set_prop_val(prop, val){
     case 'team':
     case 'trait':
     case 'bool':
+    case 'strength':
         inp.val(''+val);
         break;
     case 'color':
+        //parseColorExt(val);
         if(val instanceof Array){
             inp.val(rgb_to_hex(val));
         }else{
@@ -3110,8 +4331,6 @@ function set_prop_val(prop, val){
         inp.val(val.join(','));
         break;
     case 'length':
-        break;
-    case 'strength':
         break;
     }
 }
@@ -3126,13 +4345,13 @@ function tool_class_name(tool){
     if(!tool)
         return 'selected_tool_none';
     switch(tool.name){
-    case 'segment': return 'selected_tool_segments';
-    case 'vertex': return 'selected_tool_vertexes';
-    case 'plane': return 'selected_tool_planes';
-    case 'disc': return 'selected_tool_discs';
-    case 'goal': return 'selected_tool_goals';
-    case 'joint': return 'selected_tool_joints';
-    default: return 'selected_tool_other';
+        case 'segment': return 'selected_tool_segments';
+        case 'vertex':  return 'selected_tool_vertexes';
+        case 'plane':   return 'selected_tool_planes';
+        case 'disc':    return 'selected_tool_discs';
+        case 'goal':    return 'selected_tool_goals';
+        case 'joint':   return 'selected_tool_joints';
+        default:        return 'selected_tool_other';
     }
 }
 
@@ -3342,8 +4561,8 @@ function set_selection_range(el, start, end){
 
         value = el.value;
         range = el.createTextRange();
-        end   -= start + value.slice(start + 1, end).split("\n").length - 1;
-        start -= value.slice(0, start).split("\n").length - 1;
+        end   -= start + value.slice(start + 1, end).split(newLine).length - 1;
+        start -= value.slice(0, start).split(newLine).length - 1;
         range.move('character', start);
         range.moveEnd('character', end);
         range.select();
@@ -3432,7 +4651,21 @@ function reset_mirror_data(st){
                     }
                 });
                 break;
+
             case 'joints':
+                var d0 = st.discs[sh1.object.d0];
+                var d1 = st.discs[sh1.object.d1];
+                var ma = mirror_data(st.discs[sh2.object.d0]);
+                var mb = mirror_data(st.discs[sh2.object.d1]);
+                $.each(link_types, function(i, type){
+                    if(ma[type] == d0 && mb[type] == d1){
+                        link_shapes(sh1, sh2, type);
+                    }
+                    else if(ma[type] == d1 && mb[type] == d0){
+                        shape_switch_ends(sh1);
+                        link_shapes(sh1, sh2, type);
+                    }
+                });
                 break;
             }
         });
@@ -3494,6 +4727,13 @@ function shape_switch_ends(sh){
         seg.v1 = tmp;
         break;
         
+    case 'joints':
+        var jnt = sh.object;
+        var tmp = jnt.d0;
+        jnt.d0 = jnt.d1;
+        jnt.d1 = tmp;
+        break;
+        
     case 'goals':
         var tmp = sh.object.p0;
         sh.object.p0 = sh.object.p1;
@@ -3547,6 +4787,15 @@ function segment_vertices(st, seg){
     return [
         Shape('vertexes', st.vertexes[v0], v0),
         Shape('vertexes', st.vertexes[v1], v1)
+    ];
+}
+
+function joint_discs(st, jnt){
+    var d0 = jnt.object.d0;
+    var d1 = jnt.object.d1;
+    return [
+        Shape('discs', st.discs[d0], d0),
+        Shape('discs', st.discs[d1], d1)
     ];
 }
 
@@ -3850,48 +5099,99 @@ function library_delete(){
     });    
 }
 
-function download()
-{
-    var fs = require('fs');
-
-    // 1. 새로 생성할 파일에 입력될 문자열
-    var data = "My first data...\r\nhello there!";
-    
-    // 2. 비동기 방식으로 파일을 생성. 함수의 인자는 앞에서 부터 순서대로 파일명, 입력데이터, 인코딩, 콜백함수
-    fs.writeFile('file01_async.hbs', data, 'utf-8', function(e){
-        if(e){
-            // 3. 파일생성 중 오류가 발생하면 오류출력
-            console.log(e);
-        }else{
-            // 4. 파일생성 중 오류가 없으면 완료 문자열 출력
-            console.log('01 WRITE DONE!');
+function download(st){
+    if(!st){ 
+        alert($.lang[getLang()][7]);
+        return;		//	데이터가 없는 경우
+    }
+    let hasOverflow = function(st){
+        let types = [
+            'segments', 'vertexes', 'discs', 'goals', 'planes', 'joints'
+        ];
+        let getAlertKeyword = function(st){
+            let hasValidAmount = (prp) => prp == undefined ? true : prp.length <= 255;
+            for(let i = 0; i < types.length; i++){
+                let prop = st[types[i]];
+                if(!hasValidAmount(prop)) return 33 + i;
+            }
+            return false;
         }
-    });
-    
-    // 5. 동기방식은 callback 함수를 통한 오류처리를 할 수 없기 때문에 함수전체를 try 문으로 예외처리
-    try{
-        // 6. 동기 방식으로 파일을 생성. 함수의 인자는 앞에서 부터 순서대로 파일명, 입력데이터, 인코딩
-        fs.writeFileSync('file02_sync.txt', data, 'utf-8');
-        console.log('02 WRITE DONE!');
-    }catch(e){
-        console.log(e);
-    }   
+        let getOverflow = function(str){
+            let getProp = function(type){
+                let index = type - 33;
+                if(index >= types.length) return [];
+                return st[types[index]];
+            }
+            return getProp(str).length - 255;
+        }
+        let alertKeyword = getAlertKeyword(st);
+        if(!alertKeyword) return false;
+        if(alertKeyword > 0) alert($.lang[getLang()][8]
+        +"\n" + $.lang[getLang()][123] + $.lang[getLang()][alertKeyword] + '(' + getOverflow(alertKeyword) + ')');
+        return true;
+    }
+    if(hasOverflow(st)) return;
+    let title = (st.name + ".hbs");
+    const downloadURL = (data, name) => {
+        const a = document.createElement('a')
+        a.href = data
+        a.download = name;
+        document.body.appendChild(a)
+        a.style.display = 'none'
+        a.click()
+        a.remove()
+    }  
+    const downloadBlob = (data, name, mimeType) => {
+        const blob = new Blob([data], {
+            type: mimeType
+        })
+        const url = window.URL.createObjectURL(blob)
+        downloadURL(url, name);
+        setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+    }
+    //downloadBlob(fileData, fileName, "application/octet-stream");
+    downloadBlob(pprint(st), title, "application/prs.hbs");
 }
 
 function parseColor(str){
-    if(!str.match('^[A-Fa-f0-9]{6}$'))
-        return '';
-    return str;
+    if(str.match('^[A-Fa-f0-9]{6}$')) return str;
+    return '';
+}
+
+function parseColorExt(str){
+    return str.match('transparent') ? str : parseColor(str);
 }
 
 function parseCameraFollow(str){
     if(str.match('ball') || str.match('player')) return str;
-    else return '';
+    return '';
 }
 
-function parseDetectedCommand(str){
-    if(str.match == 0) return false;
-    else return true;
+function parseKickOffReset(str){
+    if(str.match('partial') || str.match('full')) return str;
+    return '';
+}
+
+function parseCanBeStored(){
+    return parseBool(prop_canBeStored);
+    //let res = str.match('true') ? true : str.match('false') ? false : '';
+    //return res;
+    //return str.match('true') ? true : str.match('false') ? false : '';
+}
+function parseVis(){ 
+    return parseBool(prop_vis);
+}
+
+function parseBool(prop){ 
+    return $(prop).prop("checked");
+}
+
+function parseVector(str){
+    var list = str.split(',');
+    let pos = [parseFloat(list[0]), parseFloat(list[1])];
+    if(isNaN(pos[0]) == true || isNaN(pos[1]) == true)
+        return [0, 0];
+    return pos;
 }
 
 function parseMaskList(str){
