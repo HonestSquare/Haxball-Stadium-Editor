@@ -140,12 +140,13 @@ $.lang = {};
 $.lang.ko = {
     // 공통
     0: "HaxPuck(오프라인)",
-    1: "v1.19(베타) " + newLine + "2022년 3월 18일 최종 업데이트",
+    1: "v1.20(베타) " + newLine + "2022년 4월 17일 최종 업데이트",
     2: "언어를 선택하십시오",
     3: "알림", 4: "주의", 5: "경고",
     6: "Haxball Stadium Editor를 닫을까요?",
     7: "파일을 내보내는 도중 오류가 발생하였습니다. 나중에 다시 시도하십시오.",
     8: "오브젝트의 수가 너무 많아서 저장할 수 없습니다.",
+    9: "파일을 불러오는 도중 오류가 발생하였습니다.",
 
     // 상단 퀵툴
     10: "게임 업데이트 페이지입니다.",
@@ -188,6 +189,7 @@ $.lang.ko = {
     121: "정말로 모든 내용을 지우겠습니까?",
     122: "찾아 갈 좌표 위치를 입력하세요.",
     123: "초과한 오브젝트의 수: ",
+    124: "파일 형식 또는 파일 확장명이 잘못되어 이 파일을 열 수 없습니다." + newLine + "파일명: ",
 
     // 도움말 내부 버튼
     130: "도움말",  131: "버전 정보",
@@ -237,7 +239,7 @@ $.lang.ko = {
 
     // 기타
     300: "열기", 301: "저장", 302: "닫기", 303: "내보내기",
-    304: "예", 305: "아니오", 306: "취소", 307: "확인",
+    304: "예", 305: "아니오", 306: "취소", 307: "확인", 308: "불러오기",
     310: "활성화", 311: "비활성화",
     315: "볼", 316: "플레이어",
     317: "최소", 318: "최대",
@@ -480,21 +482,28 @@ $.lang.ko = {
     + newLine + "[도움말]이 갱신되었습니다."
     + newLine + "마우스를 드래그 할 때 표시되는 선택 박스의 시인성이 향상되었습니다."
     + newLine + "사용성이 향상되었습니다.",
+    // (2022.04.17) v1.20
+    2271: "파일 열기 기능이 추가되었습니다."
+    + newLine + "우클릭을 통한 작업 동작 메뉴가 추가되었습니다."
+    + newLine + "비선택 도구를 활성화 한 상태에서 붙여놓기 동작을 실행하면 선택 도구로 전환되는 구조가 추가되었습니다."
+    + newLine + "[속성] > [백그라운드] > [색상]을 사용자 임의 값으로 지정하면 잔디 테마가 제대로 적용되지 않던 문제가 해결되었습니다."
+    + newLine + "사용성이 향상되었습니다.",
 };
 //  영어
 $.lang.en = {
     // Common
     0: "HaxPuck(OFFLINE)",
-    1: "v1.19(Beta); " + newLine + "This software was updated on 18th Mar, 2022",
+    1: "v1.20(Beta); " + newLine + "This software was updated on 17th Apr, 2022",
     2: "Select your language",
     3: "Confirm", 4: "Alert", 5: "Warning",
-    6: "Are you sure want to leave from HBSE?",
+    6: "Are you sure want to leave HBSE?",
     7: "Error during exporting process of the file. Please try again later.",
     8: "Failed to save the file due to too many objects!",
+    9: "Error during importing process of the file.",
 
     // Top quick-tool
     10: "the game version update page.",
-    11: "You can access the game right away. Fast movement is possible for map testing.",
+    11: "You can access the game right away. Fast movement is possible for stadium test.",
     12: "the game introduction page.",
     13: "a community list page around the world.",
     14: "an old version based on flash. do not visit this even though if you got a curse that must have no web browsers except IE on your PC.",
@@ -533,6 +542,7 @@ $.lang.en = {
     121: "Clear all data?",
     122: "Character Position?",
     123: "Overflowed: ",
+    124: "The file format or its extension is not valid and cannot open this:" + newLine,
 
     // 도움말 내부 버튼
     130: "Help",  131: "Info",
@@ -584,7 +594,7 @@ $.lang.en = {
 
     // ETC
     300: "Open", 301: "Save", 302: "Close", 303: "Download",
-    304: "Yes", 305: "No", 306: "Cancel", 307: "OK",
+    304: "Yes", 305: "No", 306: "Cancel", 307: "OK", 308: "Open",
     310: "Enable", 311: "Disable",
     315: "Ball", 316: "Player",
     317: "Partial", 318: "Full",
@@ -803,7 +813,7 @@ $.lang.en = {
     + newLine + "Updated contents of [Help].",
     // v1.17(2022.02.06)
     2241: "Enhanced Preview feature"
-    + newLine + "Added Download feature that save stadium data to export a file into Local Storage."
+    + newLine + "Added a feature that save stadium data to export a file into Local Storage."
     + newLine + "Added Settings menu."
     + newLine + "Added [kickOffReset] of [General] in [Stadium Properties]."
     + newLine + "Added a structure that background color applying as by the value of [Color] of [Background] in [Stadium Properties] automatically."
@@ -820,6 +830,12 @@ $.lang.en = {
     2261: "Added a feature minimize a Status Window."
     + newLine + "Updated contents of [Help]."
     + newLine + "Updated a Mouse Selection Box."
+    + newLine + "Enchaned and Improved UX.",
+    // (2022.04.17) v1.20
+    2271: "Added a feature that open and load a file from Local Storage."
+    + newLine + "Added a Context Menu with Bottom quick-tool."
+    + newLine + "Added structure to switch to the select tool when paste action is performed with the non-selection tool enabled."
+    + newLine + "Fixed a structure that background color applying as by the value of [Color] of [Background] in [Stadium Properties] does not working with [Type] in [Background]: [Glass]."
     + newLine + "Enchaned and Improved UX.",
 };
 
@@ -914,7 +930,8 @@ var haxball = {
     segment_color: 'rgb(0,0,0)',
     disc_color: 'rgb(255,255,255)',
     default_disc_radius: 10,
-    default_player_radius: 15
+    default_player_radius: 15,
+    border_color: 'rgb(255, 255, 255)'
 };
 
 var properties = (function(p){return {
@@ -1094,7 +1111,7 @@ var sin = Math.sin;
 
 $(function(){
     initLang();
-    check_logged_in();
+    //check_logged_in();
 
     $('#stadium_editor_link').click(function(){
         hide_box();
@@ -1125,7 +1142,16 @@ $(function(){
             library_query();
         }
     });
-
+    
+    $('#button_import_text').click(function(){
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        download(stadium);
+    });
+    $('#button_import_load').click(function(){
+        if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
+        if(load_file() == true)    //  불러오고 창 닫기
+            return hide_box("import");
+    });
     $('#button_load').click(function(){
         load_file();
     });
@@ -1172,12 +1198,29 @@ $(function(){
     load_tile('grass');
     load_tile('hockey');
 
-    $(window).bind('beforeunload', function(){
-        if(!can_leave)
-            return alert($.lang[getLang()][6]);
+    /*
+    window.addEventListener('beforeunload', function(e){     //  나가기 직전 알림
+        if(!can_leave){
+            return confirm($.lang[getLang()][6]);
+        }
     });
+    */
+
+    $(document).keydown(function (e){               // F5, ctrl + F5, ctrl + r 새로고침 막기
+        if(e.which === 116){
+            if(typeof event == "object"){
+                event.keyCode = 0;
+            }
+            return false;
+        }
+        else if(e.which === 82 && e.ctrlKey){
+            return false;
+        } 
+    });
+
     $(window).resize(function(){                    //  창 크기 조절
-        setTimeout(() => resize(), 100);
+        $(".contextmenu").hide();
+        resize();
     });
 
     reset_selection();
@@ -1231,6 +1274,7 @@ $(function(){
     modified();
 
     set_tool(tool_select);
+
 
     $('#button_library_new').click(function(){
         load(new_stadium());
@@ -1349,7 +1393,7 @@ $(function(){
             st = undefined;
         }
         if(!st){
-            alert("맵에 예기치 않은 오류가 발생했습니다.");
+            alert($.lang[getLang()][9]);
             return;
         }
         oldTxtaraVal = $("#textarea_import").val();
@@ -1429,41 +1473,12 @@ $(function(){
  
     //  최대화
     $('.btn_show').click(function(){
-        let selectors = $(this).parents("div");
-        let parents = selectors[selectors.length - 1];
-        let btnHide = parents.getElementsByClassName('btn_hide')[0];
-        if(btnHide.style.display == 'none') btnHide.style.display = 'block';
-        this.style.display = 'none';
-        $(parents.getElementsByTagName("div")[1]).toggle();
-        switch(parents.id){
-            case 'titlebar':        //  상단 헤드라인
-                $('#input_name').toggle();
-                break;
-            case 'bottomboxes':     //  하단 작업표시줄
-                $('#mousepos').toggle();
-                $('#mouseposClone').toggle();
-                break;
-        }
-        resize();                //  UI 조정
+        test_me = this;
+        display_window(this, true);
     });
     //  최소화
     $('.btn_hide').click(function(){
-        let selectors = $(this).parents("div");
-        let parents = selectors[selectors.length - 1];
-        let btnShow = parents.getElementsByClassName('btn_show')[0];
-        if(btnShow.style.display == 'none') btnShow.style.display = 'block';
-        this.style.display = 'none';
-        $(parents.getElementsByTagName("div")[1]).toggle();
-        switch(parents.id){
-            case 'titlebar':        //  상단 헤드라인
-                $('#input_name').toggle();
-                break;
-            case 'bottomboxes':     //  하단 작업표시줄
-                $('#mouseposClone').toggle();
-                $('#mousepos').toggle();
-                break;
-        }
-        resize();                //  UI 조정
+        display_window(this, false);
     });
 
     $('#button_help_close').click(function(){
@@ -1482,7 +1497,7 @@ $(function(){
         hide_box("options");
         $("#button_options").removeClass("active");
         //closePop('#button_options');
-    });    
+    });
 
     add_tool(tool_select);
     add_tool(tool_segment);
@@ -1555,6 +1570,81 @@ $(function(){
         settings.preview = $('#pref_preview').hasClass('active');
         queue_render();
     });
+/*
+    $('#canvas').mousedown(function(event){         //  마우스 클릭
+        switch (event.which) {
+            case 1:             //  좌클릭
+                break;
+            case 2:             //  휠
+                return;
+            case 3:             //  우클릭
+                alert("대충 우클릭 감지");
+                break;
+            default:
+                return;
+        }
+    });
+
+*/
+
+    /*  Original Source by Tobias Bogliolo */
+    //  우클릭 도구 메뉴
+    $('#canvas').ready(function(){
+        //Show contextmenu:
+        $('#canvas').contextmenu(function(e){
+          //Get window size:
+          var winWidth = $(window).width();
+          var winHeight = $(window).height();
+          //Get pointer position:
+          var posX = e.pageX;
+          var posY = e.pageY;
+          //Get contextmenu size:
+          var menuWidth = $(".contextmenu").width();
+          var menuHeight = $(".contextmenu").height();
+          //Security margin:
+          var secMargin = 2;
+          //Prevent page overflow:
+          if(posX + menuWidth + secMargin >= winWidth
+          && posY + menuHeight + secMargin >= winHeight){
+            //Case 1: right-bottom overflow:
+            posLeft = posX - menuWidth - secMargin + "px";
+            posTop = posY - menuHeight - secMargin + "px";
+          }
+          else if(posX + menuWidth + secMargin >= winWidth){
+            //Case 2: right overflow:
+            posLeft = posX - menuWidth - secMargin + "px";
+            posTop = posY + secMargin + "px";
+          }
+          else if(posY + menuHeight + secMargin >= winHeight){
+            //Case 3: bottom overflow:
+            posLeft = posX + secMargin + "px";
+            posTop = posY - menuHeight - secMargin + "px";
+          }
+          else {
+            //Case 4: default values:
+            posLeft = posX + secMargin + "px";
+            posTop = posY + secMargin + "px";
+          };
+          //Display contextmenu:
+          $(".contextmenu").css({
+            "left": posLeft,
+            "top": posTop
+          }).show();
+          //Prevent browser default contextmenu.
+          return false;
+        });
+        /*
+        //Hide contextmenu:
+        $('#canvas').click(function(){
+          $(".contextmenu").hide();
+        });
+        */
+    });
+    
+    $(document).click(function(){
+        $(".contextmenu").hide();
+    });
+
 
 
     define_tab('properties');
@@ -1567,7 +1657,6 @@ $(function(){
     $(document).bind('keydown', handle_key);
 
     resize();
-    $(window).resize(resize);
 });
 
 function initLang(){
@@ -1731,6 +1820,72 @@ function hide_box(name){
     if($('#mouseposClone')[0].style.display == 'none') $('#mousepos').show();
     resize();
 }
+function display_propertiesMenu(name){
+    let tabProp = document.getElementById("tab_parent");
+    let tabTool = document.getElementById("right_tabs");
+    let getDisplayValue = function(name){
+        switch(name){
+            case "select":
+                let types = [
+                    'segments', 'vertexes', 'discs', 'goals', 'planes'
+                ];
+                let hasSelectedObject = function(t){
+                    for(let p of stadium[t]){
+                        if(p._selected == true) return true;
+                    }
+                    return false
+                }
+                for(let t of types){
+                    if(hasSelectedObject(t)) return 'block';
+                }
+            case "rotate":
+            case "scale":
+                return 'none';
+            default:
+                return 'block';
+        }
+    }
+    let dv = getDisplayValue(name);
+    tabTool.style.float = (dv == 'none' ? "inherit" : "right");
+    tabProp.style.display = dv;
+}
+function display_window(dw, isActive){
+    let selectors = $(dw).parents("div");
+    let parents = selectors[selectors.length - 1];
+    if(isActive == true){       //  최대화
+        let btnHide = parents.getElementsByClassName('btn_hide')[0];
+        if(btnHide.style.display == 'none') btnHide.style.display = 'block';
+        dw.style.display = 'none';
+        $(parents.getElementsByTagName("div")[1]).toggle();
+        switch(parents.id){
+            case 'titlebar':        //  상단 헤드라인
+                $('#input_name').toggle();
+                break;
+            case 'bottomboxes':     //  하단 작업표시줄
+                parents.style.bottom = 0;
+                $('#mousepos').toggle();
+                $('#mouseposClone').toggle();
+                break;
+        }
+    }
+    else{                       //  최소화
+        let btnShow = parents.getElementsByClassName('btn_show')[0];
+        if(btnShow.style.display == 'none') btnShow.style.display = 'block';
+        dw.style.display = 'none';
+        $(parents.getElementsByTagName("div")[1]).toggle();
+        switch(parents.id){
+            case 'titlebar':        //  상단 헤드라인
+                $('#input_name').toggle();
+                break;
+            case 'bottomboxes':     //  하단 작업표시줄
+                parents.style.bottom = "36px";
+                $('#mouseposClone').toggle();
+                $('#mousepos').toggle();
+                break;
+        }
+    }
+    resize();                //  UI 조정
+}
 
 $('#objl_segment_0').click(function(){
     select_shape(stadium, Shape('segments', stadium.segments[0], 0));
@@ -1853,8 +2008,8 @@ function center_canvas(pt){
 }
 
 function render(st){
-
-    var transform;
+    let transform;
+    let sw = st.width, sh = st.height;
 
     if(current_tool && current_tool.transform){
         transform = function(shape, draw){
@@ -1876,15 +2031,16 @@ function render(st){
     
     if(settings.preview){
         ctx.beginPath();
-        ctx.moveTo(-st.width, -st.height);
-        ctx.lineTo(st.width, -st.height);
-        ctx.lineTo(st.width, st.height);
-        ctx.lineTo(-st.width, st.height);
+        ctx.moveTo(-sw, -sh);
+        ctx.lineTo(sw, -sh);
+        ctx.lineTo(sw, sh);
+        ctx.lineTo(-sw, sh);
         ctx.clip();
     }
 
     renderbg(st, ctx);
 
+    
     if(!settings.preview) $.each(st.planes, function(i, plane){
         transform(Shape('planes', plane, i), function(){
             var ext = plane_extremes(st, plane);
@@ -2000,6 +2156,12 @@ function render(st){
         ctx.stroke();
 
     }
+    else{   //  윤곽선 그리기
+        ctx.setLineDash([5, 3]);/*dashes are 5px and spaces are 3px*/
+        ctx.strokeStyle = haxball.border_color;
+        ctx.strokeRect(-sw, -sh, 2 * sw, 2 * sh);
+        ctx.setLineDash([]);
+    }
 
     if(!settings.preview && current_tool && current_tool.render){
         current_tool.render(ctx);
@@ -2061,22 +2223,19 @@ function render_joint_arc(ctx, joint, arc){
     }
 }
 function renderbg(st, ctx){
-    var bg = st.bg;
+    let bg = st.bg;
+    let sw = st.width, sh = st.height;
     ctx.save();
 
+    //  배경 칠하기
+    //  draw bg color
+    let getBgColor = (c, t) => t == 'hockey' ? haxball[t].bg_color : hexToRgb(c);
+    let bgc = getBgColor(bg.color, bg.type);
+    ctx.fillStyle = bgc;
+    ctx.fillRect(-sw, -sh, 2 * sw, 2 * sh);
     switch(bg.type){
         case 'grass':
-            let bgc = hexToRgb(bg.color);
-            if(bgc != haxball['grass'].bg_color){
-                ctx.fillStyle = bgc;
-                ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
-                break;
-            }
         case 'hockey':
-            ctx.fillStyle = haxball[bg.type].bg_color;      //  배경 색상(grass, hockey)
-            ctx.fillRect(-st.width, -st.height,
-                         2 * st.width, 2 * st.height);
-
             ctx.beginPath();
             
             ctx.moveTo(-bg.width + bg.cornerRadius, -bg.height);
@@ -2088,8 +2247,8 @@ function renderbg(st, ctx){
 
             ctx.save();
             ctx.clip();
-            ctx.fillStyle = bg_patterns[bg.type];
-            ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
+            ctx.fillStyle = bg_patterns[bg.type];       //  draw bg patterns
+            ctx.fillRect(-sw, -sh, 2 * sw, 2 * sh);
             ctx.restore();
 
             ctx.moveTo(0, -bg.height);
@@ -2103,11 +2262,7 @@ function renderbg(st, ctx){
             ctx.strokeStyle = haxball[bg.type].border_color;
             ctx.stroke();
             break;
-        default:
-            ctx.fillStyle = hexToRgb(bg.color);
-            ctx.fillRect(-st.width, -st.height, 2 * st.width, 2 * st.height);
     }
-
     ctx.restore();
 }
 
@@ -2201,50 +2356,55 @@ function handle_key(ev){
     }
 
     switch(ev.which){
-    case 90: // Z
-    case 85:// U
-        undo();
-        return false;
-    case 82: // R
-        redo();
-        return false;
-    case 46: // DEL
-        if(delete_selected(stadium))
+        case 90: // Z
+        case 85:// U
+            undo();
+            return false;
+        case 82: // R
+            redo();
+            return false;
+        case 46: // DEL
+            if(delete_selected(stadium))
+                modified();
+            return false;
+        case 65: // A
+            select_all();
+            return false;
+        case 67: // C
+            copy();
+            return false;
+        case 88: // X
+            cut();
             modified();
-        return false;
-    case 65: // A
-        select_all();
-        return false;
-    case 67: // C
-        copy();
-        return false;
-    case 88: // X
-        cut();
-        modified();
-        return false;
-    case 86: // V
-        paste();
-        modified();
-        return false;
-    case 68: // D
-        duplicate();
-        modified();
-        return false;
-    case 49: // 1
-    case 50: // 2
-    case 51: // 3
-    case 52: // 4
-    case 53: // 5
-    case 54: // 6
-    case 55: // 7
-    case 56: // 8
-    case 57: // 9
-        set_tool([tool_select, tool_rotate, tool_scale, tool_segment,
-                  tool_vertex, tool_joint, tool_disc, tool_goal, tool_plane]
-                 [ev.which - 49]);
-        return false;
-    default:
-        return current_tool.key(ev.which, ev);
+            return false;
+        case 86: // V
+            paste();
+            modified();
+            return false;
+        case 68: // D
+            duplicate();
+            modified();
+            return false;
+        case 49: // 1
+        case 50: // 2
+        case 51: // 3
+        case 52: // 4
+        case 53: // 5
+        case 54: // 6
+        case 55: // 7
+        case 56: // 8
+        //case 57: // 9
+            /*
+            set_tool([tool_select, tool_rotate, tool_scale, tool_segment,
+                      tool_vertex, tool_joint, tool_disc, tool_goal, tool_plane]
+                     [ev.which - 49]);
+            */
+            set_tool([tool_select, tool_rotate, tool_scale, tool_segment,
+               tool_vertex, tool_disc, tool_goal, tool_plane]
+              [ev.which - 49]);
+            return false;
+        default:
+            return current_tool.key(ev.which, ev);
     }
 }
 
@@ -2291,10 +2451,12 @@ var tool_select = {
             if(!(ev.shiftKey || ev.ctrlKey)){
                 clear_selection(stadium);
             }
-        }else{
+        }
+        else{
             if(shape.type == 'segments'){
                 this.drag_type = 'segment';
-            }else{
+            }
+            else{
                 this.drag_type = 'move';
             }
             this.keep_others = ev.shiftKey || ev.ctrlKey;
@@ -2303,10 +2465,12 @@ var tool_select = {
                 if(!this.keep_others)
                     clear_selection(stadium);
                 select_shape(stadium, shape);
-            }else{
+            }
+            else{
                 this.shape_selected = true;
             }
         }
+        display_propertiesMenu(this.name);
         queue_render();
     },
     click: function(pt, ev){
@@ -2320,10 +2484,12 @@ var tool_select = {
             }
         }
         update_savepoint();
+        display_propertiesMenu(this.name);
     },
     end_drag: function(from, to, ev){
         this.transform = false;
         this.drag_type = false;
+        display_propertiesMenu(this.name);
         var shape = this.shape;
         if(!shape){
             select_rect(stadium, from, to);
@@ -2338,6 +2504,7 @@ var tool_select = {
                 modified();
             }
         }
+        display_propertiesMenu(this.name);
     },
     key: function(){},
     dragging: function(from, to, ev){
@@ -2454,6 +2621,7 @@ function set_tool(t){
     $(canvas).css('cursor', t.cursor);
     t.init();
     trigger('set_tool', t, old_tool);
+    display_propertiesMenu(t.name);
     queue_render();
 }
 
@@ -3028,7 +3196,7 @@ function load_tile(name){
         bg_patterns[name] = ctx.createPattern(tile, 'repeat');
         queue_render();
     };
-    tile.src = name+'tile.png';
+    tile.src = "./HBSE_files/general/" + name+'tile.png';
 }
 
 function color_to_style(color, def, type){
@@ -3587,7 +3755,7 @@ var tool_plane = {
     moving: function(pt, ev){
         this.mouse_pos = pt;
         let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
-        test_me = mpObj;
+        //test_me = mpObj;
         $(mpObj).text(pt[0] + ', ' + pt[1] + '; ' + Math.round(angle_to(pt, [0,0])/Math.PI*180)+'°');
         queue_render();
         return false;
@@ -4339,6 +4507,7 @@ triggers.set_tool.push(function(tool, old_tool){
     var tp = $('#tab_properties');
     tp.removeClass(tool_class_name(old_tool));
     tp.addClass(tool_class_name(tool));
+    display_propertiesMenu(tool.name);
 });
 
 function tool_class_name(tool){
@@ -4464,6 +4633,7 @@ function copy(){
 
 function paste(){
     import_snippet(stadium, clipboard);
+    if(current_tool != tool_select) set_tool(tool_select);
 }
 
 function cut(){
@@ -4473,6 +4643,7 @@ function cut(){
 
 function duplicate(){
     import_snippet(stadium, clone_selected(stadium));
+    if(current_tool != tool_select) set_tool(tool_select);
 }
 
 function clone_selected(st){
@@ -4832,16 +5003,45 @@ function object_clone(obj){
 }
 
 function load_file(){           // 맵 불러오기
-    var fileList = file.files ;
+    /*
+    var fileList = file.files;
     
     // 읽기
     var reader = new FileReader();
-    reader.readAsText(fileList [0]);
+    reader.readAsText(fileList[0]);
 
     //로드 한 후
     reader.onload = function  () {
         document.querySelector('#preview').textContent = reader.result ;
-    }; 
+    };
+    */ 
+    let input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/prs.hbs"; // 확장자가 xxx, yyy 일때, ".xxx, .yyy"
+    input.onchange = function (event) {
+        return processFile(event.target.files[0]);
+    };
+    input.click();
+
+    function processFile(file) {
+        let fr = new FileReader();
+        fr.onload = function(e){
+            test_me = file;
+            if(input.accept.includes(file.name.split('.').reverse()[0]) == false)
+                return alert($.lang[getLang()][124] + file.name);
+            let rs = e.target.result;
+            let st = eval('[' + rs + ']')[0];
+            try {
+                load(st);
+                hide_box("import");     //  불러오고 창 닫기
+            }
+            catch(error){        
+                alert($.lang[getLang()][9]);
+            }
+            modified();
+        };
+        fr.readAsText(file);
+    }
 }
 
 function login(){

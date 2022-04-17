@@ -50,8 +50,8 @@
       <div id="dw_lang_title" data-langNum="3", class="dialog_title">알림</div>
       <p class="ctxt mb20" data-langNum="2"></p>
       <div class="dialog_list">
-        <button class="dialog_answer" data-lang="en", id="button_lang_en"><a href="#" class="btn-layerClose" style="color: #fff; min-width: 64px;" data-langNum="400">영어</a></button>
-        <button class="dialog_answer" data-lang="ko", id="button_lang_ko"><a href="#" class="btn-layerClose" style="color: #fff; min-width: 64px;" data-langNum="401">한국어</a></button>
+        <button class="dialog_answer" data-lang="en" id="button_lang_en"><a href="#" class="btn-layerClose" data-langNum="400">영어</a></button>
+        <button class="dialog_answer" data-lang="ko" id="button_lang_ko"><a href="#" class="btn-layerClose" data-langNum="401">한국어</a></button>
       </div>
     </div>
   </div>
@@ -65,8 +65,8 @@
       <div id="dw_lang_title" data-langNum="3", class="dialog_title">알림</div>
       <p class="ctxt mb20" id="dialog_context"></p>
       <div class="dialog_select">
-        <button class="dialog_answer", id="button_yes"><a href="#" style="color: #fff;" class="btn-layerYes" data-langNum="304">예</a></button>
-        <button class="dialog_answer", id="button_no"><a href="#" style="color: #fff;" class="btn-layerNo" data-langNum="305">아니오</a></button>
+        <button class="dialog_answer" id="button_yes"><a href="#" style="color: #fff;" class="btn-layerYes" data-langNum="304">예</a></button>
+        <button class="dialog_answer" id="button_no"><a href="#" style="color: #fff;" class="btn-layerNo" data-langNum="305">아니오</a></button>
       </div>
     </div>
   </div>
@@ -90,9 +90,9 @@
 
   <div id="titlebar" class="underline">
     <div style="display: table-row-group;">
-      <button id="button_undo" class="btn_act"><img class="btn_act" alt="action_undo" src="./HBSE_files/always-tools/always-tools_undo.ico"></button>
-      <button id="button_redo" class="btn_act"><img class="btn_act" alt="action_redo" src="./HBSE_files/always-tools/always-tools_redo.ico"></button>
-      <input id="input_name" value="" autocomplete="off" style="border-radius: 4px; margin: 0 4px;">
+      <button id="button_undo" class="btn_act"><img class="btn_act" alt="action_undo" src="./HBSE_files/always-tools/always-tools_undo.ico"></img></button>
+      <button id="button_redo" class="btn_act"><img class="btn_act" alt="action_redo" src="./HBSE_files/always-tools/always-tools_redo.ico"></img></button>
+      <input id="input_name" value="" autocomplete="off" style="border-radius: 4px; margin: 0 4px;"></input>
       <button class="btn_show" style="display: none;"><img class="show" alt="general-toggle-show" src="./HBSE_files/general/general_toggle_full.ico"></img></button>
       <button class="btn_hide"><img class="hide" alt="general-toggle-hide" src="./HBSE_files/general/general_toggle_hide.ico"></img></button>
     </div>
@@ -100,14 +100,15 @@
       <div style="display: table-row;">
         <div id="titleline" style="border-bottom: 3px solid #C13535;">
           <!--<td><button id="button_save" style="width: 120px; float: right;">저장</button></td>-->
-          <button id="button_download" class="btn_accnt" style="width: 120px; float: right;"><img alt="top-tools_download" src="./HBSE_files/top-tools/top-tools_download.ico" style="float: left; height: 16px; width: 16px;"><a data-langNum="303", style = "color:#fff;">내보내기</a></img></button>
+          <button id="button_download" class="btn_accnt" style="float: right; height: 32px; min-width: 32px;"><img alt="top-tools_download" src="./HBSE_files/top-tools/top-tools_download.ico" style="float: none;"></button>
+          <button id="button_load" style="float: right; height: 32px; min-width: 32px;"><img alt="top-tools_import" src="./HBSE_files/top-tools/top-tools_import.ico" style="float: none;"></img></button>
           <!--
           <td><button id="button_open" style="width: 120px; color: #fff; float: right;"><img alt="top-tools_open" src="./HBSE_files/top-tools/top-tools_download.ico" style="float: left; height: 16px; width: 16px;"><a data-langNum="300", style = "color:#fff;">열기</a></img></button></td>
           -->
           <button id="button_import" style="float: right;"><img src="./HBSE_files/top-tools/top-tools_text.ico" style="float: left; height: 16px; width: 16px;"><a data-langNum="110" style="color: #fff;">텍스트 모드</a></button>
-          <button id="button_properties" style="float: right; min-width: 160px;"><img src="./HBSE_files/top-tools/top-tools_pr.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="220" style="color: #fff;">경기장 속성</a></button>
+          <button id="button_properties" style="float: right;"><img src="./HBSE_files/top-tools/top-tools_pr.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="220" style="color: #fff;">경기장 속성</a></button>
           <button id="button_help" style="float: right;"><img src="./HBSE_files/top-tools/top-tools_help.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="130" style="color: #fff;">도움말</a></button>
-          <button id="button_options" style="float: right; height: 32px; min-width: 32px;"><img alt="settings" src="./HBSE_files/top-tools/top-tools_st.ico" style="height: 16px; width: 16px;" ></button>
+          <button id="button_options" style="float: right; height: 32px; min-width: 32px;"><img alt="settings" src="./HBSE_files/top-tools/top-tools_st.ico" style="float: none;" ></button>
         </div>
       </div>
     </div>
@@ -127,6 +128,7 @@
     </div>
   </div>
   -->
+  
 
   <table id="table" cellspacing="0px">
     <tbody>
@@ -157,6 +159,23 @@
         <div id="canvas_div_placeholder"></div>
         <div id="canvas_div"><canvas id="canvas"></canvas></div>
       </td></tr>
+      <div>
+        <ul class="contextmenu">
+          <!--
+          <li><a href="#">Simple link</a></li>
+          <li><a href="#">Link to somewhere</a></li>
+          -->
+          <li id="button_cut"><img alt="at_cut" src="./HBSE_files/always-tools/always-tools_cut.ico"><a class="cm_index" data-langNum="26">잘라내기</a><a class="cm_shortcut">(X)</a></li>
+          <li id="button_copy"><img alt="at_copy" src="./HBSE_files/always-tools/always-tools_copy.ico"><a class="cm_index" data-langNum="19">복사</a><a class="cm_shortcut">(C)</a></li>
+          <li id="button_paste"><img alt="at_paste" src="./HBSE_files/always-tools/always-tools_paste.ico"><a class="cm_index" data-langNum="20">붙여넣기</a><a class="cm_shortcut">(V)</a></li>
+          <li id="button_duplicate"><img alt="at_cap" src="./HBSE_files/always-tools/always-tools_CaP.ico"><a class="cm_index" data-langNum="25">복사하여 붙여넣기</a><a class="cm_shortcut">(D)</a></li>
+          <li id="button_select_all"><img alt="at_all" src="./HBSE_files/always-tools/always-tools_all.ico"><a class="cm_index" data-langNum="22">모두 선택</a><a class="cm_shortcut">(A)</a></li>
+          <li id="button_inverse_selection"><img alt="at_inverse" src="./HBSE_files/always-tools/always-tools_inverse.ico"><a class="cm_index" data-langNum="24">선택 영역 반전</a><a class="cm_shortcut">(X)</a></li>
+          <li id="button_delete"><img alt="at_del" src="./HBSE_files/always-tools/always-tools_del.ico" ><a class="cm_index" data-langNum="21">지우기</a><a class="cm_shortcut">(Del)</a></li>
+          <!--<li id="button_select_none"><img src="./HBSE_files/always-tools/always-tools_cancel.ico"><a data-langNum="23">선택 취소</a></li>-->
+
+        </ul>
+      </div>
     </tbody>
   </table>
     <!--
@@ -198,17 +217,18 @@
   <div id="mousepos" class="right">0, 0</div>
   <div id="bottomboxes">
     <div style="display: table-row-group;">
-      <button class="btn_show" style="display: none;"><img class="show" alt="general-toggle-show" src="./HBSE_files/general/general_toggle_full.ico"></img></button>
-      <button class="btn_hide"><img class="hide" alt="general-toggle-hide" src="./HBSE_files/general/general_toggle_hide.ico"></img></button>
       <pre id="mouseposClone" style="float: left;">0, 0</pre>
+      <button class="btn_toggle" id="button_mirror_mode"><img alt="left-tools-mirror" src="./HBSE_files/left-tools/left-tools_mirror.ico"></button>
+      <button class="btn_toggle" id="pref_preview"><img alt="left-tools-preview" src="./HBSE_files/left-tools/left-tools_preview.ico"></button>
+      <button class="btn_show" style="display: none; margin: 8px 2px;"><img class="show" alt="general-toggle-show" src="./HBSE_files/general/general_toggle_full.ico"></img></button>
+      <button class="btn_hide"><img class="hide" alt="general-toggle-hide" src="./HBSE_files/general/general_toggle_hide.ico"></img></button>
     </div>
     <div style="display: table-row-group;">
+      <!--
       <div style="display: table-row;">
         <div id="tab_sub">
-          <!--
           <button id="button_undo"><img src="./HBSE_files/always-tools/always-tools_undo.ico" style="float: left; height: 16px; width: 16px;"><a style="color: rgb(194, 194, 194);" data-langNum="17">실행 취소</a></button>
           <button id="button_redo"><img src="./HBSE_files/always-tools/always-tools_redo.ico" style="float: left; height: 16px; width: 16px;"><a style="color: rgb(194, 194, 194);" data-langNum="18">다시 실행</a></button>
-          -->
           <button id="button_copy"><img src="./HBSE_files/always-tools/always-tools_copy.ico" style="float: left; height: 16px; width: 16px;"><a style="color: rgb(194, 194, 194);" data-langNum="19">복사</a></button>
           <button id="button_paste"><img src="./HBSE_files/always-tools/always-tools_paste.ico" style="float: left; height: 16px; width: 16px;"><a style="color: rgb(194, 194, 194);" data-langNum="20">붙여넣기</a></button>
           <button id="button_delete" class="btn_accnt"><img src="./HBSE_files/always-tools/always-tools_del.ico" style="float: left; height: 16px; width: 16px;" ><a style="color: rgb(194, 194, 194);" data-langNum="21">지우기</a></button>
@@ -219,31 +239,36 @@
           <button id="button_cut" class="btn_accnt"><img src="./HBSE_files/always-tools/always-tools_cut.ico" style="float: left; height: 16px; width: 16px;"><a style="color: rgb(194, 194, 194);" data-langNum="26">잘라내기</a></button>
         </div>
       </div>
+      -->
       <div id="leftbox" style="display: table-row;">
+        <!--
         <div id="left_tabs">
           <button id="button_tab_properties" class="active"><img src="./HBSE_files/left-tools/left-tools_pr.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="40" style="color: #fff;">속성</a></button>
-          <!-- <button id="button_tab_edit">편집</button> -->
+          <button id="button_tab_edit">편집</button>
           <button id="button_tab_advanced"><img src="./HBSE_files/left-tools/left-tools_board.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="41" style="color: #fff;">도구</a></button>
         </div>
+        -->
         <div id="tab_parent">
           <div id="tab_properties" class="selected_tool_other"></div>
+          <!--
           <div id="tab_advanced" class="hidden">
             <button style="min-width: 124px" id="button_mirror_mode"><img src="./HBSE_files/left-tools/left-tools_mirror.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="42" style="color: #fff;">거울 복사</a></button>
             <button style="min-width: 96px" id="pref_preview"><img src="./HBSE_files/left-tools/left-tools_preview.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="43" style="color: #fff;">미리보기</a></button>
           </div>
+          -->
         </div>
         <div id="right_tabs">
-          <button id="button_tool_select"><img src="./HBSE_files/right-tools/right-tools_select.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="30" style="color: #fff;">선택</a></button>
-          <button id="button_tool_rotate"><img src="./HBSE_files/right-tools/right-tools_rotate.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="31" style="color: #fff;">회전</a></button>
-          <button id="button_tool_scale"><img src="./HBSE_files/right-tools/right-tools_scale.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="32" style="color: #fff;">크기 조정</a></button>
-          <button id="button_tool_segment"><img src="./HBSE_files/right-tools/right-tools_segment.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="33" style="color: #fff;">세그먼트</a></button>
-          <button id="button_tool_vertex"><img src="./HBSE_files/right-tools/right-tools_vertex.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="34" style="color: #fff;">버텍스</a></button>
+          <button id="button_tool_select"><img alt="right-tools_select" src="./HBSE_files/right-tools/right-tools_select.ico"><a data-langNum="30">선택</a></button>
+          <button id="button_tool_rotate"><img alt="right-tools_rotate" src="./HBSE_files/right-tools/right-tools_rotate.ico"><a data-langNum="31">회전</a></button>
+          <button id="button_tool_scale"><img alt="right-tools_scale" src="./HBSE_files/right-tools/right-tools_scale.ico"><a data-langNum="32">크기 조정</a></button>
+          <button id="button_tool_segment"><img alt="right-tools_segment" src="./HBSE_files/right-tools/right-tools_segment.ico"><a data-langNum="33">세그먼트</a></button>
+          <button id="button_tool_vertex"><img alt="right-tools_vertex" src="./HBSE_files/right-tools/right-tools_vertex.ico"><a data-langNum="34">버텍스</a></button>
           <!--
-          <button id="button_tool_joint"><img src="./HBSE_files/right-tools/right-tools_joint.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="38" style="color: #fff;">조인트</a></button>
+          <button id="button_tool_joint"><img alt="right-tools_joint" src="./HBSE_files/right-tools/right-tools_joint.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="38" style="color: #fff;">조인트</a></button>
           -->
-          <button id="button_tool_disc"><img src="./HBSE_files/right-tools/right-tools_disc.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="35" style="color: #fff;">디스크</a></button>
-          <button id="button_tool_goal"><img src="./HBSE_files/right-tools/right-tools_goal.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="36" style="color: #fff;">골 영역</a></button>
-          <button id="button_tool_plane"><img src="./HBSE_files/right-tools/right-tools_plane.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="37" style="color: #fff;">플레인</a></button>
+          <button id="button_tool_disc"><img alt="right-tools_disc" src="./HBSE_files/right-tools/right-tools_disc.ico"><a data-langNum="35">디스크</a></button>
+          <button id="button_tool_goal"><img alt="right-tools_goal" src="./HBSE_files/right-tools/right-tools_goal.ico"><a data-langNum="36">골 영역</a></button>
+          <button id="button_tool_plane"><img alt="right-tools_plane" src="./HBSE_files/right-tools/right-tools_plane.ico"><a data-langNum="37">플레인</a></button>
         </div>
       </div>
     </div>
@@ -306,8 +331,9 @@
         <button id="button_import_clear" style="min-width: 96px"><img src="./HBSE_files/general/general_del.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="114" style="color: #fff;">모두 지우기</a></button>
         <button id="button_import_goto" style="min-width: 120px"><img src="./HBSE_files/general/general_goto.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="115" style="color: #fff;">좌표 이동</a></button>
         <!--<button id="button_import_cancel" style="min-width: 120px; float: right;"><img src="./HBSE_files/general/general_vis.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="111", style="color: #fff;" href="#layer_lang" class="btn-example" id="button_exit">시각 모드</a></button>-->
-        <button id="button_import_import" style="min-width: 96px; float: right;"><img src="./HBSE_files/general/general_save.ico" style="float: left; height: 16px; width: 16px;" ><a data-langNum="112" style="color: #fff;">저장</a></button>
-        <button id="button_download_text" class="btn_accnt" style="width: 120px; float: right;"><img alt="top-tools_download" src="./HBSE_files/top-tools/top-tools_download.ico" style="float: left; height: 16px; width: 16px;"><a data-langNum="303", style = "color:#fff;">내보내기</a></img></button>
+        <button id="button_import_import" style="float: right;"><img alt="general_save" src="./HBSE_files/general/general_save.ico"><a data-langNum="112" style="color: #fff;"></img>저장</a></button>
+        <button id="button_import_load"style="float: right;"><img alt="top-tools_import" src="./HBSE_files/top-tools/top-tools_import.ico"><a data-langNum="308", style = "color:#fff;"></img>불러오기</a></button>
+        <button id="button_download_text" class="btn_accnt" style="float: right;"><img alt="top-tools_download" src="./HBSE_files/top-tools/top-tools_download.ico"><a data-langNum="303", style = "color:#fff;"></img>내보내기</a></button>
         <!--
         <button id="button_download" style="width: 120px; color: #fff; background: #BB2929;"><img alt="top-tools_download" src="./HBSE_files/top-tools/top-tools_download.ico" style="float: left; height: 16px; width: 16px;"></img><a data-langNum="303", style = "color:#fff;">내보내기</a></button>
         -->
@@ -423,8 +449,8 @@
         <pre class="titleContent" data-langNum="130">도움말</pre>
         <button id="button_help_close" class="btn_close"><img class="close" alt="general-toggle-close" src="./HBSE_files/general/general_toggle_close.ico"></img></button>
       </div>
-      <button id="button_about" style="width: 90px"><img src="./HBSE_files/top-tools/top-tools_help.ico" style="float: left; height: 16px; width: 16px;"><a data-langNum="131" style="color: #fff;">버전 정보</a></button>
-      <button id="button_feedback" style="width: 120px"><img src="./HBSE_files/general/general_feed.ico" style="float: left; height: 16px; width: 16px;"><a data-langNum="16" style="color: #fff;">버그 제보ㆍ문의</a></button>
+      <button id="button_about"><img src="./HBSE_files/top-tools/top-tools_help.ico"><a data-langNum="131" style="color: #fff;">버전 정보</a></button>
+      <button id="button_feedback"><img src="./HBSE_files/general/general_feed.ico"><a data-langNum="16" style="color: #fff;">버그 제보ㆍ문의</a></button>
     <div>
       <div id="helpcontents">
         <h2>Haxball Stadium Editor</h2>
@@ -438,6 +464,7 @@
           <li><p data-langNum="2103">이 에디터는 AtnNm 원작인 AtnNn's Haxball Stadium Editor에서 2차 수정하였습니다.</p></li>
         </ul>
 
+        <h4>(2022-04-17) v1.20</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2271"></pre></details>
         <h4>(2022-03-18) v1.19</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2261"></pre></details>
         <h4>(2022-02-15) v1.18</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2251"></pre></details>
         <h4>(2022-02-06) v1.17</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2241"></pre></details>

@@ -8,6 +8,7 @@ ul, li {
 
 html {
     scroll-behavior: smooth;
+    overflow: hidden;
 }
 
 body {
@@ -16,11 +17,83 @@ body {
     font-size: 1em;
     line-height: 21px;
     background: #939E7F;
+    background-image: url("https://www.haxball.com/PFj3geCw/__cache_static__/g/images/bg.png");
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 a {
     color: #FFB89C;
     text-decoration: none;
+}
+
+
+button {
+    color: white;
+    background: #283238;
+    margin: 2px;
+    padding: 2px;
+    border: 2px solid #2F3C43;
+    border-radius: 8px;
+    font-family: 'Noto Sans CJK KR Bold', '맑은 고딕 Bold', '나눔고딕 Bold', 'Open Sans Bold', 'sans-serif';
+    font-size: 0.8em;
+    word-break: break-all;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+button img {
+    height: 16px;
+    width: 16px;
+    padding: 0 2px;
+    float: left;
+}
+button a, button a:hover, button a:active {
+    color: #FFFFFF;
+    padding: 0 12px;
+}
+
+button:hover {
+    background: #244967;
+    border: 2px solid #2F5E85;
+}
+
+button.active, button.btn_active {
+    background: #2F5E85;
+    border: 2px solid #415F77;
+}
+
+button.btn_accnt {
+    color: white;
+    background: #382832;
+    border: 2px solid #432F3C;
+    border-radius: 8px;
+    font-family: 'Noto Sans CJK KR Bold', '맑은 고딕 Bold', '나눔고딕 Bold', 'Open Sans Bold', 'sans-serif';
+    font-size: 0.8em;
+    word-break: break-all;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+
+button.btn_accnt:hover, button.btn_accnt.active, button.btn_close:hover {
+    background: #a33232;
+    border: 2px solid #432F3C;
+}
+
+button.btn_accnt.active, button.btn_accnt.active, button.btn_close.active {
+    background: #e05e5e;
+    border: 2px solid #432F3C;
+}
+
+img.btn_act, img.show, img.hide, img.close {
+    height: 16px;
+    width: 16px;
+    float: none;
 }
 
 a:hover {
@@ -43,7 +116,7 @@ a:hover {
     position: absolute;
     top: 50%;
     right: 24px;
-    max-width: 360px;
+    max-width: 372px;
     min-width: 180px;
     height: auto;
     background: #1A2125E0;
@@ -256,85 +329,36 @@ ul.menu li a:visited {
     cursor: pointer;
 }
 
-.dialog_select {
+.dialog_select, .dialog_list {
     font-family: 'Noto Sans CJK KR Regular', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
     font-size: 1em;
+    text-align: center;
     margin: 2px;
     padding: 2px 0;
-    text-align: center;
+    display: flex;
+}
+
+.dialog_select {
     float: right;
 }
 .dialog_list {
-    font-family: 'Noto Sans CJK KR Regular', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
-    font-size: 1em;
-    margin: 2px;
-    padding: 2px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
+    display: grid;
 }
 
 .dialog_answer {
     font-family: 'Noto Sans CJK KR Regular', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
     font-size: 0.75em;
-    clear: both;
+    min-width: 96px;
+    padding: 0 1px;
     text-align: center;
+    clear: both;
 }
 
-button {
-    color: white;
-    background: #283238;
-    border: 2px solid #2F3C43;
-    border-radius: 8px;
-    min-width: 120px;
-    min-height: 20px;
-    font-family: 'Noto Sans CJK KR Bold', '맑은 고딕 Bold', '나눔고딕 Bold', 'Open Sans Bold', 'sans-serif';
-    font-size: 0.8em;
-    word-break: break-all;
-    -moz-transition: all .2s ease-in;
-    -o-transition: all .2s ease-in;
-    -webkit-transition: all .2s ease-in;
-    transition: all .2s ease-in;
+.dialog_answer a {
+    color: #FFFFFF;
+    padding: 0 16px;
 }
 
-button:hover {
-    background: #244967;
-    border: 2px solid #2F5E85;
-}
-
-button.active, button.btn_active {
-    background: #2F5E85;
-    border: 2px solid #415f77;
-}
-
-button.btn_accnt {
-    color: white;
-    background: #382832;
-    border: 2px solid #432F3C;
-    border-radius: 8px;
-    min-width: 120px;
-    min-height: 20px;
-    font-family: 'Noto Sans CJK KR Bold', '맑은 고딕 Bold', '나눔고딕 Bold', 'Open Sans Bold', 'sans-serif';
-    font-size: 0.8em;
-    word-break: break-all;
-    -moz-transition: all .2s ease-in;
-    -o-transition: all .2s ease-in;
-    -webkit-transition: all .2s ease-in;
-    transition: all .2s ease-in;
-}
-
-button.btn_accnt:hover, button.btn_accnt.active, button.btn_close:hover {
-    background: #BB2929;
-}
-
-button.btn_accnt.active, button.btn_accnt.active, button.btn_close.active {
-    background: #e05e5e;
-}
-
-img.btn_act, img.show, img.hide, img.close {
-    height: 16px;
-    width: 16px;
-}
 
 .act {
   visibility: hidden;
@@ -342,7 +366,7 @@ img.btn_act, img.show, img.hide, img.close {
 
 button.btn_act, button.btn_show, button.btn_hide, button.btn_close {
     min-width: 36px;
-    height: 16px;
+    height: 20px;
     border-radius: 4px;
     border: 0px;
     background: transparent;
@@ -353,11 +377,16 @@ button.btn_show, button.btn_hide, button.btn_close {
 }
 
 button.btn_act:hover, button.btn_show:hover, button.btn_hide:hover {
-    background: #6A747C;
+    background: #3A4952;
 }
 
 button.btn_act.active, button.btn_show.active, button.btn_hide.active {
-    background: #464C52;
+    background: #6A747C;
+}
+
+button.btn_close { 
+    border: 2px solid transparent;
+    height: 24px;
 }
 
 .button_header{
@@ -461,7 +490,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 50vw;
     min-width: 480px;
     padding: 0 8px;
-    color: white;
+    color: rgb(197, 197, 197);
     background: transparent;
     outline: none;
 }
@@ -594,6 +623,13 @@ textarea {
     overflow: auto;
 }
 
+#helpcontents pre, #helpcontents li {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
 #mousepos, #mouseposClone {
     font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
     font-size: 0.8rem;
@@ -607,9 +643,9 @@ textarea {
     color: rgb(197, 197, 197);
     border: 1px solid #222C31;
     border-radius: 8px;
-    position: absolute;
-    /*bottom: 180px;
-    margin: 16px;*/
+    /*position: absolute;*/
+    /*bottom: 180px;*/
+    margin: 4px;
     padding: 0 8px;
     line-height: 24px;
     text-align: right;
@@ -831,8 +867,7 @@ input.prop.error, select.prop.error {
 }
 #right_tabs {
     border-left: 2px solid #808080;
-    width: 25vw;
-    max-width: 360px;
+    width: 360px;
     float: right;
 }
 
@@ -868,8 +903,14 @@ input.prop.error, select.prop.error {
     min-height: 48px;
 }
 #right_tabs button {
-    min-width: 108px;
-    min-height: 32px;
+    font-size: 0.75rem;
+    width: 108px;
+    height: 32px;
+}
+
+#right_tabs button.active {
+    background: #244967;
+    border: 2px dotted #6A747C;
 }
 
 .property {
@@ -973,6 +1014,96 @@ body.logged-out .valid-user {
 #boxlibrary button.owner {
     display: none;
 }
+
+
+button.btn_toggle {
+    margin: 2px;
+    min-width: 32px;
+    height: 32px;
+    background: #3A4952;
+    border: 2px solid #3A4952;
+}
+button.btn_toggle:hover {
+    background: #6A747C;
+}
+button.btn_toggle.active {
+    background: #6A747C;
+    border: 2px dotted #FFFFFF;
+}
+
+.btn_toggle img {
+    height: 16px;
+    width: 16px;
+    float: none;
+}
+
+.contextmenu {
+    display: none;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    background: #1A2125;
+    border: 2px solid #2F3C43;
+    border-radius: 5px;
+    list-style: none;
+    box-shadow:
+      0 15px 35px rgba(50, 67, 90, 0.1),
+      0 5px 15px rgba(0,0,0,0.07);
+    overflow: hidden;
+    z-index: 999999;
+  }
+  
+  .contextmenu li {
+    /*border-left: 3px solid transparent;*/
+    height: 18px;
+    margin: 0;
+    padding: 6px 12px;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+  }
+
+  .contextmenu img {
+    height: 18px;
+    width: 18px;
+    float: left;
+}
+  
+  .contextmenu li a {
+    display: block;
+    height: 18px;
+    margin: 0px;
+    padding: 0 4px;
+    /*color: #B0BEC5;*/
+    color: #C2C2C2;
+    text-decoration: none;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+  }
+  
+  .contextmenu li:hover {
+    background: #3A4952;
+    /*border-left: 3px solid #9C27B0;*/
+  }
+  .contextmenu li:active {
+    background: #6A747C;
+    /*border-left: 3px solid #9C27B0;*/
+  }
+  
+  .contextmenu li:hover a {
+    color: #FFFFFF;
+  }
+
+  .contextmenu .cm_index {
+      float: left;
+  }
+  .contextmenu .cm_shortcut {
+      float: right;
+  }
+
 
 .news {
     overflow: auto;
