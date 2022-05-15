@@ -81,8 +81,12 @@ button.btn_accnt {
 }
 
 button.btn_accnt:hover, button.btn_accnt.active, button.btn_close:hover {
-    background: #a33232;
-    border: 2px solid #432F3C;
+    background: #752e2e;
+    border: 2px solid #a53d3d;
+}
+
+button.btn_close:hover {
+    background: #b83a3a;
 }
 
 button.btn_accnt.active, button.btn_accnt.active, button.btn_close.active {
@@ -114,19 +118,22 @@ a:hover {
   
   .gadget-layer {
     position: absolute;
+    display: block;
+    /*
     top: 50%;
     right: 24px;
+    */
     max-width: 372px;
     min-width: 180px;
     height: auto;
     background: #1A2125E0;
-    border: 1px solid #222C31;
+    border: 1px solid #2F3C43;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 0 2px #1A2125;
     border-radius: 10px;
     margin: 0;
-    padding: 0;
+    padding: 0 4px;
     z-index: 10;
   }
 
@@ -152,7 +159,7 @@ a:hover {
     min-width: 180px;
     height: auto;
     background: #1A2125;
-    border: 1px solid #222C31;
+    border: 1px solid #2F3C43;
     border-radius: 10px;
     margin: 0;
     padding: 0;
@@ -237,9 +244,14 @@ ul.menu li a:visited {
 }
 
 #box {
+    width: 50vw;
+    min-width: 900px;
     background: #1A2125;
-    border-radius: 8px;
+    margin: 16px auto;
     padding: 10px;
+    justify-content: center;
+    position: relative;
+    border-radius: 8px;
 }
   
 #boximport {
@@ -254,6 +266,10 @@ ul.menu li a:visited {
     height: 90vh;
 }
 
+#boximport, #boxproperties, #boxhelp, #boxoptions {
+    width: 100%;
+}
+
 #table {
     width: 100%;
     height: 100%;
@@ -266,6 +282,7 @@ ul.menu li a:visited {
     position: relative;
     padding: 8px;
     margin: 20px auto;
+    border: 1px solid #2F3C43;
     border-radius: 8px;
     display: table;
     justify-content: center;
@@ -329,23 +346,47 @@ ul.menu li a:visited {
     cursor: pointer;
 }
 
-.dialog_select, .dialog_list {
+.dialog_list {
     font-family: 'Noto Sans CJK KR Regular', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
     font-size: 1em;
     text-align: center;
     margin: 2px;
     padding: 2px 0;
-    display: flex;
-}
-
-.dialog_select {
-    float: right;
-}
-.dialog_list {
     display: grid;
 }
 
-.dialog_answer {
+#popups {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: rgb(115 136 92 / 50%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 2;
+}
+#layer_sp_pointsRed, #layer_sp_pointsBlue {
+    min-height: 60px;
+    max-height: 25vh;
+    overflow: auto;
+}
+
+.dialog_select {
+    width: 100%;
+    height: 2rem;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+}
+
+#layer_lang .dialog_select {
+    text-align: center;
+    margin: 2px;
+    padding: 2px auto;
+}
+
+.dialog_answer, .button_apply, .button_cancel
+ {
+    width: 50%;
     font-family: 'Noto Sans CJK KR Regular', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
     font-size: 0.75em;
     min-width: 96px;
@@ -357,6 +398,10 @@ ul.menu li a:visited {
 .dialog_answer a {
     color: #FFFFFF;
     padding: 0 16px;
+}
+#layer_lang .dialog_answer {
+    width: 100%;
+    font-size: 0.8rem;
 }
 
 
@@ -451,6 +496,7 @@ details > ul {
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 0 2px #1A2125;
     padding: 4px;
+    border: 1px solid #2F3C43;
     border-radius: 8px;
     /* width: 99vw; */
     height: 36px;
@@ -506,51 +552,47 @@ h1, h2, h3, h4, h5, h6 {
     border: 2px solid #2E5C81;
 }
 
-#box {
-    margin: 16px auto;
-    min-width: 900px;
-    width: 50vw;
-    position: relative;
-}
-
 .centered {
     margin-left: auto;
     margin-right: auto;
+}
+
+
+textarea {
+    width: 100%;
+    height: 1.5rem;
+    font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
+    font-size: 0.9em;
+    color: #c5c5c5;
+    background: #111619;
+    border: 2px solid #2F3C43;
+    border-radius: 8px;
+    padding: 2 10px;
+    clear: both;
+    overflow: auto;
+    outline: none;
+    resize: none;
+}
+textarea:focus {
+    color: #FFFFFF;
+    border: 2px solid #2E5C81;
 }
 
 #editor-container{
     position: relative;
 }
 #textarea_import{
-    position: relative;
-    font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
-    font-size: 15px;
-    color: #c5c5c5;
-    background-color: transparent;
-    caret-color: #00a2ff;
-    top: 0;
-    left: 0;
-    margin: 0;
-    padding: 5px;
-    line-height: 20px;
-    z-index: 1;
-}
-
-textarea {
-    width: 100%;
-    font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
-    font-size: 0.9em;
-    color: #c5c5c5;
-    background: #111619;
-    border: 3px solid black;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    padding: 2 10px;
-    clear: both;
     height: 80vh;
     min-height: 600px;
-    overflow: auto;
-    outline: none;
+    position: relative;
+    color: #c5c5c5;
+    font-size: 15px;
+    caret-color: #00a2ff;
+    margin: auto;
+    padding: 5px;
+    border-radius: 8px 2px 2px 8px;
+    line-height: 20px;
+    z-index: 1;
 }
 
 ::-webkit-scrollbar {
@@ -563,18 +605,18 @@ textarea {
     width: 2px;
     height: 2px;
     background-color: #283238dc;
-    border: 2px solid #2F3C43dc;
+    border: 1px solid #2F3C43dc;
     border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background-color:#244967;
+    background:#294155dc;
     border-color:#2f5e85;
 }
 ::-webkit-scrollbar-thumb:active {
     width: 16px;
     height: 16px;
-    background:#2F5E85dc;
-    border-color:#415f77dc;
+    background-color:#3f5261;
+    border-color:#5181a5dc;
 }
 ::-webkit-scrollbar-button:start:decrement, 
 ::-webkit-scrollbar-button:end:increment {
@@ -591,6 +633,9 @@ textarea {
     width: 300px;
     margin: 0 auto;
     position: relative;
+    
+    /*border: 10px dashed blue;*/
+
     cursor: default;
     padding: 0 0;
     overflow: overlay;
@@ -688,48 +733,42 @@ pre{
     font-size: 0.9em;
     font-family: 'Noto Sans CJK KR', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
 }
+label.prop, label.prop_size, label.prop_sel {
+    height: 1.5rem;
+    font-size: 0.8rem;
+    clear: left;
+    margin: auto;
+    padding: 0 10px;
+    display: table-row;
+}
 
 label.prop {
-    display: block;
     float: initial;
     text-align: center;
-    font-size: 0.8rem;
+    /*
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    border: 2px solid #2F3C43;
+    border: 1px solid #2F3C43;
     background: #283238;
-    clear: left;
-    margin: auto;
-    padding: 0 10px;
+    */
 }
 label.prop_size {
-    display: block;
     float: inherit;
     text-align: center;
-    font-size: 0.8rem;
     width: 160px;
-    height: 1.5rem;
+    /*
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    border: 2px solid #2F3C43;
+    border: 1px solid #2F3C43;
     background: #283238;
-    clear: left;
-    margin: auto;
-    padding: 0 10px;
+    */
 }
 label.prop_sel {
-    display: block;
-    float: left;;
-    font-size: 0.8rem;
-    height: 1.5rem;
+    float: left;
     min-width: 100px;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
     border: 2px solid #2F3C43;
+    border-radius: 8px;
     background: #283238;
-    clear: left;
-    margin: auto;
-    padding: 0 10px;
 }
 
 
@@ -753,97 +792,85 @@ label.prop_sel {
     border-bottom-right-radius: 8px;
 }
 
-pre.prop {
-    display: block;
-    text-align: center;
+pre.prop, input.prop, select.prop,
+input.prop_size, select.prop_size,
+input.prop_sel, select.prop_sel,
+input.color_palette {
+    height: 1.5rem;
+    width: 182px;
+    display: table-row;
+    float: left;
     font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
     font-size: 1rem;
     color: rgb(197, 197, 197);
     background: #1A2125;
     border: 2px solid #2F3C43;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-radius: 8px;
     clear: right;
-    margin-bottom: 8px;
     padding: 0 14px;
     outline: none;
+}
+
+pre.prop {
+    text-align: center;
 }
 
 input.prop, select.prop {
-    display: block;
-    float: left;
-    width: 184px;
     text-align: center;
-    font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
-    font-size: 1rem;
-    color: rgb(197, 197, 197);
-    background: #1A2125;
-    border: 2px solid #2F3C43;
+    /*
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-    clear: right;
     margin-bottom: 8px;
-    padding: 0 14px;
-    outline: none;
+    */
 }
 input.prop_size, select.prop_size {
-    display: block;
-    float: left;
-    width: 92px;
-    height: 1.5rem;
+    width: 91px;
     text-align: center;
-    font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
-    font-size: 1rem;
-    color: rgb(197, 197, 197);
-    background: #1A2125;
-    border: 2px solid #2F3C43;
-    clear: right;
-    margin-bottom: 8px;
-    padding: 0 14px;
-    outline: none;
 }
 
 input.prop_sel, select.prop_sel {
-    display: block;
-    float: left;
-    width: 184px;
     text-align: left;
-    font-family: 'Noto Sans CJK Mono KR', 'D2Coding', 'mono';
-    font-size: 1rem;
-    color: rgb(197, 197, 197);
-    background: #1A2125;
-    border: 2px solid #2F3C43;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    clear: right;
-    margin-bottom: 8px;
-    padding: 0 14px;
-    outline: none;
 }
 
-input.prop:focus, select.prop:focus {
-    background: #1A2125;
-    border: 2px solid #2E5C81; 
-    color: #FFFFFF;
-}
-input.prop_size:focus, select.prop_size:focus {
-    background: #1A2125;
-    border: 2px solid #2E5C81; 
-    color: #FFFFFF;
-}
+input.prop:focus, select.prop:focus,
+input.prop_size:focus, select.prop_size:focus,
 input.prop_sel:focus, select.prop_sel:focus {
-    background: #1A2125;
+    /*background: #1A2125;*/
     border: 2px solid #2E5C81; 
     color: #FFFFFF;
 }
-
+/*
 label.prop.error {
     color: #FF6161;
     background: #682828;
     border: 2px solid #B63636;
 }
+*/
 input.prop.error, select.prop.error {
     border: 2px solid #B63636;
+}
+
+#popups input.prop {
+    width: 100%;
+    height: 1.5rem;
+    font-size: 1em;
+    background: #111619;
+    margin: 2px auto;
+    border-radius: 4px;
+    text-align: left;
+    display: flex;
+    justify-content: center;
+}
+#layer_sp_pointsRed input.prop, #layer_sp_pointsBlue input.prop {
+    width: 75%;
+    display: none;
+}
+
+#popups textarea {
+    height: 100px;
+    background: #111619;
+    border-radius: 4px;
+    outline: none;
 }
 
 
@@ -870,6 +897,29 @@ input.prop.error, select.prop.error {
     border-left: 2px solid #808080;
     width: 360px;
     float: right;
+}
+.color_preview {
+    -webkit-appearance: none;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+  }
+  .color_preview::-webkit-color-swatch {
+    border: none;
+    border-radius: 10px;
+    padding: 0;
+  }
+  .color_preview::-webkit-color-swatch-wrapper {
+    border: none;
+    border-radius: 10px;
+    padding: 0;
+  }
+
+input.color_palette {
+    text-align: center;
 }
 
 
@@ -919,6 +969,14 @@ input.prop.error, select.prop.error {
     float: left;
     margin: 1px 2px;
 }
+.property_prop {
+    height: 3rem;
+    margin: 4px auto;
+    background: #283238;
+    border: 2px solid #2F3C43;
+    border-radius: 8px;
+    display: table;
+}
 
 table.center-content {
     width: 100%;
@@ -939,9 +997,8 @@ label.form {
     display: inline-block;
     text-align: right;
     height: 22px;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border: 1px solid #244967;
+    border: 2px solid #244967;
+    border-radius: 8px;
     background: #244967;
     padding: 0 10px;
     width: 150px;
@@ -956,7 +1013,7 @@ input.form, select.form {
     border-bottom-right-radius: 8px;
     background: #1A2125;
     width: 300px;
-    border: 1px solid #244967;
+    border: 2px solid #244967;
     color: white;
     padding: 0 10px;
     margin-bottom: 5px;
@@ -964,7 +1021,7 @@ input.form, select.form {
 }
 
 input.form.error, select.form.error {
-    border: 3px solid #dd0000;
+    border: 2px solid #dd0000;
 }
 
 body.logged-in .anonymous {
@@ -1044,7 +1101,7 @@ button.btn_toggle.active {
     margin: 0;
     padding: 0;
     background: #1A2125;
-    border: 2px solid #2F3C43;
+    border: 1px solid #2F3C43;
     border-radius: 5px;
     list-style: none;
     box-shadow:
@@ -1095,7 +1152,7 @@ button.btn_toggle.active {
   }
   
   .contextmenu li:hover a {
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
   }
 
   .contextmenu .cm_index {
@@ -1149,6 +1206,10 @@ button.btn_toggle.active {
     font-size: 1em;
     margin-bottom: 4px;
     border-bottom: 2px solid #808080;
+}
+#popups .prop_element_title {
+    font-size: 1.2rem;
+    border: 0;
 }
 
 .prop_help {

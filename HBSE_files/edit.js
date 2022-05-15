@@ -59,8 +59,14 @@ $('.btn-example').click(function(){
     layer_popup($href);
 });
 
+const POPUP_LIST = ['layer_lang', 'layer_exit', 'layer_rename'];
+
 function layer_popup(el){
     var $el = $(el);        //레이어의 id를 $el 변수에 저장
+    let selectors = $el.parents("div");
+    let parents = selectors[selectors.length - 1];
+    if(parents.style.display != 'flex') parents.style.display = 'flex';
+
     var isDim = $el.prev().hasClass('dimBg');   //dimmed 레이어를 감지하기 위한 boolean 변수
 
     isDim ? $('.dim-layer').fadeIn() : $el.fadeIn();
@@ -80,25 +86,41 @@ function layer_popup(el){
         $el.css({top: 0, left: 0});
     }
 
-    switch($el){
-        case 'layer_lang': return openPop_lang($el);
-        case 'layer_exit': return openPop_txtovs($el);
+    switch($el[0].id){
+        case 'layer_lang':      return openPop_lang($el, isDim);
+        case 'layer_exit':      return openPop_txtovs($el, isDim);
+        case 'layer_rename':    return openPop_about($el, isDim);
+        case 'layer_spawnDist': return openPop_spawnDist($el, isDim);
     }
 }
 
-function openPop_lang(el){
-    el.find('button.button_lang_ko').click(function(){
+function open_popup(el, isDim){
+    switch(el[0].id){
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        default:
+            return false;    
+    }
+}
+
+function openPop_lang(el, isDim){
+    $("#button_lang_en").click(function(){
+        close_popup("#layer_lang");
+        setLanguage("en");
+        jQuery('html > head > title').text($.lang[getLang()][0] + " - " + stadium.name);     //  제목에 맵 이름 추가
+    });
+    $("#button_lang_ko").click(function(){
+        close_popup("#layer_lang");
         setLanguage("ko");
-        //$('#table').fadeIn();
-        //$('#table').show();
-        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut();
-        return false;
+        jQuery('html > head > title').text($.lang[getLang()][0] + " - " + stadium.name);     //  제목에 맵 이름 추가
     });
 
-    el.find('a.btn-layerClose').click(function(){
-        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 닫기 버튼을 클릭하면 레이어가 닫힌다.
-        return false;
-    });
+    // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+    el.find('a.btn-layerClose').click(() => close_popup(el, isDim));
 
     $('.layer .dimBg').click(function(){
         $('.dim-layer').fadeOut();
@@ -106,29 +128,68 @@ function openPop_lang(el){
     });
 }
 
-function openPop_txtovs(el){
-    el.find('button.button_yes').click(function(){
-        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 아니오
-        return false;
-    });
-    el.find('button.button_no').click(function(){
-        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 아니오
-        return false;
-    });
-    el.find('a.btn-layerYes').click(function(){
-        confirm("yes");
-        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 예
-        return true;
-    });
-    el.find('a.btn-layerNo').click(function(){
-        confirm("no");
-        isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 아니오
-        return false;
-    });
+function openPop_txtovs(el, isDim){
+    el.find('button.button_yes').click(()   => close_popup(el, isDim));     // 예
+    el.find('button.button_no').click(()    => close_popup(el, isDim));     // 아니오
+    el.find('a.btn-layerYes').click(()      => close_popup(el, isDim));     // 예
+    el.find('a.btn-layerNo').click(()       => close_popup(el, isDim));     // 아니오
 }
 
-function closePop(el){              // 팝업 닫기
-    $(el).fadeOut();
+function openPop_about(el, isDim){
+    el.find('button.button_apply').click(()   => close_popup(el, isDim));     // 예
+    el.find('button.button_cancel').click(()  => close_popup(el, isDim));     // 아니오
+    el.find('#popups.btn_close').click(()    => close_popup(el, isDim));     // 닫기
+    let inptTitle = $("#layer_rename_title")[0].getElementsByTagName("input")[0];
+    //let inptVersion = $("#layer_rename_version")[0].getElementsByTagName("input")[0];
+    //let txtMemo = $("#layer_rename_memo")[0].getElementsByTagName("textarea")[0];
+    let printText = function(t, s){
+        t.value = s;
+    }
+    printText(inptTitle, stadium.name);
+    //printText(inptVersion, "v1.00");
+}
+
+function openPop_spawnDist(el, isDim){
+    el.find('button.button_apply').click(()   => close_popup(el, isDim));     // 예
+    el.find('button.button_cancel').click(()  => close_popup(el, isDim));     // 아니오
+    el.find('#popups.btn_close').click(()    => close_popup(el, isDim));     // 닫기
+    let dist = $("#layer_sp_spawnDistance")[0].getElementsByTagName("input")[0];
+    let pntsRed = $("#layer_sp_pointsRed");
+    let pntsBlue = $("#layer_sp_pointsBlue");
+
+    let st = stadium;
+
+    let printText = function(t, s){
+        t.value = s;
+    }
+    printText(dist, st.spawnDistance);
+
+    let showSpawnPoints = function(team){
+        let spawnPoints = team == 1 ? st.blueSpawnPoints : st.redSpawnPoints;
+        let pntsSd = team == 1 ? pntsBlue : pntsRed;
+        for(let i = 0; i < spawnPoints.length; i++){
+          let target = pntsSd.find("input")[i];
+          target.value = spawnPoints[i].join();
+          target.style.display = "block";
+        }
+    }
+
+    showSpawnPoints(0);
+    showSpawnPoints(1);
+}
+
+function close_popup(el, isDim){              // 팝업 닫기
+    let $el = $(el);
+    let selectors = $el.parents("div");
+    let parents = selectors[selectors.length - 1];
+    //$el.fadeOut();
+    ($(isDim ? '.dim-layer' : el)).fadeOut();
+    $(parents).fadeOut();
+    /*
+    setTimeout(() => {
+        if(parents.style.display == 'flex') parents.style.display = 'none';
+    }, 200);
+    */
 }
 
 // 언어팩 선언
@@ -140,7 +201,7 @@ $.lang = {};
 $.lang.ko = {
     // 공통
     0: "HaxPuck(오프라인)",
-    1: "v1.20(베타) " + newLine + "2022년 4월 17일 최종 업데이트",
+    1: "v1.21(베타) " + newLine + "2022년 5월 15일 최종 업데이트",
     2: "언어를 선택하십시오",
     3: "알림", 4: "주의", 5: "경고",
     6: "Haxball Stadium Editor를 닫을까요?",
@@ -168,6 +229,7 @@ $.lang.ko = {
     24: "선택 영역 반전", 
     25: "복사하여 붙여넣기", 
     26: "잘라내기", 
+    27: "더 보기",
 
     // 우측 하단부 버튼
     30: "선택",     31: "회전",     32: "크기 조정",
@@ -181,6 +243,11 @@ $.lang.ko = {
 
     // 경기장 이름
     50: "새 경기장",
+    51: "경기장 정보",
+    52: "제목",
+    53: "버전",
+    54: "설명",
+    55: "이름 바꾸기",
 
     // 텍스트 모드 내부 버튼
     110: "텍스트 모드",
@@ -196,13 +263,18 @@ $.lang.ko = {
 
     // 설정
     140: "설정",
+    141: "경기장 데이터",
+    142: "초기화",
+    143: "이미 작업한 내용은 저장되지 않습니다. 경기장 데이터를 모두 지우시겠습니까?",
 
     // 경기장 속성
     220: "경기장 속성",
     221: "일반",                    // --------------------------
     222: "스폰 거리 간격",
-    223: "가로 × 세로",
-    225: "가로 × 세로(카메라)",
+    223: "redSpawnPoints: ",
+    224: "blueSpawnPoints: ",
+    225: "가로 × 세로",
+    226: "가로 × 세로(카메라)",
     227: "최대 시야 너비",
     228: "저장 명령어",
     229: "카메라 시점",
@@ -239,7 +311,7 @@ $.lang.ko = {
 
     // 기타
     300: "열기", 301: "저장", 302: "닫기", 303: "내보내기",
-    304: "예", 305: "아니오", 306: "취소", 307: "확인", 308: "불러오기",
+    304: "예", 305: "아니오", 306: "취소", 307: "확인", 308: "불러오기", 309: "적용",
     310: "활성화", 311: "비활성화",
     315: "볼", 316: "플레이어",
     317: "최소", 318: "최대",
@@ -253,7 +325,7 @@ $.lang.ko = {
     502: "속도",
     503: "충돌 마스크",
     504: "충돌 그룹",
-    505: "프리셋",
+    505: "오브젝트 프리셋",
     506: "x", 
     507: "y",
     508: "0번째 버텍스", 
@@ -488,12 +560,20 @@ $.lang.ko = {
     + newLine + "비선택 도구를 활성화 한 상태에서 붙여놓기 동작을 실행하면 선택 도구로 전환되는 구조가 추가되었습니다."
     + newLine + "[속성] > [백그라운드] > [색상]을 사용자 임의 값으로 지정하면 잔디 테마가 제대로 적용되지 않던 문제가 해결되었습니다."
     + newLine + "사용성이 향상되었습니다.",
+    // (2022.05.15) v1.21
+    2281: "[설정] > [환경 설정] > [초기화] 기능이 추가되었습니다."
+    + newLine + "색상 선택기가 추가되었습니다."
+    + newLine + "[속성] > [이름 바꾸기] 메뉴가 추가되었습니다."
+    + newLine + "텍스트 모드에서 가독성이 개선되었습니다."
+    + newLine + "시인성이 개선되었습니다."
+    + newLine + "전반적인 최적화가 개선되었습니다."
+    + newLine + "사용성이 향상되었습니다.",
 };
 //  영어
 $.lang.en = {
     // Common
     0: "HaxPuck(OFFLINE)",
-    1: "v1.20(Beta); " + newLine + "This software was updated on 17th Apr, 2022",
+    1: "v1.21(Beta); " + newLine + "This software was updated on 15th May, 2022",
     2: "Select your language",
     3: "Confirm", 4: "Alert", 5: "Warning",
     6: "Are you sure want to leave HBSE?",
@@ -521,6 +601,7 @@ $.lang.en = {
     24: "INVERT SELECTION", 
     25: "DUPLICATE", 
     26: "CUT",
+    27: "More Details",
 
     // 우측 하단부 버튼
     30: "Select",   31: "Rotate",   32: "Sclae",
@@ -534,6 +615,11 @@ $.lang.en = {
 
     // a name of defalut stadium
     50: "New Stadium",
+    51: "About This Stadium",
+    52: "Title: ",
+    53: "Version: ",
+    54: "Memo: ",
+    55: "Rename a stadium",
 
     // in Text Mode
     110: "Text Mode",
@@ -549,15 +635,18 @@ $.lang.en = {
 
     // Settings
     140: "Settings",
+    141: "Stadium Data",
+    142: "Reset",
+    143: "All data will be lost. Are you sure want to reset the stadium?",
 
     // Stadium Properties
     220: "Stadium Properties",
     221: "General",                // --------------------------
     222: "Spawn Distance: ",
-    223: "Height × Width: ",
-    224: "redSpawnPoints: ",
-    225: "H × W(Camera): ",
-    226: "blueSpawnPoints: ",
+    223: "redSpawnPoints: ",
+    224: "blueSpawnPoints: ",
+    225: "Height × Width: ",
+    226: "H × W(Camera): ",
     227: "maxViewWidth: ",
     228: "CanBeStored: ",
     229: "CameraFollow: ",
@@ -588,13 +677,13 @@ $.lang.en = {
     272: "#1: ", 273: "#2: ", 274: "#3: ", 275: "#4: ", 276: "#5: ", 
     
     280: "Preferences",               // --------------------------
-    281: "Change language",
+    281: "Change a language",
     282: "Object diagnosis",
     283: "Object List",
 
     // ETC
     300: "Open", 301: "Save", 302: "Close", 303: "Download",
-    304: "Yes", 305: "No", 306: "Cancel", 307: "OK", 308: "Open",
+    304: "Yes", 305: "No", 306: "Cancel", 307: "OK", 308: "Open", 309: "Apply",
     310: "Enable", 311: "Disable",
     315: "Ball", 316: "Player",
     317: "Partial", 318: "Full",
@@ -820,7 +909,7 @@ $.lang.en = {
     + newLine + "Fixed a problem that [canBeStored] of [General] in [Stadium Properties] did not working."
     + newLine + "Fixed a problem that the value of [Gravity] in [Stadium Properties] won't edit or sync."
     + newLine + "Fixed a problem that needless margin had been appeared during a window resize in some situations."
-    + newLine + "enhanced readability/visibility."
+    + newLine + "Enhanced Readability/Visibility."
     + newLine + "the new enhanced UI is now available.",
     // (2022.02.15) v1.18
     2251: "Add [download] button in [Text Mode]."
@@ -836,6 +925,13 @@ $.lang.en = {
     + newLine + "Added a Context Menu with Bottom quick-tool."
     + newLine + "Added structure to switch to the select tool when paste action is performed with the non-selection tool enabled."
     + newLine + "Fixed a structure that background color applying as by the value of [Color] of [Background] in [Stadium Properties] does not working with [Type] in [Background]: [Glass]."
+    + newLine + "Enchaned and Improved UX.",
+    // (2022.05.15) v1.21
+    2281: "Added [Reset] of [Preferences] in [Settings]."
+    + newLine + "Added a Color Picker."
+    + newLine + "Added [Rename a stadium] in [Stadium Properties]."
+    + newLine + "Improved Overall optimization."
+    + newLine + "Enhanced Readability/Visibility."
     + newLine + "Enchaned and Improved UX.",
 };
 
@@ -853,7 +949,7 @@ function setLanguage(currentLanguage) {
     
     $('[data-langNum]').each(function() {
       var $this = $(this); 
-      $this.html($.lang[currentLanguage][$this.data('langnum')]); 
+      $this.html($.lang[currentLanguage][$this.data('langnum')]);
     });
     currentLang = currentLanguage;
 }  
@@ -935,36 +1031,36 @@ var haxball = {
 };
 
 var properties = (function(p){return {
-    bCoef:      p($.lang[getLang()][500], false, 'number'),
-    gravity:    p($.lang[getLang()][501], false, 'point'),
-    speed:      p($.lang[getLang()][502], false, 'point'),
-    cMask:      p($.lang[getLang()][503], false, 'layers'),
-    cGroup:     p($.lang[getLang()][504], false, 'layers'),
-    trait:      p($.lang[getLang()][505], false, 'trait'),
-    x:          p($.lang[getLang()][506], true, 'number', true),
-    y:          p($.lang[getLang()][507], true, 'number', true),
-    v0:         p($.lang[getLang()][508], true, 'ref', true),
-    v1:         p($.lang[getLang()][509], true, 'ref', true),
-    curve:      p($.lang[getLang()][510], true, 'number'),
-    curveF:     p($.lang[getLang()][511], true, 'number'),
-    bias :      p($.lang[getLang()][512], true, 'number'),
-    vis:        p($.lang[getLang()][513], false, 'bool'),
-    color:      p($.lang[getLang()][514], false, 'color'),
-    normal:     p($.lang[getLang()][515], true, 'point', true),
-    dist:       p($.lang[getLang()][516], true, 'number', true),
-    radius:     p($.lang[getLang()][517], false, 'number'),
-    invMass:    p($.lang[getLang()][518], false, 'number'),
-    pos:        p($.lang[getLang()][519], true, 'point'),
-    p0:         p($.lang[getLang()][520], true, 'point', true),
-    p1:         p($.lang[getLang()][521], true, 'point', true),
-    team:       p($.lang[getLang()][522], true, 'team'),
-    damping:    p($.lang[getLang()][523], true, 'number'),
-    d0:       p($.lang[getLang()][524], true, 'ref'),
-    d1:       p($.lang[getLang()][525], true, 'ref'),
-    //d0:         p($.lang[getLang()][524], true, 'number'),
-    //d1:         p($.lang[getLang()][525], true, 'number'),
-    //length:     p($.lang[getLang()][526], true, 'length'),
-    strength:   p($.lang[getLang()][527], true, 'strength')
+    bCoef:      p(500, false, 'number'),
+    gravity:    p(501, false, 'point'),
+    speed:      p(502, false, 'point'),
+    cMask:      p(503, false, 'layers'),
+    cGroup:     p(504, false, 'layers'),
+    trait:      p(505, false, 'trait'),
+    x:          p(506, true, 'number', true),
+    y:          p(507, true, 'number', true),
+    v0:         p(508, true, 'ref', true),
+    v1:         p(509, true, 'ref', true),
+    curve:      p(510, true, 'number'),
+    curveF:     p(511, true, 'number'),
+    bias :      p(512, true, 'number'),
+    vis:        p(513, false, 'bool'),
+    color:      p(514, false, 'color'),
+    normal:     p(515, true, 'point', true),
+    dist:       p(516, true, 'number', true),
+    radius:     p(517, false, 'number'),
+    invMass:    p(518, false, 'number'),
+    pos:        p(519, true, 'point'),
+    p0:         p(520, true, 'point', true),
+    p1:         p(521, true, 'point', true),
+    team:       p(522, true, 'team'),
+    damping:    p(523, true, 'number'),
+    d0:         p(524, true, 'ref'),
+    d1:         p(525, true, 'ref'),
+    //d0:         p(524, true, 'number'),
+    //d1:         p(525, true, 'number'),
+    //length:     p(526, true, 'length'),
+    strength:   p(527, true, 'strength')
 };})(function(name, required, type, nodefault){
     return { innerText: name, required: required, type: type, def: !nodefault };
 });
@@ -1110,7 +1206,6 @@ var sin = Math.sin;
 //==== Initilisation
 
 $(function(){
-    initLang();
     //check_logged_in();
 
     $('#stadium_editor_link').click(function(){
@@ -1147,13 +1242,16 @@ $(function(){
         if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
         download(stadium);
     });
-    $('#button_import_load').click(function(){
+    $("#button_import_load, #button_st_import").click(function(){
         if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
         if(load_file() == true)    //  불러오고 창 닫기
             return hide_box("import");
     });
     $('#button_load').click(function(){
         load_file();
+    });
+    $("#button_st_import").click(function(){
+        $("#button_options").removeClass("active");
     });
 
     $('#button_library_edit').click(function(){
@@ -1234,6 +1332,7 @@ $(function(){
     
     initialise_properties_css();
     populate_tab_properties();
+    initLang();                 //  언어 초기화
     
     connect_field($('#input_name'), 'name');
     connect_field($('#prop_spawnDistance'), 'spawnDistance', parseFloat);
@@ -1271,29 +1370,39 @@ $(function(){
     connect_field($('#prop_bp_cGroup'), 'ballPhysics.cGroup', parseMaskList);
     connect_field($('#prop_vis'), 'vis', parseVis);
     load(new_stadium());
+    jQuery('html > head > title').text($.lang[getLang()][0] + " - " + $.lang[getLang()][50]);     //  제목에 맵 이름 추가
     modified();
 
     set_tool(tool_select);
 
 
-    $('#button_library_new').click(function(){
-        load(new_stadium());
-        hide_box();
-        modified();
+    $("#button_library_new, #button_st_reset").click(function(){
+        setContext(143);
+        layer_popup("#layer_exit");
     });
 
     // 공통 응답: 예
     $("#button_yes").click(function(){
+        let $dw = $(this);
+        let prts = $dw.parents("div");
+        let title = prts[prts.length - 2];
+
         switch(getIndexPop()){
             case 120:           // 텍스트 모드: 시각 모드
                 hide_box("import");
-                closePop('#layer_exit');
                 break;
             case 121:           // 텍스트 모드: 모두 지우기
                 $('#textarea_import').val('');
-                closePop('#layer_exit');
+                break;
+            case 143:           //  경기장 초기화: 예
+                load(new_stadium());
+                jQuery('html > head > title').text($.lang[getLang()][0] + " - " + stadium.name);     //  제목 반영
+                modified();
+                $("#button_options").removeClass("active");
+                hide_box();
                 break;
         }
+        close_popup('#' + title.id);
     });
     // 공통 응답: 아니오
     $("#button_no").click(function(){
@@ -1303,23 +1412,74 @@ $(function(){
             case 121:           // 텍스트 모드: 모두 지우기
                 break;
         }
-        closePop("#layer_exit");
+        close_popup("#layer_exit");
+    });
+    // 공통 응답: 적용
+    $("#popups").find(".button_apply").click(function(){
+        $el = $(this);
+        let prts = $el.parents("div")[3];
+        let st = stadium;
+
+        switch(prts.id){
+            case 'layer_rename':            //  경기장 정보
+                let inptTitle = $("#layer_rename_title")[0].getElementsByTagName("input")[0];
+                //let inptVersion = $("#layer_rename_version")[0].getElementsByTagName("input")[0];
+                //let txtMemo = $("#layer_rename_memo")[0].getElementsByTagName("textarea")[0];
+                if(inptTitle.value != st.name){
+                    st.name = inptTitle.value;
+                    jQuery('html > head > title').text($.lang[getLang()][0] + " - " + inptTitle.value);     //  제목 반영
+                }
+                break;
+            case 'layer_spawnDist':         //  스폰 거리 간격
+                let dist = $("#layer_sp_spawnDistance")[0].getElementsByTagName("input")[0];
+                let pntsRed = $("#layer_sp_pointsRed").find("input");
+                let pntsBlue = $("#layer_sp_pointsBlue").find("input");
+
+                $("#prop_spawnDistance")[0].value = dist.value;
+                st.spawnDistance = dist.value;
+
+                let showSpawnPoints = function(team){
+                    let spawnPoints = team == 1 ? st.blueSpawnPoints : st.redSpawnPoints;
+                    let pntsSd = team == 1 ? pntsBlue : pntsRed;
+                    let limit = Math.max(spawnPoints.length, pntsSd.length);
+                    for(let i = 0; i < limit.length; i++){
+                        let target = pntsSd.find("input")[i];
+                        if(spawnPoints.length < i){         //  스폰 위치 추가
+                            spawnPoints[i] = parseVector(target.value);
+                        }
+                        else if(pntsSd.length.value < i){   //  스폰 위치 삭제
+                            spawnPoints.splice(i);       //  원본 배열 수정
+                        }
+                    }
+                }
+            
+                showSpawnPoints(0);
+                showSpawnPoints(1);
+
+                break;
+        }
+        close_popup('#' + prts.id);
+    });
+    // 공통 응답: 취소
+    $(".button_cancel").click(function(){
+        let $dw = $(this);
+        let prts = $dw.parents("div");
+        let title = prts[prts.length - 2];
+        close_popup('#' + title.id);
+    });
+
+    $("#layer_spawnDist").find('.prop').on("change", function() {  //  스폰 좌표
+        let target = $(this)[0];
+        if(target.value != '') return;
+        target.style.display = "none";
     });
 
     // 언어 변경
     $("#button_lang").click(function(){
         //$('#table').hide();
         //$('#dw_lang').show();
-        layer_popup($(this).attr('href'));
-    });
-    
-    $("#button_lang_en").click(function(){
-        closePop("#layer_lang");
-        setLanguage("en");
-    });
-    $("#button_lang_ko").click(function(){
-        closePop("#layer_lang");
-        setLanguage("ko");
+        //layer_popup($(this).attr('href'));
+        layer_popup("#layer_lang");
     });
 
     // 텍스트 모드
@@ -1388,7 +1548,7 @@ $(function(){
         if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
         var st;
         try {
-            st = eval('[' + $('#textarea_import').val() + ']')[0];
+            st = Function('"use strict";return (' + ('[' + $('#textarea_import').val() + ']') + ')')()[0];
         } catch (error) {
             st = undefined;
         }
@@ -1398,6 +1558,9 @@ $(function(){
         }
         oldTxtaraVal = $("#textarea_import").val();
         //$("#button_import_cancel").removeClass("btn_accnt");
+        if(st.name != stadium.name){
+            jQuery('html > head > title').text($.lang[getLang()][0] + " - " + st.name);     //  제목 반영 
+        }
         load(st);
         modified();
         //hide_box();
@@ -1422,7 +1585,7 @@ $(function(){
                 window.open("https://umhxbl.wixsite.com/storage/forum/pideubaeg");
                 break;
             default:
-                alert('contact djdft1456@gmail.com if you have something such as a bug or another problem.');
+                alert('contact at djdft1456@gmail.com if you have something such as a bug or another problem.');
         }
     });
 
@@ -1430,7 +1593,7 @@ $(function(){
         save();
     });
 
-    $('#button_download_text').click(function(){
+    $("#button_download_text, #button_st_export").click(function(){
         if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
         download(stadium);
     });
@@ -1473,7 +1636,6 @@ $(function(){
  
     //  최대화
     $('.btn_show').click(function(){
-        test_me = this;
         display_window(this, true);
     });
     //  최소화
@@ -1491,13 +1653,104 @@ $(function(){
         hide_box("properties");
         $("#button_properties").removeClass("active");
     });
+    $('#button_properties_rename').click(function(){
+        //$('#layer_rename').show();
+        layer_popup("#layer_rename");
+    });
+    $('#button_properties_spawnDist').click(function(){
+        //$('#layer_rename').show();
+        layer_popup("#layer_spawnDist");
+    });
+    $(".button_cancel").click(function(){
+        let $dw = $(this);
+        let prts = $dw.parents("div");
+        let title = prts[prts.length - 2];
+        close_popup('#' + title.id);
+    });
+    $('#popups').find('.btn_close').click(function(){
+        let $dw = $(this);
+        let prts = $dw.parents("div");
+        let title = prts[prts.length - 2];
+        close_popup('#' + title.id);
+    });
 
     $('#button_options_close').click(function(){
-        if($('#layer_lang').css('display') == 'block') return;
+        //if($('#layer_lang').css('display') == 'block') return;
         hide_box("options");
         $("#button_options").removeClass("active");
-        //closePop('#button_options');
+        //close_popup('#button_options');
     });
+    
+
+    $('.color_preview').on("change", function() {  //  색상 입력
+        let $dw = $(this);
+        let parents = $dw.parents("div")[0];
+        let spn = $(parents).find("input")[0];
+        let inpt = $(parents).find("input")[1];
+        
+        let pickCol = (spn.value.replace('#', '')).toUpperCase();
+        let textCol = inpt.value.toUpperCase();
+        if(pickCol == textCol) return;
+     
+        inpt.value = pickCol;
+        //current_tool.shape.object.color = pickCol;
+        property_apply("color", inpt);
+        modified(true);
+        //set_prop_val("color", inpt.value);
+        //property_data["color"].val(pickCol);
+    });
+    
+    $("#color, .color_palette").on("propertychange change keyup paste input", function() {  //  색상 입력
+        let $dw = $(this);
+        let parents = $dw.parents("div")[0];
+        let spn = $(parents).find("input")[0];
+        let inpt = $(parents).find("input")[1];
+        
+        let oldVal = (spn.value.replace('#', '')).toUpperCase();
+        let currentVal = inpt.value.toUpperCase();
+
+        switch(currentVal){
+            case oldVal:
+                return;
+            case '':
+                //  색상 미리보기 초기화
+                let getLiveColor = function(t, v){
+                    if(v) return (v == "transparent" ? v : '#' + v);
+                    switch(t.name){
+                        case "disc":
+                            return '#' + "FFFFFF";
+                        case "select":
+                            let shpType = t.shape != undefined ? t.shape.type : null;
+                            return '#' + (shpType == "discs" ? "FFFFFF" : "000000");
+                        default:
+                            return '#' + "000000";
+                    }
+                }
+                spn.value = getLiveColor(current_tool, inpt.value);
+                /*
+                let tn = current_tool.name;
+                if(tn == "segment" || tn == "disc")
+                    return spn.value = (inpt.value == "transparent" ? inpt.value : '#' + (!inpt.value ? tn == "disc" ? "FFFFFF" : "000000" : inpt.value));
+                let shpType = current_tool.shape == undefined ? null : current_tool.shape.type;
+                //  Disc 기본 값은 흰색
+                spn.value = (inpt.value == "transparent" ? inpt.value : '#' + (!inpt.value ? shpType == "discs" ? "FFFFFF" : "000000" : inpt.value));
+                */
+                return;
+            default:
+                switch(parseColorExt(currentVal)){
+                    case '':
+                        return;
+                    case "transparent":
+                        spn.value = '#' + "000000";
+                        break;
+                    default:
+                        spn.value = '#' + currentVal;
+                }
+        }
+        //set_prop_val("color", currentVal);
+    });
+    
+    
 
     add_tool(tool_select);
     add_tool(tool_segment);
@@ -1570,22 +1823,6 @@ $(function(){
         settings.preview = $('#pref_preview').hasClass('active');
         queue_render();
     });
-/*
-    $('#canvas').mousedown(function(event){         //  마우스 클릭
-        switch (event.which) {
-            case 1:             //  좌클릭
-                break;
-            case 2:             //  휠
-                return;
-            case 3:             //  우클릭
-                alert("대충 우클릭 감지");
-                break;
-            default:
-                return;
-        }
-    });
-
-*/
 
     /*  Original Source by Tobias Bogliolo */
     //  우클릭 도구 메뉴
@@ -1640,8 +1877,29 @@ $(function(){
         });
         */
     });
+
+    /*
+    $(document).mousedown(function(e){        //    마우스 입력
+        switch(e.which){
+            case 1:             //  좌클릭
+                break;
+            case 2:             //  휠
+                break;
+            case 3:             //  우클릭
+                break;
+        }
+    });
+    */
     
-    $(document).click(function(){
+    /*
+    $(document).click(function(){        //    마우스 클릭
+        $(".contextmenu").hide();
+    });
+    $(document).scroll(function(e){      //    마우스 스크롤
+        $(".contextmenu").hide();
+    });
+    */
+    $(document).on('click mousewheel DOMMouseScroll', function(e){       //    마우스 스크롤
         $(".contextmenu").hide();
     });
 
@@ -1848,6 +2106,23 @@ function display_propertiesMenu(name){
     let dv = getDisplayValue(name);
     tabTool.style.float = (dv == 'none' ? "inherit" : "right");
     tabProp.style.display = dv;
+
+    
+    let inpt = $('#color')[0];
+
+    let getLiveColor = function(t, v){
+        if(v) return (v == "transparent" ? v : '#' + v);
+        switch(t.name){
+            case "disc":
+                return '#' + "FFFFFF";
+            case "select":
+                let shpType = t.shape != undefined ? t.shape.type : null;
+                return '#' + (shpType == "discs" ? "FFFFFF" : "000000");
+            default:
+                return '#' + "000000";
+        }
+    }
+    $(".color_preview")[0].value = getLiveColor(current_tool, inpt.value);
 }
 function display_window(dw, isActive){
     let selectors = $(dw).parents("div");
@@ -2017,7 +2292,8 @@ function render(st){
             current_tool.transform(st, ctx, shape, draw);
             ctx.restore();
         };
-    }else{
+    }
+    else{
         transform = function(shape, draw){ draw(); };
     }
 
@@ -2124,8 +2400,12 @@ function render(st){
         });
     });
 
-    $.each(debug_render, function(i, f){ f(ctx); });
+    $.each(debug_render, function(i, f){ 
+        f(ctx); 
+    });
 
+    //canvas.style.height = st.height;
+    //canvas.style.width = st.width;
     if(settings.preview){
         // TODO: use exact colors and sizes
 
@@ -2157,10 +2437,10 @@ function render(st){
 
     }
     else{   //  윤곽선 그리기
-        ctx.setLineDash([5, 3]);/*dashes are 5px and spaces are 3px*/
+        ctx.setLineDash([5, 3]);                        /*dashes are 5px and spaces are 3px*/
         ctx.strokeStyle = haxball.border_color;
-        ctx.strokeRect(-sw, -sh, 2 * sw, 2 * sh);
-        ctx.setLineDash([]);
+        ctx.strokeRect(-sw, -sh, 2 * sw, 2 * sh);       //  렌더링
+        ctx.setLineDash([]);                            //  점선 끝
     }
 
     if(!settings.preview && current_tool && current_tool.render){
@@ -2446,6 +2726,7 @@ var tool_select = {
     down: function(pt, ev){
         var shape = under_point(stadium, pt);
         this.shape = shape;
+        test_me = shape;
         if(!shape){
             this.drag_type = 'select';
             if(!(ev.shiftKey || ev.ctrlKey)){
@@ -2621,6 +2902,13 @@ function set_tool(t){
     $(canvas).css('cursor', t.cursor);
     t.init();
     trigger('set_tool', t, old_tool);
+    
+    //  색상 미리보기 초기화
+    let inpt = $('#color')[0];
+    let tn = t.name;
+    //  Disc 기본 값은 흰색
+    $(".color_preview")[0].value = (inpt.value == "transparent" ? inpt.value : '#' + (!inpt.value ? tn == "disc" ? "FFFFFF" : "000000" : inpt.value));
+
     display_propertiesMenu(t.name);
     queue_render();
 }
@@ -2635,7 +2923,7 @@ function unselect_shape(st, shape){
             if(selected(st.vertexes[s.v1]) == 'segment')
                 shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), false);
             break;
-        
+        /*
         case 'joints':
             var s = shape.object;
             if(selected(st.discs[s.v0]) == 'joint')
@@ -2643,7 +2931,7 @@ function unselect_shape(st, shape){
             if(selected(st.discs[s.v1]) == 'joint')
                 shape_set_selected(Shape('discs', st.discs[s.d1], s.d1), false);
             break;
-        
+        */
     }
 }
 
@@ -2661,7 +2949,7 @@ function select_shape(st, shape){
             if(!selected(st.vertexes[s.v1]))
                 shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), 'segment');
             break;
-        
+        /*
         case 'joints':
             var s = shape.object;
             if(!selected(st.discs[s.d0 - 1]))
@@ -2669,7 +2957,7 @@ function select_shape(st, shape){
             if(!selected(st.discs[s.d1 - 1]))
                 shape_set_selected(Shape('discs', st.discs[s.d1 - 1], s.d1 - 1), 'joint');
             break;
-        
+        */
     }
 }
 
@@ -2881,13 +3169,14 @@ function select_rect(st, a, b){
                 count ++;
             }
             break;
-        
+        /*
         case 'joints':
             if(selected(st.discs[o.d0]) && selected(st.discs[o.d1])){
                 shape_set_selected(shape, true);
                 count ++;
             }
             break;
+        */
         }
     });
 
@@ -3194,7 +3483,7 @@ function load_tile(name){
     tile.onload = function(){
         var ctx = canvas.getContext('2d');
         bg_patterns[name] = ctx.createPattern(tile, 'repeat');
-        queue_render();
+        //queue_render();
     };
     tile.src = "./HBSE_files/general/" + name+'tile.png';
 }
@@ -3590,7 +3879,7 @@ function undo(){
     redo_savepoints.unshift(undo_savepoints.shift());
     redo_savepoints.splice(undo_levels);
 
-    load(eval('['+undo_savepoints[0]+']')[0]);
+    load(Function('"use strict";return (' + ('['+undo_savepoints[0]+']') + ')')()[0]);
     modified(true);
     return true;
 }
@@ -3601,7 +3890,7 @@ function redo(){
     var state = redo_savepoints.shift();
     undo_savepoints.unshift(state);
     undo_savepoints.splice(undo_levels);
-    load(eval('['+state+']')[0]);
+    load(Function('"use strict";return (' + ('['+state+']') + ')')()[0]);
     modified(true);
     return true;
 }
@@ -3938,12 +4227,13 @@ function rotate_obj(st, shape, center, cos, sin){
         obj.normal = nn;
         obj.dist = d;
     }
-
+    /*
     if(type == 'joints'){
         var n = point_rotate([o.d0, o.d1], center, cos, sin);
         obj.d0 = n[0];
         obj.d1 = n[1];
     }
+    */
 }
 
 function update_mirrored_geometry_selected(st){
@@ -3975,8 +4265,10 @@ function update_mirrored_geometry_selected(st){
                         sh2.object.normal = mirror_point(obj.normal, dir);
                         sh2.object.dist = obj.dist;
                         break;
+                    /*
                     case 'joints':
                         break;
+                    */
                     }
                 }else{
                     if(selected(dat[dir].object)){
@@ -4082,8 +4374,10 @@ function resize_canvas(){
             var ext = plane_extremes(st, obj);
             consider(midpoint(ext.a, ext.b), 0);
             break;
+        /*
         case 'joints':
             break;
+        */
         }
     });
 
@@ -4100,6 +4394,7 @@ function resize_canvas(){
 
     canvas_rect = rect;
     var wh = { width: rect[2] - rect[0], height: rect[3] - rect[1]};
+    //test_me = wh;
     $(canvas).attr(wh);
     $(canvas).css(wh);
 
@@ -4328,15 +4623,25 @@ function initialise_properties_css(){
     var rules = [];
 
     $.each(type_properties, function(type, props){
+        let rcss = '{ height: 3rem; background: #283238; border: 1px solid #2F3C43; border-radius: 8px; margin: 4px 2px; display: table; }';
         $.each(props, function(i, prop){
             var opts = properties[prop];
-            rules.push('.selected_'+type+'.selected_tool_other .prop_'+prop+' { display: block }');
+            rules.push('.selected_' + type + '.selected_tool_other .prop_' + prop + rcss);
             if(opts.def)
-                rules.push('.selected_tool_'+type+' .prop_'+prop+'{ display: block }');
+                rules.push('.selected_tool_' + type + ' .prop_' + prop + rcss);
         });
     });
 
     $('<style type="text/css">' + rules.join(newLine) + '</style>').appendTo($('head'));
+
+    //  create spawnPoints
+    let lspd = $("#layer_spawnDist").find(".pop-conts")[0];
+    let spntsRed = $(lspd).find("#layer_sp_pointsRed");
+    let spntsBlue = $(lspd).find("#layer_sp_pointsBlue");
+    for(let i = 0; i < 30; i++){
+        $('<input class="prop" id="spawnPoints_red_' + (i + 1) + '" autocomplete="off"></div>').appendTo(spntsRed);
+        $('<input class="prop" id="spawnPoints_blue_' + (i + 1) + '" autocomplete="off"></div>').appendTo(spntsBlue);
+    }
 }
 
 function populate_tab_properties(){
@@ -4345,38 +4650,41 @@ function populate_tab_properties(){
         var type = opts.type;
         if(type != 'ref'){
             var div = $('<div class="property prop_' + prop + '"></div>').appendTo(tp);
-            var label = $('<label for="' + prop + '" class="prop">' +  properties[prop].innerText + '</label>').appendTo(div);
+            //var label = $('<label for="' + prop + '" class="prop">' +  properties[prop].innerText + '</label>').appendTo(div);
+            var label = $('<label for="' + prop + '" data-langNum="' + properties[prop].innerText + '" class="prop">' + '</label>').appendTo(div);
             var apply = function(){
                 property_apply(prop, property_data[prop]);
             };
-            switch(type){
-                
+            let inpProp;
+            switch(type){    
                 // TODO: number point color team trait bool
-
-            case 'bool':/*
-                var inp = $('<input type="checkbox" class="prop">').appendTo(div);
-                property_data[prop] = inp;
-                inp.change(apply);
-                break;
-                */
-                /*
-                <select class="prop" style="width: 104px;" id="prop_kickOffReset">
-                  <option data-langNum="317", value="partial">Partial</option>
-                  <option data-langNum="318", value="full">Full</option>
-                </select>
-                */
-            case 'point':
-            case 'number':
-            case 'color':
-            case 'team':
-            case 'layers':
-            case 'length':
-            case 'strength':
-            case 'trait':
-                var inp = $('<input name="' + prop + '"' + 'id="' + prop + '"' + 'type="text" class="prop">').appendTo(div);
-                property_dataLabel[prop] = label;
-                property_data[prop] = inp;
-                inp.change(apply);
+                case 'color':
+                    let spn = $('<input class="color_preview" type="color">').appendTo(div);
+                    inpProp = 'style="width: 162px; float: right;"';
+                case 'bool':
+                    /*
+                    var inp = $('<input type="checkbox" class="prop">').appendTo(div);
+                    property_data[prop] = inp;
+                    inp.change(apply);
+                    break;
+                    */
+                    /*
+                    <select class="prop" style="width: 104px;" id="prop_kickOffReset">
+                      <option data-langNum="317", value="partial">Partial</option>
+                      <option data-langNum="318", value="full">Full</option>
+                    </select>
+                    */
+                case 'point':
+                case 'number':
+                case 'team':
+                case 'layers':
+                case 'length':
+                case 'strength':
+                case 'trait':
+                    inp = $('<input name="' + prop + '"' + 'id="' + prop + '"' + 'type="text" class="prop"' + inpProp + '>').appendTo(div);
+                    property_dataLabel[prop] = label;
+                    property_data[prop] = inp;
+                    inp.change(apply);
             }
         }
     });    
@@ -4472,6 +4780,30 @@ function set_prop_val(prop, val){
 
     if(val === undefined){
         inp.val('');
+        //  색상 미리보기 초기화
+        /*
+        let inpt = $('#color')[0];
+
+        let getLiveColor = function(t, v){
+            if(v) return (v == "transparent" ? v : '#' + v);
+            switch(t.name){
+                case "disc":
+                    return '#' + "FFFFFF";
+                case "select":
+                    let shpType = t.shape != undefined ? t.shape.type : null;
+                    return '#' + (shpType == "discs" ? "FFFFFF" : "000000");
+                default:
+                    return '#' + "000000";
+            }
+        }
+        $(".color_preview")[0].value = getLiveColor(current_tool, inpt.value);
+*/
+        /*
+        let shpType = current_tool.shape == undefined ? null : current_tool.shape.type;
+        test_me = current_tool;
+        //  Disc 기본 값은 흰색
+        $(".color_preview")[0].value = (inpt.value == "transparent" ? inpt.value : '#' + (!inpt.value ? shpType == "discs" ? "FFFFFF" : "000000" : inpt.value));
+        */
         return;
     }
 
@@ -4822,7 +5154,7 @@ function reset_mirror_data(st){
                     }
                 });
                 break;
-
+            /*
             case 'joints':
                 var d0 = st.discs[sh1.object.d0];
                 var d1 = st.discs[sh1.object.d1];
@@ -4838,6 +5170,7 @@ function reset_mirror_data(st){
                     }
                 });
                 break;
+            */
             }
         });
     });
@@ -4897,14 +5230,14 @@ function shape_switch_ends(sh){
         seg.v0 = seg.v1;
         seg.v1 = tmp;
         break;
-        
+    /*
     case 'joints':
         var jnt = sh.object;
         var tmp = jnt.d0;
         jnt.d0 = jnt.d1;
         jnt.d1 = tmp;
         break;
-        
+    */    
     case 'goals':
         var tmp = sh.object.p0;
         sh.object.p0 = sh.object.p1;
@@ -5026,11 +5359,10 @@ function load_file(){           // 맵 불러오기
     function processFile(file) {
         let fr = new FileReader();
         fr.onload = function(e){
-            test_me = file;
             if(input.accept.includes(file.name.split('.').reverse()[0]) == false)
                 return alert($.lang[getLang()][124] + file.name);
             let rs = e.target.result;
-            let st = eval('[' + rs + ']')[0];
+            let st = Function('"use strict";return (' + ('[' + rs + ']') + ')')()[0];
             try {
                 load(st);
                 hide_box("import");     //  불러오고 창 닫기
@@ -5038,6 +5370,7 @@ function load_file(){           // 맵 불러오기
             catch(error){        
                 alert($.lang[getLang()][9]);
             }
+            jQuery('html > head > title').text($.lang[getLang()][0] + " - " + st.name);
             modified();
         };
         fr.readAsText(file);
