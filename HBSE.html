@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8">
     <!--<meta name="viewport" con tent="width=device-width"> -->
-    <title data-langNum="0">HaxPuck.com(오프라인)</title>
+    <title data-langNum="0"></title>
     <!--<link rel="shortcut icon" href="https://atnnn.github.io/haxpuck/hbedit/">-->
     <link rel="shortcut icon" href="http://web.archive.org/web/20181112005722im_/http://haxpuck.com/favicon.ico">
   </head>
@@ -42,42 +42,124 @@
   <a class="shortcut" href="https://www.haxball.com/flash/", target="_blank">Flash</a>
   <a class="shortcut" href="https://www.haxball.com/headless", target="_blank">Headless Host</a>
 </div></table>
-<a href="#layer_lang" class="btn-example"></a>
-<div id="layer_lang" class="pop-layer">
-  <div class="pop-container">
-    <div class="pop-conts">
-      <!--content //-->
-      <div id="dw_lang_title" data-langNum="3", class="dialog_title">알림</div>
-      <p class="ctxt mb20" data-langNum="2"></p>
-      <div class="dialog_list">
-        <button class="dialog_answer" data-lang="en" id="button_lang_en"><a href="#" class="btn-layerClose" data-langNum="400">영어</a></button>
-        <button class="dialog_answer" data-lang="ko" id="button_lang_ko"><a href="#" class="btn-layerClose" data-langNum="401">한국어</a></button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<a href="#layer_exit" class="btn-example"></a>
-<div id="layer_exit" class="pop-layer">
-  <div class="pop-container">
-    <div class="pop-conts">
-      <!--content //-->
-      <div id="dw_lang_title" data-langNum="3", class="dialog_title">알림</div>
-      <p class="ctxt mb20" id="dialog_context"></p>
-      <div class="dialog_select">
-        <button class="dialog_answer" id="button_yes"><a href="#" style="color: #fff;" class="btn-layerYes" data-langNum="304">예</a></button>
-        <button class="dialog_answer" id="button_no"><a href="#" style="color: #fff;" class="btn-layerNo" data-langNum="305">아니오</a></button>
+<div id="popups" class="hidden">
+
+  <!--언어 변경-->
+  <a href="#layer_lang" class="btn-example"></a>
+  <div id="layer_lang" class="pop-layer">
+    <div class="pop-container">
+      <div class="pop-conts">
+        <!--content //-->
+        <div id="dw_lang_title" data-langNum="3", class="dialog_title">알림</div>
+        <p class="ctxt mb20" data-langNum="2"></p>
+        <div class="dialog_list">
+          <button class="dialog_answer" data-lang="en" id="button_lang_en"><a href="#" class="btn-layerClose" data-langNum="400">영어</a></button>
+          <button class="dialog_answer" data-lang="ko" id="button_lang_ko"><a href="#" class="btn-layerClose" data-langNum="401">한국어</a></button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!--시작 모드로 나가기-->
+  <a href="#layer_exit" class="btn-example"></a>
+  <div id="layer_exit" class="pop-layer">
+    <div class="pop-container">
+      <div class="pop-conts">
+        <!--content //-->
+        <div id="dw_lang_title" data-langNum="3", class="dialog_title">알림</div>
+        <p class="ctxt mb20" id="dialog_context"></p>
+        <div class="dialog_select">
+          <button class="dialog_answer" id="button_yes"><a href="#" style="color: #fff;" class="btn-layerYes" data-langNum="304">예</a></button>
+          <button class="dialog_answer" id="button_no"><a href="#" style="color: #fff;" class="btn-layerNo" data-langNum="305">아니오</a></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--경기장 정보-->
+  <a href="#layer_rename" class="btn-example"></a>
+  <div id="layer_rename" class="pop-layer">
+    <div class="pop-container">
+      <!--content //-->
+      <div class="pop-conts">
+        <!--작업 표시줄-->
+        <div class="titleContent">
+          <pre class="titleContent" data-langnum="51">경기장 정보</pre>
+          <button id="button_about_close" class="btn_close"><img class="close" alt="general-toggle-close" src="./HBSE_files/general/general_toggle_close.ico"></button>
+        </div>
+        <!--맵 제목-->
+        <div class="prop_element" id="layer_rename_title">
+          <pre class="prop_element_title" data-langNum="52"></pre>
+          <input class="prop" value="" autocomplete="off"></input>
+        </div>
+        
+        <!--//맵 버전
+        <div class="prop_element" id="layer_rename_version">
+          <pre class="prop_element_title" data-langNum="53"></pre>
+          <input class="prop" value="" autocomplete="off"></input>
+        </div>
+        -->
+        <!--//맵 설명
+        <div class="prop_element" id="layer_rename_memo">
+          <pre class="prop_element_title" data-langNum="54"></pre>
+          <textarea></textarea>
+          <pre class="prop_element_title"></pre>
+        </div>
+        -->
+        <div class="dialog_select">
+          <button class="button_apply"><a href="#" style="color: #fff;" class="btn-layerYes" data-langNum="309">적용</a></button>
+          <button class="button_cancel"><a href="#" style="color: #fff;" class="btn-layerNo" data-langNum="306">취소</a></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--스폰 거리 간격-->
+  <a href="#layer_spawnDist" class="btn-example"></a>
+  <div id="layer_spawnDist" class="pop-layer">
+    <div class="pop-container">
+      <!--content //-->
+      <div class="pop-conts">
+        <!--작업 표시줄-->
+        <div class="titleContent">
+          <pre class="titleContent" data-langnum="222">스폰 거리 간격</pre>
+          <button id="button_about_close" class="btn_close"><img class="close" alt="general-toggle-close" src="./HBSE_files/general/general_toggle_close.ico"></button>
+        </div>
+
+        <!--스폰 거리 간격-->
+        <div class="prop_element" id="layer_sp_spawnDistance">
+          <pre class="prop_element_title" data-langNum="222"></pre>
+          <input class="prop"value="" autocomplete="off"></input>
+        </div>
+        <!--레드-->
+        <div class="prop_element" id="layer_sp_pointsRed">
+          <pre class="prop_element_title" data-langNum="223"></pre>
+        </div>
+        <!--블루-->
+        <div class="prop_element" id="layer_sp_pointsBlue">
+          <pre class="prop_element_title" data-langNum="224"></pre>
+        </div>
+        <div class="dialog_select">
+          <button class="button_apply"><a href="#" style="color: #fff;" class="btn-layerYes" data-langNum="309">적용</a></button>
+          <button class="button_cancel"><a href="#" style="color: #fff;" class="btn-layerNo" data-langNum="306">취소</a></button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
 </div>
 
 
   <div id="layer_objl" class="hidden">
     <div class="gadget-layer"><div class="gadget-container"><div class="gadget-conts">
       <!--content //-->
-      <div class="titleContent" data-langNum="283" style="text-shadow: 0 0 2px #C5C5C5;">목록</div>
-      <pre></pre>
+      <!--작업 표시줄-->
+      <div class="titleContent">
+        <pre class="titleContent" data-langnum="283">목록</pre>
+        <button class="btn_close"><img class="close" alt="general-toggle-close" src="./HBSE_files/general/general_toggle_close.ico"></button>
+      </div>
       <label data-langNum="33" class="prop"></label><pre class="prop" id="oblt_segments"></pre>
         <button id="objl_segment_0" class="shortcut">0</button>
       </pre>
@@ -92,7 +174,7 @@
     <div style="display: table-row-group;">
       <button id="button_undo" class="btn_act"><img class="btn_act" alt="action_undo" src="./HBSE_files/always-tools/always-tools_undo.ico"></img></button>
       <button id="button_redo" class="btn_act"><img class="btn_act" alt="action_redo" src="./HBSE_files/always-tools/always-tools_redo.ico"></img></button>
-      <input id="input_name" value="" autocomplete="off" style="border-radius: 4px; margin: 0 4px;"></input>
+      <!--<input id="input_name" value="" autocomplete="off" style="border-radius: 4px; margin: 0 4px;"></input>-->
       <button class="btn_show" style="display: none;"><img class="show" alt="general-toggle-show" src="./HBSE_files/general/general_toggle_full.ico"></img></button>
       <button class="btn_hide"><img class="hide" alt="general-toggle-hide" src="./HBSE_files/general/general_toggle_hide.ico"></img></button>
     </div>
@@ -278,7 +360,7 @@
       <table id="librarytable">
         <tbody><tr>
           <td id="librarytop" colspan="2" style="width:100%;" valign="right">
-            <button id="button_library_new">New</button>
+            <button id="button_library_new"><a data-langNum="142">New</a></button>
             <button id="button_library_edit">Edit</button>
             <button id="button_library_delete" class="owner">Delete</button>
           </td>
@@ -353,27 +435,35 @@
         <pre class="titleContent" data-langNum="220">경기장 속성</pre>
         <button id="button_properties_close" class="btn_close"><img class="close" alt="general-toggle-close" src="./HBSE_files/general/general_toggle_close.ico"></img></button>
       </div>
+      <button id="button_properties_rename"><img alt="general_rename" src="./HBSE_files/general/general_rename.ico"></img><a data-langNum="55">이름 바꾸기</a></button>
       <div id="stadium_properties">
         <div class="prop_group" id="sp_general">                <!-- 일반 -->
           <div data-langNum="221", class="prop_group_title">일반</div>
-          <label data-langNum="222", class="prop">스폰 거리 간격:</label><input class="prop" type="text" id="prop_spawnDistance">
+          <div class="property_prop">
+            <label class="prop" data-langNum="222">스폰 거리 간격</label>
+            <!--
+            <button class="btn_act" id="button_properties_spawnDist"><img class="btn_act" alt="general_details" src="./HBSE_files/general/general_details.ico"></img></button>
+            <input class="prop" type="text" id="prop_spawnDistance" style="width: 142px;"></input>
+            -->
+            <input class="prop" type="text" id="prop_spawnDistance"></input>
+            
+          </div>
           <!--
           <label data-langNum="223", class="prop">가로:</label><input class="prop" type="text" id="prop_sizeLeft">
           <label data-langNum="224", class="prop">세로:</label><input class="prop" type="text" id="prop_height">
           <label data-langNum="225", class="prop">가로(카메라):</label><input class="prop" type="text" id="prop_cameraWidth">
           <label data-langNum="226", class="prop">세로(카메라):</label><input class="prop" type="text" id="prop_cameraHeight">
           --->
-          <div>
-            <label class="prop_size" data-langNum="223">가로 × 세로: </label>
+          <div class="property_prop">
+            <label class="prop_size" data-langNum="225">가로 × 세로</label>
             <input class="prop_size" type="text" id="prop_width"></input><input class="prop_size" type="text" id="prop_height"></input>
           </div>
-
-          <div>
-            <label class="prop_size" data-langNum="225">가로 × 세로(카메라): </label>
+          <div class="property_prop">
+            <label class="prop_size" data-langNum="226">가로 × 세로(카메라)</label>
             <input class="prop_size" type="text" id="prop_cameraWidth"></input><input class="prop_size" type="text" id="prop_cameraHeight"></input>
           </div>
-          <label data-langNum="227", class="prop">최대 시야 너비:</label><input class="prop" type="text" id="prop_maxViewWidth"></input>
-          <label data-langNum="228", class="prop">저장 명령어:</label><input class="prop" id="prop_canBeStored" type="checkbox" checked></input>
+          <div class="property_prop"><label data-langNum="227", class="prop">최대 시야 너비</label><input class="prop" type="text" id="prop_maxViewWidth"></input></div>
+          <div class="property_prop"><label data-langNum="228", class="prop">저장 명령어</label><input class="prop" id="prop_canBeStored" type="checkbox" checked></input></div>
           <!--
           <label data-langNum="228", class="prop">저장 명령어:</label>
           <select class="prop_sel" id="prop_canBeStored">
@@ -381,66 +471,71 @@
             <option data-langNum="311", value="false">비활성화</option>
           </select>
           -->
-          <label data-langNum="229", class="prop">카메라 시점:</label>
-          <select class="prop_sel" id="prop_cameraFollow">
-            <option data-langNum="315", value="ball">볼</option>
-            <option data-langNum="316", value="player">플레이어</option>
-          </select>
-          <label data-langNum="269", class="prop">킥오프 초기화:</label>
-          <select class="prop_sel" id="prop_kickOffReset">
-            <option data-langNum="317", value="partial">최소</option>
-            <option data-langNum="318", value="full">최대</option>
-          </select>
+          <div class="property_prop">
+            <label data-langNum="229", class="prop">카메라 시점</label>
+            <select class="prop_sel" id="prop_cameraFollow">
+              <option data-langNum="315", value="ball">볼</option>
+              <option data-langNum="316", value="player">플레이어</option>
+            </select>
+          </div>
+          <div class="property_prop">
+            <label data-langNum="269", class="prop">킥오프 초기화:</label>
+            <select class="prop_sel" id="prop_kickOffReset">
+              <option data-langNum="317", value="partial">최소</option>
+              <option data-langNum="318", value="full">최대</option>
+            </select>
+          </div>
         </div>
         <div class="prop_group" id="sp_background">             <!-- 백그라운드 -->
           <div data-langNum="230", class="prop_group_title">백그라운드</div>
-          <label data-langNum="231" class="prop">테마:</label>
-          <select class="prop_sel" id="prop_bg_type">
-            <option data-langNum="237", value="">기본</option>
-            <option data-langNum="238", value="grass">잔디</option>
-            <option data-langNum="239", value="hockey">하키</option>
-          </select>
+          <div class="property_prop">
+            <label data-langNum="231" class="prop">테마</label>
+            <select class="prop_sel" id="prop_bg_type">
+              <option data-langNum="237", value="">기본</option>
+              <option data-langNum="238", value="grass">잔디</option>
+              <option data-langNum="239", value="hockey">하키</option>
+            </select>
+          </div>
 
-          <div>
-            <label class="prop_size" data-langNum="232">가로 × 세로: </label>
+          <div class="property_prop">
+            <label class="prop_size" data-langNum="232">가로 × 세로</label>
             <input class="prop_size" type="text" id="prop_bg_width"></input><input class="prop_size" type="text" id="prop_bg_height"></input>
           </div>
           <!---
           <label div data-langNum="232", class="prop">가로:</label><input class="prop" type="text" id="prop_bg_height">
           <label div data-langNum="233", class="prop">세로:</label><input class="prop" type="text" id="prop_bg_width">
           -->
-
-          <label div data-langNum="234", class="prop">코너 반경:</label><input class="prop" type="text" id="prop_bg_cornerRadius">
-          <label div data-langNum="235", class="prop">킥오프 반경:</label><input class="prop" type="text" id="prop_bg_kickOffRadius">
-          <label div data-langNum="236", class="prop">색상:</label><input div class="prop" style="text-align: center;" type="text" id="prop_bg_color">
+          <div class="property_prop"><label div data-langNum="234", class="prop">코너 반경</label><input class="prop" type="text" id="prop_bg_cornerRadius"></div>
+          <div class="property_prop"><label div data-langNum="235", class="prop">킥오프 반경</label><input class="prop" type="text" id="prop_bg_kickOffRadius"></div>
+          <div class="property_prop"><label div data-langNum="236", class="prop">색상:</label><input div class="prop" style="text-align: center;" type="text" id="prop_bg_color"></div>
         </div>
         <div class="prop_group" id="sp_playerphysics">          <!-- 플레이어 피직스 -->
           <div data-langNum="240", class="prop_group_title">플레이어 피직스</div>
-          <label data-langNum="241", class="prop">중력</label><input class="prop" type="text" id="prop_pp_gravity">
-          <label data-langNum="242", class="prop">반경</label><input class="prop" type="text" id="prop_pp_radius">
-          <label data-langNum="243", class="prop">바운스</label><input class="prop" type="text" id="prop_pp_bCoef">
-          <label data-langNum="244", class="prop">역질량</label><input class="prop" type="text" id="prop_pp_invMass">
-          <label data-langNum="245", class="prop">제동</label><input class="prop" type="text" id="prop_pp_damping">
-          <label data-langNum="246", class="prop">충돌 그룹</label><input class="prop" type="text" id="prop_pp_cGroup">
-          <label data-langNum="247", class="prop">가속</label><input class="prop" type="text" id="prop_pp_acceleration">
+          <div class="property_prop"><label data-langNum="241", class="prop">중력</label><input class="prop" type="text" id="prop_pp_gravity"></div>
+          <div class="property_prop"><label data-langNum="242", class="prop">반경</label><input class="prop" type="text" id="prop_pp_radius"></div>
+          <div class="property_prop"><label data-langNum="243", class="prop">바운스</label><input class="prop" type="text" id="prop_pp_bCoef"></div>
+          <div class="property_prop"><label data-langNum="244", class="prop">역질량</label><input class="prop" type="text" id="prop_pp_invMass"></div>
+          <div class="property_prop"><label data-langNum="245", class="prop">제동</label><input class="prop" type="text" id="prop_pp_damping"></div>
+          <div class="property_prop"><label data-langNum="246", class="prop">충돌 그룹</label><input class="prop" type="text" id="prop_pp_cGroup"></div>
+          <div class="property_prop"><label data-langNum="247", class="prop">가속</label><input class="prop" type="text" id="prop_pp_acceleration"></div>
         </div>
         <div class="prop_group" id="sp_playerphysics_kick">     <!-- 플레이어 피직스(킥) -->
           <div data-langNum="250", class="prop_group_title">플레이어 피직스(킥)</div>
-          <label data-langNum="251", class="prop">킥 가속</label><input class="prop" type="text" id="prop_pp_kickingAcceleration">
-          <label data-langNum="252", class="prop">킥 제동</label><input class="prop" type="text" id="prop_pp_kickingDamping">
-          <label data-langNum="253", class="prop">킥 강도</label><input class="prop" type="text" id="prop_pp_kickStrength">
-          <label data-langNum="254", class="prop">킥 반동</label><input class="prop" type="text" id="prop_pp_kickback">
+          <div class="property_prop"><label data-langNum="251", class="prop">킥 가속</label><input class="prop" type="text" id="prop_pp_kickingAcceleration"></div>
+          <div class="property_prop"><label data-langNum="252", class="prop">킥 제동</label><input class="prop" type="text" id="prop_pp_kickingDamping"></div>
+          <div class="property_prop"><label data-langNum="253", class="prop">킥 강도</label><input class="prop" type="text" id="prop_pp_kickStrength"></div>
+          <div class="property_prop"><label data-langNum="254", class="prop">킥 반동</label><input class="prop" type="text" id="prop_pp_kickback"></div>
         </div>
         <div class="prop_group" id="sp_discphysics">            <!-- 디스크 피직스 -->
           <div data-langNum="260", class="prop_group_title">디스크 피직스</div>
-          <label data-langNum="261", class="prop">중력</label><input class="prop" type="text" id="prop_bp_gravity">
-          <label data-langNum="262", class="prop">반경</label><input class="prop" type="text" id="prop_bp_radius">
-          <label data-langNum="263", class="prop">바운스</label><input class="prop" type="text" id="prop_bp_bCoef">
-          <label data-langNum="264", data-langNum="260", class="prop">역질량</label><input class="prop" type="text" id="prop_bp_invMass">
-          <label data-langNum="265", class="prop">제동</label><input class="prop" type="text" id="prop_bp_damping">
-          <label data-langNum="266", class="prop">색상</label><input class="prop" type="text" id="prop_bp_color">
-          <label data-langNum="267", class="prop">충돌 마스크</label><input class="prop" type="text" id="prop_bp_cMask">
-          <label data-langNum="268", class="prop">충돌 그룹</label><input class="prop" type="text" id="prop_bp_cGroup">
+          <div class="property_prop"><label data-langNum="261", class="prop">중력</label><input class="prop" type="text" id="prop_bp_gravity"></div>
+          <div class="property_prop"><label data-langNum="262", class="prop">반경</label><input class="prop" type="text" id="prop_bp_radius"></div>
+          <div class="property_prop"><label data-langNum="263", class="prop">바운스</label><input class="prop" type="text" id="prop_bp_bCoef"></div>
+          <div class="property_prop"><label data-langNum="264", data-langNum="260", class="prop">역질량</label><input class="prop" type="text" id="prop_bp_invMass"></div>
+          <div class="property_prop"><label data-langNum="265", class="prop">제동</label><input class="prop" type="text" id="prop_bp_damping"></div>
+          <div class="property_prop"><label data-langNum="266", class="prop">색상</label><input class="prop" type="text" id="prop_bp_color"></div>
+          <div class="property_prop"><label data-langNum="267", class="prop">충돌 마스크</label><input class="prop" type="text" id="prop_bp_cMask"></div>
+          <div class="property_prop"><label data-langNum="268", class="prop">충돌 그룹</label><input class="prop" type="text" id="prop_bp_cGroup"></div>
         </div>
       </div>
     </div>
@@ -464,6 +559,7 @@
           <li><p data-langNum="2103">이 에디터는 AtnNm 원작인 AtnNn's Haxball Stadium Editor에서 2차 수정하였습니다.</p></li>
         </ul>
 
+        <h4>(2022-05-15) v1.21</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2281"></pre></details>
         <h4>(2022-04-17) v1.20</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2271"></pre></details>
         <h4>(2022-03-18) v1.19</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2261"></pre></details>
         <h4>(2022-02-15) v1.18</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2251"></pre></details>
@@ -617,11 +713,11 @@
         <div class="prop_help"><span class="prop_help_title" data-langNum="221">일반</span><ul>
           <li><b data-langNum="222">스폰 거리간격</b></li>
             <pre data-langNum="822"></pre>
-          <li><b data-langNum="224">레드팀 스폰 지점</b></li>
+          <li><b data-langNum="223">레드팀 스폰 지점</b></li>
             <pre data-langNum="824"></pre>
-          <li><b data-langNum="226">블루팀 스폰 지점</b></li>
+          <li><b data-langNum="224">블루팀 스폰 지점</b></li>
             <pre data-langNum="826"></pre>
-          <li><b data-langNum="223">가로 × 세로</b></li>
+          <li><b data-langNum="226">가로 × 세로</b></li>
             <pre data-langNum="823"></pre>
           <li><b data-langNum="227">최대 시야 너비</b></li>
             <pre data-langNum="827"></pre>
@@ -690,33 +786,60 @@
           <div id="settingcontents">
             <div class="prop_group">
               <div data-langNum="280", class="prop_group_title">환경 설정</div>
+              <!--경기장 초기화-->
+              <div class="prop_element"><pre class="prop_element_title" data-langNum="141"></pre>
+                <button id="button_st_export" style="display: list-item;"><a data-langNum="303"></a></button>
+                <button id="button_st_import" style="display: list-item;"><a data-langNum="308"></a></button>
+                <button id="button_st_reset" style="display: list-item;"><a data-langNum="142"></a></button>
+              </div>
             </div>
             <div class="prop_group" style="width: 184px;"><div data-langNum="270", class="prop_group_title">실험 기능</div>
               <!--색상-->
               <div class="prop_element"><pre class="prop_element_title" data-langNum="271"></pre>
-                <button style="margin: 4px 0;"><a data-langNum="271", href="https://www.color-hex.com/", target="_blank", style = color:#fff>사용자 지정 색상</a></button>
-                <label data-langNum="272", class="prop">색 미리보기 1: </label><input class="prop" type="color" name="color1" value="#718C5A">
-                <label data-langNum="273", class="prop">색 미리보기 2: </label><input class="prop" type="color" name="color2" value="#555555">
-                <label data-langNum="274", class="prop">색 미리보기 3: </label><input class="prop" type="color" name="color3" value="#1A2125">
-                <label data-langNum="275", class="prop">색 미리보기 4: </label><input class="prop" type="color" name="color4" value="#2E343C">
-                <label data-langNum="276", class="prop">색 미리보기 5: </label><input class="prop" type="color" name="color5" value="#8ED2AB">
+                <button><a data-langNum="271", href="https://www.color-hex.com/", target="_blank", style = color:#fff>사용자 지정 색상</a></button>
+                <div class="property_prop">
+                  <label data-langNum="272" class="prop">색 미리보기 1: </label>
+                  <input class="color_preview" type="color" value="#718C5A"></input>
+                  <input class="color_palette" value="718C5A" style="display: table-cell; float: right; width: 158px;"></input>
+                </div>
+                <div class="property_prop">
+                  <label data-langNum="273" class="prop">색 미리보기 2: </label>
+                  <input class="color_preview" type="color" value="#555555"></input>
+                  <input class="color_palette" value="555555" style="display: table-cell; float: right; width: 158px;"></input>
+                </div>
+                <div class="property_prop">
+                  <label data-langNum="274" class="prop">색 미리보기 3: </label>
+                  <input class="color_preview" type="color" value="#1A2125"></input>
+                  <input class="color_palette" value="1A2125" style="display: table-cell; float: right; width: 158px;"></input>
+                </div>
+                <div class="property_prop">
+                  <label data-langNum="275" class="prop">색 미리보기 4: </label>
+                  <input class="color_preview" type="color" value="#2E343C"></input>
+                  <input class="color_palette" value="2E343C" style="display: table-cell; float: right; width: 158px;"></input>
+                </div>
+                <div class="property_prop">
+                  <label data-langNum="276" class="prop">색 미리보기 5: </label>
+                  <input class="color_preview" type="color" value="#8ED2AB"></input>
+                  <input class="color_palette" value="8ED2AB" style="display: table-cell; float: right; width: 158px;"></input>
+                </div>
               </div>
               <!--언어-->
               <div class="prop_element"><pre class="prop_element_title" data-langNum="281"></pre>
-                <button><a href="#layer_lang" class="btn-example" data-langNum="281", style="color: #fff;", id="button_lang">언어 변경</a></button>
+                <button id="button_lang"><a data-langNum="281", style="color: #fff;">언어 변경</a></button>
               </div>
               <!--진단-->
               <div class="prop_element"><pre class="prop_element_title" data-langNum="282"></pre>
-                <label data-langNum="33" class="prop"></label><pre class="prop" id="task_segments"></pre>
-                <label data-langNum="34" class="prop"></label><pre class="prop" id="task_vertexes"></pre>
-                <label data-langNum="35" class="prop"></label><pre class="prop" id="task_discs"></pre>
-                <label data-langNum="36" class="prop"></label><pre class="prop" id="task_goals"></pre>
-                <label data-langNum="37" class="prop"></label><pre class="prop" id="task_planes"></pre>
+                <div class="property_prop"><label data-langNum="33" class="prop"></label><pre class="prop" style="width: 144px;" id="task_segments"></pre></div>
+                <div class="property_prop"><label data-langNum="34" class="prop"></label><pre class="prop" style="width: 144px;" id="task_vertexes"></pre></div>
+                <div class="property_prop"><label data-langNum="35" class="prop"></label><pre class="prop" style="width: 144px;" id="task_discs"></pre></div>
+                <div class="property_prop"><label data-langNum="36" class="prop"></label><pre class="prop" style="width: 144px;" id="task_goals"></pre></div>
+                <div class="property_prop"><label data-langNum="37" class="prop"></label><pre class="prop" style="width: 144px;" id="task_planes"></pre></div>
               </div>
             </div>
           </div>
       </div>
     </div>
+  </div>
   <!--
   <iframe frameborder="0" scrolling="no" style="background-color: transparent; border: 0px; display: none;" src="./HaxPuck.com_files/saved_resource.html"></iframe>
   -->
