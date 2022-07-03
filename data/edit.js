@@ -147,14 +147,17 @@ function openPop_about(el, isDim){
     el.find('button.button_apply').click(()   => close_popup(el, isDim));     // 예
     el.find('button.button_cancel').click(()  => close_popup(el, isDim));     // 아니오
     el.find('#popups.btn_close').click(()    => close_popup(el, isDim));     // 닫기
-    let inptTitle = $("#layer_rename_title")[0].getElementsByTagName("input")[0];
-    //let inptVersion = $("#layer_rename_version")[0].getElementsByTagName("input")[0];
-    //let txtMemo = $("#layer_rename_memo")[0].getElementsByTagName("textarea")[0];
+    let lrn = $("#layer_rename")[0];
+    let st = stadium;
+    let inptTitle = lrn.getElementsByTagName("input")[0];
+    let inptVersion = lrn.getElementsByTagName("input")[1];
+    let txtMemo = lrn.getElementsByTagName("textarea")[0];
     let printText = function(t, s){
         t.value = s;
     }
     printText(inptTitle, stadium.name);
-    //printText(inptVersion, "v1.00");
+    printText(inptVersion, (st.hasOwnProperty("_version") ? st._version : "v1.00"));
+    printText(txtMemo, (st.hasOwnProperty("_memo") ? st._memo.substring(0, 255) : ''));
 }
 
 function openPop_spawnDist(el, isDim){
@@ -212,7 +215,7 @@ function openPop_spawnDist(el, isDim){
     showSpawnPoints(1);
 }
 
-function close_popup(el, isDim){              // 팝업 닫기
+function close_popup(el, isDim){            //  팝업 닫기
     let $el = $(el);
     let selectors = $el.parents("div");
     let parents = selectors[selectors.length - 1];
@@ -235,7 +238,7 @@ $.lang = {};
 $.lang.ko = {
     // 공통
     0: "HaxPuck(오프라인)",
-    1: "v1.22(베타) " + newLine + "2022년 6월 13일 최종 업데이트",
+    1: "v1.23(베타) " + newLine + "2022년 7월 3일 최종 업데이트",
     2: "언어를 선택하십시오",
     3: "알림", 4: "주의", 5: "경고",
     6: "Haxball Stadium Editor를 닫을까요?",
@@ -282,6 +285,8 @@ $.lang.ko = {
     53: "버전",
     54: "설명",
     55: "이름 바꾸기",
+    57: "예: v1.00",
+    58: "설명은 여기에 입력하세요.",
 
     // 텍스트 모드 내부 버튼
     110: "텍스트 모드",
@@ -308,14 +313,14 @@ $.lang.ko = {
     223: "스폰 지점",
     224: "레드팀 스폰 지점",
     225: "블루팀 스폰 지점",
-    226: "가로 × 세로",
-    227: "가로 × 세로(카메라)",
+    226: "경기장 규격",
+    227: "카메라 크기",
     228: "최대 시야 너비",
     229: "저장 명령어",
     230: "카메라 시점",
     231: "백그라운드",              // --------------------------
     232: "테마",
-    233: "가로 × 세로",
+    233: "크기",
     234: "위치",
     235: "코너 반경", 236: "킥오프 반경",
     237: "색상",
@@ -344,7 +349,7 @@ $.lang.ko = {
     280: "환경 설정",               // --------------------------
     281: "언어 변경",
     282: "오브젝트 진단",
-    283: "Object List",
+    283: "오브젝트 목록",
 
     // 기타
     300: "열기", 301: "저장", 302: "닫기", 303: "내보내기",
@@ -608,13 +613,19 @@ $.lang.ko = {
     2291: "[속성] > [일반] > [스폰 거리 간격]에서 더 보기 메뉴가 추가되었습니다."
     + newLine + "[속성] > [공 피직스]에서 [위치]가 추가되었습니다." 
     + newLine + "가독성이 개선되었습니다."
+    + newLine + "전반적인 최적화가 개선되었습니다.",
+    // (2022.07.03) v1.23
+    2301: "[속성] > [이름 바꾸기]에서 [버전] 및 [설명]란이 추가되었습니다."
+    + newLine + "[속성] > [스폰 거리 간격]의 더 보기 메뉴에서 공란을 두면, 레이아웃이 망가지는 문제가 해결되었습니다."
+    + newLine + "특정 상황에서 에디터가 멈추는 문제가 해결되었습니다."
+    + newLine + "호환성이 개선되었습니다."
     + newLine + "전반적인 최적화가 개선되었습니다."
 };
 //  영어
 $.lang.en = {
     // Common
     0: "HaxPuck(OFFLINE)",
-    1: "v1.21(Beta); " + newLine + "This software was updated on 13th Jun, 2022",
+    1: "v1.23(Beta); " + newLine + "This software was updated on 3rd Jul, 2022",    
     2: "Select your language",
     3: "Confirm", 4: "Alert", 5: "Warning",
     6: "Are you sure want to leave HBSE?",
@@ -661,6 +672,8 @@ $.lang.en = {
     53: "Version: ",
     54: "Memo: ",
     55: "Rename a stadium",
+    57: "e.g. v1.00",
+    58: "take to start a memo.",
 
     // in Text Mode
     110: "Text Mode",
@@ -687,14 +700,14 @@ $.lang.en = {
     223: "Spawn Points: ",
     224: "Red: ",
     225: "Blue: ",
-    226: "Height × Width: ",
-    227: "H × W(Camera): ",
+    226: "Stadium Size: ",
+    227: "Camera Size: ",
     228: "maxViewWidth: ",
-    229: "CanBeStored: ",
+    229: "Allow Store Command: ",
     230: "CameraFollow: ",
     231: "Background",             // --------------------------
     232: "Type: ",
-    233: "Height × Width: ",
+    233: "Background Size: ",
     234: "Position",
     235: "Corner Radius: ", 236: "Kick-off Radius: ",
     237: "Color: ",
@@ -924,7 +937,7 @@ $.lang.en = {
     // v1.12(2019-06-06) 
     2191: "Selection Box has applied the new color.",
     // v1.13(2019-07-29) 
-    2201: "Added [H × W(Camera)] and [CanBeStored] of [General] in [Stadium Properties]." + newLine + "Added new flags of cMask and cGroup:" + newLine + "-kick, score, c0, c1, c2, c3" + newLine + "Updated contents of [Help].",
+    2201: "Added [H × W(Camera)] and [Allow Store Command] of [General] in [Stadium Properties]." + newLine + "Added new flags of cMask and cGroup:" + newLine + "-kick, score, c0, c1, c2, c3" + newLine + "Updated contents of [Help].",
     // v1.14(2019-11-02)
     2211: "Added [radius] in [Player Physics] of [Stadium Properties]."
     + newLine + "Added [Kickback] of [Player Physics] in [Stadium Properties]." 
@@ -949,7 +962,7 @@ $.lang.en = {
     + newLine + "Added Settings menu."
     + newLine + "Added [kickOffReset] of [General] in [Stadium Properties]."
     + newLine + "Added a structure that background color applying as by the value of [Color] of [Background] in [Stadium Properties] automatically."
-    + newLine + "Fixed a problem that [canBeStored] of [General] in [Stadium Properties] did not working."
+    + newLine + "Fixed a problem that [Allow Store Command] of [General] in [Stadium Properties] did not working."
     + newLine + "Fixed a problem that the value of [Gravity] in [Stadium Properties] won't edit or sync."
     + newLine + "Fixed a problem that needless margin had been appeared during a window resize in some situations."
     + newLine + "Enhanced Readability/Visibility."
@@ -981,6 +994,12 @@ $.lang.en = {
     + newLine + "Added [Position] of [Ball Physics] in [Stadium Properties]."
     + newLine + "Enhanced Readability."
     + newLine + "Improved Overall optimization.",
+    // (2022.07.03) v1.23
+    2301: "Added [Version]/[Memo] of [About This Stadium] in [Stadium Properties]."
+    + newLine + "Fixed an issue that some layouts get misplaced if the value of [Spawn Distance] of [Spawn Points] in [Stadium Properties] was empty."
+    + newLine + "Fixed some glitches" 
+    + newLine + "Improved Compatibility for some stadiums."
+    + newLine + "Improved Overall optimization.",
 };
 
 /**
@@ -1000,6 +1019,9 @@ function setLanguage(currentLanguage){
     });
     currentLang = currentLanguage;
     localStorage.setItem("language", currentLang);      //  로컬 데이터 쓰기
+    $("#layer_rename_title input")[0].placeholder = $.lang[getLang()][50];
+    $("#layer_rename_version input")[0].placeholder = $.lang[getLang()][57];
+    $("#layer_rename_memo textarea")[0].placeholder = $.lang[getLang()][58];
 }
 
 function setColorTheme(currentTheme){
@@ -1490,12 +1512,27 @@ $(function(){
 
         switch(prts.id){
             case 'layer_rename':            //  경기장 정보
-                let inptTitle = $("#layer_rename_title")[0].getElementsByTagName("input")[0];
-                //let inptVersion = $("#layer_rename_version")[0].getElementsByTagName("input")[0];
-                //let txtMemo = $("#layer_rename_memo")[0].getElementsByTagName("textarea")[0];
+                let lrn = $("#layer_rename")[0];
+                let inptTitle = lrn.getElementsByTagName("input")[0];
+                let inptVersion = lrn.getElementsByTagName("input")[1];
+                let txtMemo = lrn.getElementsByTagName("textarea")[0];
                 if(inptTitle.value != st.name){
                     st.name = inptTitle.value;
                     jQuery('html > head > title').text($.lang[getLang()][0] + " - " + inptTitle.value);     //  제목 반영
+                }
+                if(st.hasOwnProperty("_version")){
+                    if(st._version != inptVersion.value)
+                        st._version = inptVersion.value;
+                }
+                else{
+                    st._version = inptVersion.value;
+                }
+                if(st.hasOwnProperty("_memo")){
+                    if(st._memo != txtMemo.value)
+                        st._memo = txtMemo.value.substring(0, 255);
+                }
+                else{
+                    st._memo = txtMemo.value.substring(0, 255);
                 }
                 break;
             case 'layer_spawnDist':         //  스폰 거리 간격
@@ -1504,7 +1541,7 @@ $(function(){
                 let pntsBlue = $("#layer_sp_pointsBlue").find("input");
 
                 $("#prop_spawnDistance")[0].value = dist.value;
-                st.spawnDistance = dist.value;
+                st.spawnDistance = parseInt(dist.value);
 
                 let updateSpawnPoints = function(team){
                     let spawnPoints = team == 1 ? st.blueSpawnPoints : st.redSpawnPoints;
@@ -1546,8 +1583,10 @@ $(function(){
         let prts = $(this).parents("div");
         let dv = prts[0];
         let target = $(dv).find("input")[0];
-        if(target.value != '') return;
-        dv.style.display = "none";
+        if(isNaN(parseInt(target.value))){ 
+            target.value = 0;
+        }
+        //dv.style.display = "none";
 
         let getSizePnts = function(pnts){
             for(let i = 0; i < pnts.length; i++){
@@ -1721,7 +1760,7 @@ $(function(){
                 window.open("https://umhxbl.wixsite.com/storage/forum/pideubaeg");
                 break;
             default:
-                alert('contact at djdft1456@gmail.com if you have something such as a bug or another problem.');
+                alert('contact at hxb.nmh@gmail.com if you have something such as a bug or another problem.');
         }
     });
 
@@ -1825,11 +1864,58 @@ $(function(){
         close_popup('#' + title.id);
     });
 
-    $('#button_options_close').click(function(){
+    $('#button_options_close').click(function(){    //  설정 닫기
         //if($('#layer_lang').css('display') == 'block') return;
         hide_box("options");
         $("#button_options").removeClass("active");
         //close_popup('#button_options');
+    });
+    
+    $(".prop_erase").click(function(){              //  오브젝트 속성값 삭제
+        let prop = $(this);
+        let prts = prop.parents("div")[0];
+        let inpts = $(prts).find("input");
+        let target = inpts[inpts.length - 1];
+        let getValue = function(cn, ct){
+            if(cn != "color_preview") return '';
+            switch(ct.name){
+                case "disc":
+                    return '#' + "FFFFFF";
+                case "select":
+                    let shpType = ct.shape != undefined ? ct.shape.type : null;
+                    return '#' + (shpType == "discs" ? "FFFFFF" : "000000");
+                default:
+                    return '#' + "000000";
+            }
+        }
+        inpts.toArray().forEach(t => {
+            t.value = getValue(t.className, current_tool);
+        });
+
+        let getSelectedObjects = function(pn){
+            let sl = new Array();
+            let types = [
+                'segments', 'vertexes', 'discs', 'goals', 'planes', 'joints'
+            ];
+            let getSelectedObjectsByType = function(t){
+                if(!stadium.hasOwnProperty(t)) return undefined;
+                if(stadium[t].length > 1) return stadium[t].filter(t => selected(t) != undefined && t.hasOwnProperty(pn) == true);
+                return undefined;
+            }
+            for(let t of types){
+                let sot = getSelectedObjectsByType(t);
+                if(sot != undefined) sl.push(sot);
+                //if(sot != undefined && sot.length > 0) sl.push(sot);
+            }
+            return sl.length > 0 ? sl.reduce((acc, cur) => acc.concat(cur)) : sl;
+        }
+        // 버그: vis, pos, traits로 적용돼 있으면 불가
+        let selectedObj = getSelectedObjects(target.name);
+        test_me = selectedObj;
+        selectedObj.forEach(obj => {
+            delete obj[target.name];
+        });
+        modified();
     });
 
     $("#layer_sp_pointsRed").find("input").on("change", function() {  //  색상 입력(미리 보기)
@@ -2268,7 +2354,8 @@ function display_propertiesMenu(name){
                 let hasSelectedObject = function(t){
                     if(!stadium[t].length) return false;
                     for(let p of stadium[t]){
-                        if(p._selected == true) return true;
+                        if(selected(p) != undefined) return true;
+                        //if(p._selected == true) return true;
                     }
                     return false
                 }
@@ -2553,34 +2640,38 @@ function render(st){
     renderbg(st, ctx);
 
     
-    if(!settings.preview) $.each(st.planes, function(i, plane){
-        transform(Shape('planes', plane, i), function(){
-            var ext = plane_extremes(st, plane);
-            ctx.beginPath();
-            ctx.moveTo(ext.a[0], ext.a[1]);
-            ctx.lineTo(ext.b[0], ext.b[1]);
-            if(selected(plane)){
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = colors.selected;
+    if(!settings.preview){
+        $.each(st.planes, function(i, plane){
+            transform(Shape('planes', plane, i), function(){
+                var ext = plane_extremes(st, plane);
+                ctx.beginPath();
+                ctx.moveTo(ext.a[0], ext.a[1]);
+                ctx.lineTo(ext.b[0], ext.b[1]);
+                if(selected(plane)){
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = colors.selected;
+                    ctx.stroke();
+                }
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = colors.plane_thick;
                 ctx.stroke();
-            }
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = colors.plane_thick;
-            ctx.stroke();
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = colors.plane_thin;
-            ctx.stroke();
-        });
-    });
-
-    if(st.vertexes != undefined){
-        if(!settings.preview) $.each(st.vertexes, function(i, vertex){
-            transform(Shape('vertexes', vertex, i), function(){
-                vertex=complete(st, vertex);
-                ctx.fillStyle = selected(vertex) ? colors.selected : colors.vertex;
-                ctx.fillRect(vertex.x-3, vertex.y-3, 6, 6);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = colors.plane_thin;
+                ctx.stroke();
             });
         });
+    }
+
+    if(st.vertexes != undefined){
+        if(!settings.preview){
+            $.each(st.vertexes, function(i, vertex){
+                transform(Shape('vertexes', vertex, i), function(){
+                    vertex=complete(st, vertex);
+                    ctx.fillStyle = selected(vertex) ? colors.selected : colors.vertex;
+                    ctx.fillRect(vertex.x-3, vertex.y-3, 6, 6);
+                });
+            });
+        }
     }
 
     if(st.segments != undefined){
@@ -2591,7 +2682,6 @@ function render(st){
             });
         });
     }
-
     
     if(st.joints != undefined){
         $.each(st.joints, function(i, joint){
@@ -2651,31 +2741,34 @@ function render(st){
         f(ctx); 
     });
 
+    ctx.restore();
+
     //canvas.style.height = st.height;
     //canvas.style.width = st.width;
     if(settings.preview){       // 프리뷰 그리기
         // TODO: use exact colors and sizes
-        
-        let getValidProp = function(tp, dp){
-            let bp = st.ballPhysics == "disc0" ? st.discs[0] : st.ballPhysics;
-            return bp == undefined || bp[tp] == undefined ? dp : bp[tp];
+
+        if(st.ballPhysics != "disc0"){                                  //  disc0 중복 렌더링 방지
+            let getValidProp = function(tp, dp){
+                let bp = st.ballPhysics;
+                return bp == undefined || bp[tp] == undefined ? dp : bp[tp];
+            }
+            let bpPos = getValidProp("pos", [0, 0]);
+            let bpRadius = getValidProp("radius", haxball.default_disc_radius);
+            let bpColor = getValidProp("color", haxball.disc_color);
+
+            //  초기 Disc 그리기
+            ctx.beginPath();
+
+            //ctx.fillStyle = hexToRgb(st.ballPhysics.color);
+            //ctx.fillStyle = color_to_style(st.ballPhysics.color);
+            ctx.arc(bpPos[0], bpPos[1], bpRadius, 0, Math.PI*2, true);      //  공 위치
+            ctx.fillStyle = color_to_style(bpColor);                        //  공 색상
+            ctx.strokeStyle = 'rgb(0,0,0)';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
         }
-
-        let bpPos = getValidProp("pos", [0, 0]);
-        let bpRadius = getValidProp("radius", haxball.default_disc_radius);
-        let bpColor = getValidProp("color", haxball.disc_color);
-
-        //  초기 Disc 그리기
-        ctx.beginPath();
-        
-        //ctx.fillStyle = hexToRgb(st.ballPhysics.color);
-        //ctx.fillStyle = color_to_style(st.ballPhysics.color);
-        ctx.arc(bpPos[0], bpPos[1], bpRadius, 0, Math.PI*2, true);      //  공 위치
-        ctx.fillStyle = color_to_style(bpColor);                        //  공 색상
-        ctx.strokeStyle = 'rgb(0,0,0)';
-        ctx.lineWidth = 2;
-        ctx.fill();
-        ctx.stroke();
         
         let drawEachSpawnPoint = function(t, x, y, r, n){  //  개별 스폰지점 그리기
             ctx.beginPath();
@@ -3306,7 +3399,8 @@ function under_point(st, pt, type){
     if(!type || type == 'discs'){
         eachRev(st.discs, function(i, disc){
             var d = complete_shape_object(st, Shape('discs', disc, i));
-            if(dist(d.pos, pt) - d.radius <= maximum_click_distance){
+            let p = d.pos !== undefined ? d.pos : [0, 0]
+            if(dist(p, pt) - d.radius <= maximum_click_distance){
                 obj = disc;
                 index = i;
                 return false;
@@ -3458,11 +3552,13 @@ function select_rect(st, a, b){
             break;
 
         case 'discs':
-            if(rectangle_contains(a, b, o.pos) &&
-               !near(o.pos[0], a[0], o.radius) &&
-               !near(o.pos[0], b[0], o.radius) &&
-               !near(o.pos[1], a[1], o.radius) &&
-               !near(o.pos[1], b[1], o.radius)){
+            let p = o.pos !== undefined ? o.pos : [0, 0];
+            let r = o.radius !== undefined ? o.radius : haxball.default_disc_radius;
+            if(rectangle_contains(a, b, p) &&
+               !near(p[0], a[0], r) &&
+               !near(p[0], b[0], r) &&
+               !near(p[1], a[1], r) &&
+               !near(p[1], b[1], r)){
                 shape_set_selected(shape, true);
                 count ++;
             }
@@ -3503,7 +3599,8 @@ function move_obj(st, shape, from, to){
     }
     
     if(type == 'discs'){
-        obj.pos = point_add(o.pos, vd);
+        let p = obj.pos !== undefined ? obj.pos : [0, 0];
+        obj.pos = point_add(p, vd);
     }
     
     if(type == 'goals'){
@@ -4131,11 +4228,14 @@ function segment_points(st, segment){
 }
 
 function joint_points(st, joint){
-    var a = st.discs[joint.d0 - 1];
-    var b = st.discs[joint.d1 - 1];
+    let hasDiscZero = (st.ballPhysics == "disc0");
+    let getValidPos = target => target.pos !== undefined ? target.pos : [0, 0];
+    var a = joint.d0 < 1 && hasDiscZero == false ? st.ballPhysics : st.discs[joint.d0 - (hasDiscZero ? 0 : 1)];
+    var b = joint.d1 < 1 && hasDiscZero == false ? st.ballPhysics : st.discs[joint.d1 - (hasDiscZero ? 0 : 1)];
+    let pa = getValidPos(a), pb = getValidPos(b);
     return {
-        a: [a.pos[0], a.pos[1]],
-        b: [b.pos[0], b.pos[1]]
+        a: [pa[0], pa[1]],
+        b: [pb[0], pb[1]]
     };
 }
 
@@ -4163,6 +4263,8 @@ function dot_product(a, b){
 function update_savepoint(){
     if(undo_savepoints.length)
         undo_savepoints[0] = pprint(stadium);
+    //$("#button_undo img")[0].style.opacity = 1;
+    
     queue_render();
 }
 
@@ -4170,13 +4272,22 @@ function savepoint(){
     undo_savepoints.unshift(pprint(stadium));
     undo_savepoints.splice(undo_levels);
     redo_savepoints = [];
+    $("#button_undo img")[0].style.opacity = undo_savepoints.length > 1 ? 1 : 0.5;
+    $("#button_redo img")[0].style.opacity = 0.5;
 }
 
 function undo(){
     if(undo_savepoints.length <= 1)
-        return false;
+        return false;   
+    if(redo_savepoints.length < 1){
+        $("#button_redo img")[0].style.opacity = 1;
+    }
     redo_savepoints.unshift(undo_savepoints.shift());
     redo_savepoints.splice(undo_levels);
+
+    if(undo_savepoints.length <= 1){
+        $("#button_undo img")[0].style.opacity = 0.5;
+    }
 
     load(Function('"use strict";return (' + ('['+undo_savepoints[0]+']') + ')')()[0]);
     modified(true);
@@ -4186,11 +4297,20 @@ function undo(){
 function redo(){
     if(redo_savepoints.length <= 0)
         return false;
+    if(undo_savepoints.length <= 1){
+        $("#button_undo img")[0].style.opacity = 1;
+    }
     var state = redo_savepoints.shift();
     undo_savepoints.unshift(state);
     undo_savepoints.splice(undo_levels);
+
+    if(redo_savepoints.length < 1){
+        $("#button_redo img")[0].style.opacity = 0.5;
+    }
+
     load(Function('"use strict";return (' + ('['+state+']') + ')')()[0]);
     modified(true);
+
     return true;
 }
 
@@ -4655,7 +4775,9 @@ function resize_canvas(){
             consider(o.p1, 0);
             break;
         case 'discs':
-            consider(o.pos, o.radius);
+            let p = o.pos !== undefined ? o.pos : [0, 0];
+            let r = o.radius !== undefined ? o.radius : haxball.default_disc_radius;
+            consider(p, r);
             break;
         case 'planes':
             // TODO: find a better way to ensure that a plane is reachable
@@ -4923,8 +5045,8 @@ function initialise_properties_css(){
     let spntsRed = $(lspd).find("#layer_sp_pointsRed");
     let spntsBlue = $(lspd).find("#layer_sp_pointsBlue");
     for(let i = 0; i < 30; i++){
-        $('<div style="display: none">' + '<input class="prop" id="spawnPoints_red_' + (i + 1) + '" autocomplete="off"></input><button class="btn_del"><img class="del" alt="del" src="./data/general/general_toggle_close.ico"></button></div>').appendTo(spntsRed);
-        $('<div style="display: none">' + '<input class="prop" id="spawnPoints_blue_' + (i + 1) + '" autocomplete="off"></input><button class="btn_del"><img class="del" alt="del" src="./data/general/general_toggle_close.ico"></button></div>').appendTo(spntsBlue);
+        $('<div class="spinptArea">' + '<input class="prop" id="spawnPoints_red_' + (i + 1) + '" autocomplete="off"></input><button class="btn_del"><img class="del" alt="del" src="./data/general/general_toggle_close.ico"></button></div>').appendTo(spntsRed);
+        $('<div class="spinptArea">' + '<input class="prop" id="spawnPoints_blue_' + (i + 1) + '" autocomplete="off"></input><button class="btn_del"><img class="del" alt="del" src="./data/general/general_toggle_close.ico"></button></div>').appendTo(spntsBlue);
     }
     $('<button class="btn_add" id="spawnPoints_red_add' + '" autocomplete="off">' + '<img alt="spawnPointsRedAdd" src="./data/general/general_add.ico">' + '</button>').appendTo(spntsRed);
     $('<button class="btn_add" id="spawnPoints_blue_add' + '" autocomplete="off">' + '<img alt="spawnPointsBlueAdd" src="./data/general/general_add.ico">' + '</button>').appendTo(spntsBlue);
@@ -4935,18 +5057,18 @@ function populate_tab_properties(){
     $.each(properties, function(prop, opts){
         var type = opts.type;
         if(type != 'ref'){
-            var div = $('<div class="property prop_' + prop + '"></div>').appendTo(tp);
+            var div = $('<div class="property prop_' + prop + '"style="position: relative;";></div>').appendTo(tp);
             //var label = $('<label for="' + prop + '" class="prop">' +  properties[prop].innerText + '</label>').appendTo(div);
             var label = $('<label for="' + prop + '" data-langNum="' + properties[prop].innerText + '" class="prop">' + '</label>').appendTo(div);
             var apply = function(){
                 property_apply(prop, property_data[prop]);
             };
-            let inpProp;
+            let inpProp, btnProp;
             switch(type){    
                 // TODO: number point color team trait bool
                 case 'color':
                     let spn = $('<input class="color_preview" type="color">').appendTo(div);
-                    inpProp = 'style="width: 162px; float: right;"';
+                    inpProp = 'style="width: 168px;"';
                 case 'bool':
                     /*
                     var inp = $('<input type="checkbox" class="prop">').appendTo(div);
@@ -4962,11 +5084,14 @@ function populate_tab_properties(){
                     */
                 case 'point':
                 case 'number':
-                case 'team':
                 case 'layers':
                 case 'length':
                 case 'strength':
                 case 'trait':
+                    if(prop != "p0" && prop != "p1"){
+                        //btnProp = $('<button class="prop_erase"><img class="erase" alt="prop-erase" src="./data/general/general_toggle_close.ico"></button>').appendTo(div);
+                    }
+                case 'team':
                     inp = $('<input name="' + prop + '"' + 'id="' + prop + '"' + 'type="text" class="prop"' + inpProp + '>').appendTo(div);
                     property_dataLabel[prop] = label;
                     property_data[prop] = inp;
@@ -5304,7 +5429,7 @@ function import_snippet(st, snip){
         var copy = $.extend(true, {}, shape.object);
         if(shape.type == 'vertexes'){
             if(!(shape.index in newi)){
-                newi[shape.index] = svl ++;
+                newi[shape.index] = svl++;
             }
             index = newi[shape.index];
         }else if (shape.type == 'segments'){
@@ -5312,11 +5437,11 @@ function import_snippet(st, snip){
             var v1 = copy.v1;
 
             if(!(v0 in newi))
-                newi[v0] = svl ++;
+                newi[v0] = svl++;
             copy.v0 = newi[v0];
             
             if(!(v1 in newi))
-                newi[v1] = svl ++;
+                newi[v1] = svl++;
             copy.v1 = newi[v1];
         }
         st[shape.type][index] = copy;
@@ -5951,10 +6076,11 @@ function download(st){
             'segments', 'vertexes', 'discs', 'goals', 'planes', 'joints'
         ];
         let getAlertKeyword = function(st){
-            let hasValidAmount = (prp) => prp == undefined ? true : prp.length <= 255;
+            let hasValidAmount = (prp) => prp == undefined ? true : !(prp.length > 255);
             for(let i = 0; i < types.length; i++){
                 let prop = st[types[i]];
                 if(!hasValidAmount(prop)) return 33 + i;
+                //if(!st.hasOwnProperty(types)) return 33 + i;
             }
             return false;
         }
