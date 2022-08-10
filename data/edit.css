@@ -107,9 +107,9 @@ button:hover {
     border: 2px solid #2F5E85;
 }
 
-button.active, button.btn_active {
-    background: #2F5E85;
-    border: 2px solid #4883b3;
+button:active, button.btn_active {
+    background: #18374E;
+    border: 2px solid #304C63;
 }
 
 button.btn_accnt {
@@ -184,8 +184,8 @@ a:hover {
     height: auto;
     background: #1A2125E0;
     border: 1px solid #2F3C43;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 0 2px #1A2125;
     border-radius: 10px;
     margin: 0;
@@ -264,6 +264,10 @@ a:hover {
     font-size: 1em;
 }
 
+#titlebar {
+    z-index: 9;
+}
+
 .headerDiv {
     display: table-row-group;
     z-index: 10;
@@ -283,7 +287,7 @@ ul.menu li {
     list-style-type: none;
 }
 
-ul.menu li a.active {
+ul.menu li a:active {
     color: #D2C2B8;
 }
 
@@ -339,6 +343,8 @@ ul.menu li a:visited {
 #table {
     width: 100%;
     height: 100%;
+    top: 0;
+    position: absolute;
 }
 
 #bottomboxes {
@@ -352,10 +358,10 @@ ul.menu li a:visited {
     border-radius: 8px;
     display: table;
     justify-content: center;
-    z-index: 9;
+    z-index: 8;
     background-color: #1A2125E0;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 0 2px #1A2125;
 }
 
@@ -437,8 +443,8 @@ ul.menu li a:visited {
     position: absolute;
     top: 0;
     background-color: #73885C80;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 10;
 }
 #layer_sp_pointsRed, #layer_sp_pointsBlue {
@@ -507,7 +513,7 @@ button.btn_act, button.btn_show, button.btn_hide, button.btn_close {
 }
 
 button.prop_erase {
-    width: 18px;
+    width: 20px;
     height: 18px;
     display: table-cell;
     position: absolute;
@@ -517,6 +523,15 @@ button.prop_erase {
     background: transparent;
     word-break: break-all;
     right: 0;
+
+    /*
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    margin: 3px 8px;
+    border: 0;
+    right: 0;
+    */
 }
 
 .pop-container button.prop_erase {
@@ -527,11 +542,16 @@ button.btn_show, button.btn_hide, button.btn_close {
     float: right;
 }
 
-button.btn_act:hover, button.btn_show:hover, button.btn_hide:hover, button.prop_erase:hover {
+button.btn_act:hover, button.btn_show:hover, button.btn_hide:hover {
     background: #3A4952;
 }
 
-button.btn_act.active, button.btn_show.active, button.btn_hide.active {
+button.prop_erase:hover {
+    background: #752E2E;
+}
+
+
+button.btn_act:active, button.btn_show:active, button.btn_hide:active {
     background: #6A747C;
 }
 
@@ -554,8 +574,7 @@ details {
     background: #111619;
     margin-bottom: .1rem;
     box-shadow: 0 .1rem 1rem -.1rem rgba(0,0,0,.4);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-radius: 8px;
     overflow: hidden;
 }
   
@@ -601,8 +620,8 @@ details > ul {
     justify-content: center;
     margin: 8px auto;
     background-color: #1A2125E0;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 0 2px #1A2125;
     padding: 2px;
     border: 1px solid #2F3C43;
@@ -780,6 +799,7 @@ textarea:focus {
 #canvas_div_placeholder {
     width: 100%;
     height: 100%;
+    position: absolute;
 }
 
 #helpcontents, #settingcontents {
@@ -787,7 +807,7 @@ textarea:focus {
     height: 80vh;
     min-height: 600px;
     padding: 16px;
-    overflow: auto;
+    overflow-x: hidden;
 }
 
 #settingcontents pre.prop {
@@ -817,8 +837,8 @@ textarea:focus {
     width: 120px;
     min-height: 24px;
     background-color: #1A2125E0;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 0 2px #1A2125;
     color: rgb(197, 197, 197);
     border: 1px solid #222C31;
@@ -867,6 +887,7 @@ textarea:focus {
 pre{
     font-size: 0.9em;
     font-family: 'NotoSansCJK-KR', '맑은 고딕', '나눔고딕', 'Open Sans', 'sans-serif';
+    white-space: pre-wrap;
 }
 label.prop, label.prop_size, label.prop_sel {
     height: 1.5rem;
@@ -1014,6 +1035,10 @@ div.spinptArea {
 }
 
 #layer_sp_pointsRed img.del, #layer_sp_pointsBlue img.del {
+    width: 12px;
+    height: 12px;
+}
+.prop_erase img.del {
     width: 12px;
     height: 12px;
 }
@@ -1262,9 +1287,12 @@ button.btn_add {
 button.btn_del {
     background-color: transparent;
 }
-button.btn_toggle:hover, button.btn_add:hover, button.prop_erase:active {
+button.btn_toggle:hover, button.btn_add:hover {
     background: #6A747C;
     border: 2px solid #95AABB;
+}
+button.prop_erase:active {
+    background: #5A1D1D;
 }
 button.btn_toggle.active {
     background: #6A747C;
@@ -1290,6 +1318,8 @@ button.btn_toggle.active {
     border: 1px solid #2F3C43;
     border-radius: 5px;
     list-style: none;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
     box-shadow:
       0 15px 35px rgba(50, 67, 90, 0.1),
       0 5px 15px rgba(0,0,0,0.07);
@@ -1383,6 +1413,16 @@ button.btn_toggle.active {
     float: initial;
 }
 
+.prop_changelog {
+    width: 100%;
+    border-radius: 8px;
+    overflow: auto;
+    padding: 4px 2px;
+    margin: 8px 2px;
+    position: relative;
+    float: left;
+}
+
 .prop_element {
     overflow: auto;
     width: 100%;
@@ -1424,6 +1464,103 @@ button.btn_toggle.active {
 .shortcut:hover {
     color: #BFCFE1;
 }
+
+
+.category {
+    width: 100%;
+    display: table;
+    position: relative;
+    border-radius: 8px;
+    margin: 1px 0;
+    padding: 2px 0;
+}
+.prop_group > .category {
+    width: 168px;
+    background: #283238;
+    border: 2px solid #2F3C43;
+    display: table;
+    position: relative;
+    border-radius: 8px;
+    margin: 1px 0;
+    padding: 2px 0;
+}
+
+
+.category-item {
+    font-size: 0.8rem;
+    display: table-cell;
+    padding: 0 2px;
+    white-space: pre-wrap;
+}
+
+/*  
+    The switch - the box around the slider
+    source: https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+.switch {
+    position: relative;
+    display: table-cell;
+    width: 44px;
+    height: 16px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1A2125;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    margin: 2px 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2F5E85;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2F5E85;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(150%);
+    -ms-transform: translateX(150%);
+    transform: translateX(150%);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 16px;
+    border: 1px solid #425D75;
+    height: 18px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+    border: 1px solid #425D75;
+  }
+
 
 /*
 playback timings (ms):
