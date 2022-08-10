@@ -6,42 +6,29 @@
     <!--<link rel="shortcut icon" href="https://atnnn.github.io/haxpuck/hbedit/">-->
     <link rel="shortcut icon" href="http://web.archive.org/web/20181112005722im_/http://haxpuck.com/favicon.ico">
   </head>
-  <script type="text/javascript" src="./data/jquery.min.js"></script>
-  <script type="text/javascript" src="./data/jquery-ui.min.js"></script>
-  <script type="text/javascript" src="./data/edit.js"></script>
   <link type="text/css" href="./data/edit.css" rel="stylesheet"></link>
-  <body class="logged-out"><!-- BEGIN WAYBACK TOOLBAR INSERT -->
-    <script type="text/javascript" src="./data/timestamp.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./data/graph-calc.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./data/auto-complete.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./data/toolbar.js" charset="utf-8"></script>
+  <body class="logged-out">
     <style type="text/css">
       body {
         margin-top:0 !important;
         padding-top:0 !important;
         /*min-width:800px !important;*/
       }
-      .wb-autocomplete-suggestions {
-        text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
-        position: absolute; display: none; z-index: 2147483647; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
-      }
-      .wb-autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
-      .wb-autocomplete-suggestion b { font-weight: bold; }
-      .wb-autocomplete-suggestion.selected { background: #f0f0f0; }
     </style>
-    </li></ul>
-<!--<a href="https://cafe.naver.com/usemapmakerno1/1840" target="_blank" style="position: fixed; left: 40px; right: 80%; top: 0%; height: 5px">
-  <img src="./data/general/logo.ico" style="position: fixed; left: 2px; right: 80%; top: 1%; height: 1.75%"> 
-</a>-->
-<table id="qt_top"><div id="top_header" class="header">
-  <span class="title"><a href="https://atnnn.github.io/haxpuck/hbedit/", style = color:#fff>HaxPuck</a></span>
-  <a class="shortcut" href="http://blog.haxball.com/", target="_blank">News</a>
-  <a class="shortcut" href="https://www.haxball.com/play", target="_blank">Play</a>
-  <a class="shortcut" href="https://www.haxball.com/about", target="_blank">About</a>
-  <a class="shortcut" href="https://www.haxball.com/community", target="_blank">Community</a>
-  <a class="shortcut" href="https://www.haxball.com/flash/", target="_blank">Flash</a>
-  <a class="shortcut" href="https://www.haxball.com/headless", target="_blank">Headless Host</a>
-</div></table>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="./data/edit.js"></script>
+    <table id="qt_top">
+      <div id="top_header" class="header">
+        <span class="title"><a href="https://atnnn.github.io/haxpuck/hbedit/", style = color:#fff>HaxPuck</a></span>
+        <a class="shortcut" href="http://blog.haxball.com/", target="_blank">News</a>
+        <a class="shortcut" href="https://www.haxball.com/play", target="_blank">Play</a>
+        <a class="shortcut" href="https://www.haxball.com/about", target="_blank">About</a>
+        <a class="shortcut" href="https://www.haxball.com/community", target="_blank">Community</a>
+        <a class="shortcut" href="https://www.haxball.com/flash/", target="_blank">Flash</a>
+        <a class="shortcut" href="https://www.haxball.com/headless", target="_blank">Headless Host</a>
+      </div>
+    </table>
 
 <div id="loading_screen">
   <div class="loading_bar"></div>
@@ -484,12 +471,9 @@
           <!--
           <div class="property_prop"><label data-langNum="229", class="prop">저장 명령어</label><input class="prop" id="prop_canBeStored" type="checkbox" checked></input></div>
           -->
-          <div class="property_prop">
-            <label data-langNum="229" class="prop">저장 명령어:</label>
-            <select class="prop_sel" id="prop_canBeStored" onchange="parseCanBeStored(this.value);">
-              <option data-langNum="310" value="allow">활성화</option>
-              <option data-langNum="311" value="deny">비활성화</option>
-            </select>
+          <div class="category" id="cg_pp_storeCommand">
+            <pre class="category-item" data-langNum="229">저장 명령어</pre>
+            <label class="switch"><input type="checkbox" checked="true"></input><span class="slider round"></span></label>
           </div>
           <div class="property_prop">
             <label data-langNum="230" class="prop">카메라 시점</label>
@@ -657,39 +641,44 @@
       <div id="helpcontents">
         <h2>Haxball Stadium Editor</h2>
         <h3 data-langNum="1000">소스 코드</h3>
-        <a data-langNum="1003" href="https://github.com/atnnn/haxpuck/", target="_blank"><img src="./data/general/general_rink.ico" style="float: left; height: 16px; width: 16px;"></a>
+        <a data-langNum="1005" href="https://github.com/atnnn/haxpuck/", target="_blank"><img src="./data/general/general_rink.ico" style="float: left; height: 16px; width: 16px;"></a>
         <h3 data-langNum="1001">정보</h3>
 
-        <details><summary data-langNum="2100"></summary><pre data-langNum="2101"></pre></details>
+        <div class="prop_changelog">
+          <details><summary data-langNum="1004"></summary><pre class="news" data-langNum="2101"></pre></details>
+        </div>
+
         <ul>
           <li><a data-langNum="2102" href="https://atnnn.github.io/haxpuck/hbedit/", target="_blank"><img src="./data/general/general_rink.ico" style="float: left; height: 16px; width: 16px;">본 업데이트는 여기서 쓸 수 있습니다.</a></b></li>
           <li><p data-langNum="2103">이 에디터는 AtnNm 원작인 AtnNn's Haxball Stadium Editor에서 2차 수정하였습니다.</p></li>
         </ul>
 
-        <h4>(2022-07-03) v1.23</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2301"></pre></details>
-        <h4>(2022-06-13) v1.22</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2291"></pre></details>
-        <h4>(2022-05-15) v1.21</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2281"></pre></details>
-        <h4>(2022-04-17) v1.20</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2271"></pre></details>
-        <h4>(2022-03-18) v1.19</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2261"></pre></details>
-        <h4>(2022-02-15) v1.18</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2251"></pre></details>
-        <h4>(2022-02-06) v1.17</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2241"></pre></details>
-        <h4>(2020-02-06) v1.16</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2231"></pre></details>
-        <h4>(2019-12-28) v1.15</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2221"></pre></details>
-        <h4>(2019-11-02) v1.14</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2211"></pre></details>
-        <h4>(2019-07-29) v1.13</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2201"></pre></details>
-        <h4>(2019-06-06) v1.12</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2191"></pre></details>
-        <h4>(2019-05-11) v1.11</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2181"></pre></details>
-        <h4>(2019-05-04) v1.10</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2171"></pre></details>
-        <h4>(2019-04-13) v1.09</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2161"></pre></details>
-        <h4>(2019-04-06) v1.08</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2151"></pre></details>
-        <h4>(2019-03-30) v1.07</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2141"></pre></details>
-        <h4>(2019-03-24) v1.06</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2131"></pre></details>
-        <h4>(2019-03-23) v1.05</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2121"></pre></details>
-        <h4>(2019-03-23) v1.04</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2111"></pre></details>
-        <h4>2019-08-09</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2101"></pre></details>
-        <h4>2012-02-02</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2090"></pre></details>
-        <h4>2011-12-29</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2080"></pre></details>
-        <h4>2011-12-19</h4><details><summary data-langNum="1002"></summary><pre class="news" data-langNum="2070"></pre></details>
+        <h3 data-langNum="1002">업데이트</h3>
+        <div class="prop_changelog">(2022-08-10) v1.24<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2311"></pre></details></div>
+        <div class="prop_changelog">(2022-07-03) v1.23<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2301"></pre></details></div>
+        <div class="prop_changelog">(2022-06-13) v1.22<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2291"></pre></details></div>
+        <div class="prop_changelog">(2022-05-15) v1.21<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2281"></pre></details></div>
+        <div class="prop_changelog">(2022-04-17) v1.20<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2271"></pre></details></div>
+        <div class="prop_changelog">(2022-03-18) v1.19<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2261"></pre></details></div>
+        <div class="prop_changelog">(2022-02-15) v1.18<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2251"></pre></details></div>
+        <div class="prop_changelog">(2022-02-06) v1.17<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2241"></pre></details></div>
+        <div class="prop_changelog">(2020-02-06) v1.16<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2231"></pre></details></div>
+        <div class="prop_changelog">(2019-12-28) v1.15<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2221"></pre></details></div>
+        <div class="prop_changelog">(2019-11-02) v1.14<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2211"></pre></details></div>
+        <div class="prop_changelog">(2019-07-29) v1.13<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2201"></pre></details></div>
+        <div class="prop_changelog">(2019-06-06) v1.12<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2191"></pre></details></div>
+        <div class="prop_changelog">(2019-05-11) v1.11<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2181"></pre></details></div>
+        <div class="prop_changelog">(2019-05-04) v1.10<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2171"></pre></details></div>
+        <div class="prop_changelog">(2019-04-13) v1.09<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2161"></pre></details></div>
+        <div class="prop_changelog">(2019-04-06) v1.08<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2151"></pre></details></div>
+        <div class="prop_changelog">(2019-03-30) v1.07<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2141"></pre></details></div>
+        <div class="prop_changelog">(2019-03-24) v1.06<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2131"></pre></details></div>
+        <div class="prop_changelog">(2019-03-23) v1.05<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2121"></pre></details></div>
+        <div class="prop_changelog">(2019-03-23) v1.04<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2111"></pre></details></div>
+        <div class="prop_changelog">2019-08-09<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2101"></pre></details></div>
+        <div class="prop_changelog">2012-02-02<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2090"></pre></details></div>
+        <div class="prop_changelog">2011-12-29<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2080"></pre></details></div>
+        <div class="prop_changelog">2011-12-19<details><summary data-langNum="1003"></summary><pre class="news" data-langNum="2070"></pre></details></div>
         
         <h3 data-langNum="1100">저장</h3>
           <pre data-langNum="1101"></pre>
@@ -773,6 +762,8 @@
             <pre data-langNum="722"></pre>
           <li><b data-langNum="523">제동</b></li>
             <pre data-langNum="723"></pre>
+          <li><b data-langNum="530">주석</b></li>
+            <pre data-langNum="728"></pre>
         </ul>
         <h3 data-langNum="1500">상단 퀵툴</h3>
           <pre data-langNum="1501">상단 퀵툴을 통해 맵 테스트를 위해 게임에 바로 접속하거나 버그 제보 및 문의도 할 수 있습니다.</pre>
@@ -961,6 +952,17 @@
                 <div class="property_prop"><label data-langNum="36" class="prop"></label><pre class="prop" id="task_goals"></pre></div>
                 <div class="property_prop"><label data-langNum="37" class="prop"></label><pre class="prop" id="task_planes"></pre></div>
               </div>
+              <!--인터페이스-->
+              <div class="prop_element"><pre class="prop_element_title" data-langNum="284"></pre>
+                <div class="category" id="cg_lp_windows_transparent">
+                  <pre class="category-item" data-langNum="285">테스트</pre>
+                  <label class="switch"><input type="checkbox" checked="true"></input><span class="slider round"></span></label>
+                </div>
+                <div class="category" id="cg_lp_windows_draggable">
+                  <pre class="category-item" data-langNum="286">테스트</pre>
+                  <label class="switch"><input type="checkbox"></input><span class="slider round"></span></label>
+                </div>
+              </div>
             </div>
           </div>
       </div>
@@ -969,6 +971,4 @@
   <!--
   <iframe frameborder="0" scrolling="no" style="background-color: transparent; border: 0px; display: none;" src="./HaxPuck.com_files/saved_resource.html"></iframe>
   -->
-  <div id="GOOGLE_INPUT_CHEXT_FLAG" input="" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:true,&quot;ss&quot;:true}" style="display: none;"></div>
-  </body>
 </html>
