@@ -169,7 +169,7 @@ a:hover {
   .gadget-layer p.ctxt {
     color: #fff;
     line-height: 25px;
-    margin-bottom: 16px;
+    margin: 16px 0;
   }
   
   .gadget-layer {
@@ -189,7 +189,7 @@ a:hover {
     box-shadow: 0 0 2px #1A2125;
     border-radius: 10px;
     margin: 0;
-    padding: 0 4px;
+    /*padding: 0 4px;*/
     z-index: 10;
   }
 
@@ -203,7 +203,7 @@ a:hover {
   .pop-layer p.ctxt {
     color: #fff;
     line-height: 25px;
-    margin-bottom: 16px;
+    margin: 12px 4px;
   }
   
   .pop-layer {
@@ -215,7 +215,7 @@ a:hover {
     min-width: 180px;
     height: auto;
     background: #1A2125;
-    border: 1px solid #2F3C43;
+    border: 3px solid #2F3C43;
     border-radius: 10px;
     margin: 0;
     padding: 0;
@@ -306,10 +306,19 @@ ul.menu li a:visited {
     display: none;
 }
 
+#taskbar {
+    display: table;
+    border-top: 1px solid #222C31;
+}
+
 #topbox, #leftbox, #rightbox {
     border-radius: 0;
     padding: 0;
     overflow: auto;
+}
+
+#leftbox {
+    display: table-row;
 }
 
 #box {
@@ -404,13 +413,10 @@ ul.menu li a:visited {
 }
 
 .dialog_title {
-    border-bottom-color: #c13535;
-    border-bottom-style: solid;
-    margin-bottom: 4px !important;
     /*background: #1A2125;*/
     position: relative;
     padding: 8px 0;
-    top: -5px;
+    border-bottom: 3px solid #C13535;
     text-align: center;
     font-size: 1.25em;
 }
@@ -459,7 +465,7 @@ ul.menu li a:visited {
     border-radius: 8px;
 }
 
-.dialog_select {
+.dialog_select, .dialog_confirm {
     width: 100%;
     height: 2rem;
     font-size: 1.2rem;
@@ -473,6 +479,13 @@ ul.menu li a:visited {
     padding: 2px auto;
 }
 
+#layer_objl {
+    /*display: table;*/
+    position: relative;
+    z-index: 9;
+    margin: 4px auto;
+}
+
 .dialog_answer, .button_apply, .button_cancel
  {
     width: 50%;
@@ -482,11 +495,12 @@ ul.menu li a:visited {
     padding: 0 1px;
     text-align: center;
     clear: both;
+    float: right;
 }
 
 .dialog_answer a {
     color: #FFFFFF;
-    padding: 0 16px;
+    padding: 16px 0;
 }
 #layer_lang .dialog_answer {
     width: 100%;
@@ -810,9 +824,48 @@ textarea:focus {
     overflow-x: hidden;
 }
 
-#settingcontents pre.prop {
+#diagArea {
+    overflow: auto;
+    width: 100%;
+    margin: 16px 0;
+}
+
+#diagArea div.property_prop{
+    height: 3rem;
+    margin: 4px auto;
+    background: #C2CEDF;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    display: table;
+    position: relative;
+}
+#diagArea label {
+    color: #175A8D;
+}
+
+#settingcontents pre.prop,
+#settingcontents pre.diagGreat,
+#settingcontents pre.diagGood,
+#settingcontents pre.diagBad
+{
     width: 140px;
     height: 1.5rem;
+    text-shadow: 0 0 2px black;
+    text-align: center;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #175A8D;
+}
+
+
+#settingcontents pre.diagGreat {
+    background-color: #5F9B5A;
+}
+#settingcontents pre.diagGood {
+    background-color: #eba640;
+}
+#settingcontents pre.diagBad {
+    background-color: #eb5248;
 }
 
 #st_labplus {
@@ -1071,9 +1124,10 @@ div.spinptArea {
     float: left;
 }
 #right_tabs {
-    border-left: 2px solid #808080;
     width: 360px;
     float: right;
+    border-left: 3px solid #222C31;
+    border-radius: 0;
 }
 .color_preview {
     width: 16px;
@@ -1289,7 +1343,7 @@ button.btn_del {
 }
 button.btn_toggle:hover, button.btn_add:hover {
     background: #6A747C;
-    border: 2px solid #95AABB;
+    border: 2px solid #1A2125;
 }
 button.prop_erase:active {
     background: #5A1D1D;
@@ -1426,7 +1480,7 @@ button.btn_toggle.active {
 .prop_element {
     overflow: auto;
     width: 100%;
-    margin-bottom: 16px;
+    margin: 16px 0;
 }
 .prop_element_title {
     width: 100%;
@@ -1489,7 +1543,7 @@ button.btn_toggle.active {
 .category-item {
     font-size: 0.8rem;
     display: table-cell;
-    padding: 0 2px;
+    padding: 0 8px;
     white-space: pre-wrap;
 }
 

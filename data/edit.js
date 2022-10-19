@@ -63,8 +63,39 @@ var test_me;
 function setContext(str){
     let dialog = document.getElementById("dialog_context");
     if(!str) return false;
-    dialog.innerText = $.lang[getLang()][str];
+    dialog.innerText = $.lang[getLang()].hasOwnProperty(str) ? $.lang[getLang()][str] : str;
     return true;
+}
+
+//  선택지: 예-아니오
+function showMsgSelect(str){
+    let dgs = document.getElementsByClassName("dialog_select")[0];
+    let dgc = document.getElementsByClassName("dialog_confirm")[0];
+    if(dgs.style.display != "flex") dgs.style.display = "flex";
+    if(dgc.style.display != "none") dgc.style.display = "none";
+    document.getElementsByClassName("titleContent")[3].innerText = $.lang[getLang()][3];
+    return setContext(str);
+}
+//  선택지: 확인-취소
+function showMsgConfirm(str){
+    let dgs = document.getElementsByClassName("dialog_select")[0];
+    let dgc = document.getElementsByClassName("dialog_confirm")[0];
+    if(dgs.style.display != "none") dgs.style.display = "none";
+    if(dgc.style.display != "flex") dgc.style.display = "flex";
+    if(dgc.childNodes[3].style.display != "flex") dgc.childNodes[3].style.display = "flex";
+    document.getElementsByClassName("titleContent")[3].innerText = $.lang[getLang()][4];
+    return setContext(str);
+}
+//  알림: 확인
+function showMsgAlert(str){
+    let dgs = document.getElementsByClassName("dialog_select")[0];
+    let dgc = document.getElementsByClassName("dialog_confirm")[0];
+    if(dgs.style.display != "none") dgs.style.display = "none";
+    if(dgc.style.display != "flex") dgc.style.display = "flex";
+    if(dgc.childNodes[3].style.display != "none") dgc.childNodes[3].style.display = "none";
+    layer_popup("#layer_exit");
+    document.getElementsByClassName("titleContent")[3].innerText = $.lang[getLang()][4];
+    return setContext(str);
 }
 
 // DEBUG
@@ -443,7 +474,7 @@ $(function(){
     canvas = document.getElementById('canvas');
 
     if(!canvas.getContext){
-        alert('Unable to initialise canvas. Your browser may be too old.');
+        showMsgAlert('Unable to initialise canvas. Your browser may be too old.');
         return;
     }
     
@@ -451,6 +482,7 @@ $(function(){
     populate_tab_properties();
     initLang();                 //  언어 초기화
     initTheme();                //  테마 초기화
+    initPref();
     
     connect_field($('#input_name'), 'name');
     connect_field($('#prop_spawnDistance'), 'spawnDistance', parseFloat);
@@ -494,7 +526,7 @@ $(function(){
     set_tool(tool_select);
 
     $("#button_library_new, #button_st_reset").click(function(){
-        setContext(143);
+        showMsgSelect(143);
         layer_popup("#layer_exit");
     });
 
@@ -692,6 +724,11 @@ $(function(){
         setColorTheme(prop.value);
     });
 
+    //  Object Finder
+    $("#button_obfn").click(function(){
+        $("#layer_objl").show();
+    });
+
     // 텍스트 모드
     $("#textarea_import").keyup(function() {
         /*
@@ -721,7 +758,7 @@ $(function(){
         //  저장 여부에 따라 팝업 출력
         if(oldTxtaraVal == currentVal)
             return hide_box("import");
-        setContext(120);
+        showMsgSelect(120);
         layer_popup("#layer_exit");
     });
 
@@ -738,7 +775,7 @@ $(function(){
         //  저장 여부에 따라 팝업 출력
         if(oldTxtaraVal == currentVal)
             return hide_box("import");
-        setContext(120);
+        showMsgSelect(120);
         layer_popup("#layer_exit");
     });
     */
@@ -750,7 +787,7 @@ $(function(){
 
     $('#button_import_clear').click(function(){         //  모두 지우기
         if($('#layer_exit').css('display') == 'block') return;          //  팝업이 이미 있으면 작동 불가 처리
-        setContext(121);
+        showMsgSelect(121);
         layer_popup("#layer_exit");
     });
 
@@ -763,7 +800,7 @@ $(function(){
             st = undefined;
         }
         if(!st){
-            alert($.lang[getLang()][9]);
+            showMsgAlert($.lang[getLang()][9]);
             return;
         }
         oldTxtaraVal = $("#textarea_import").val();
@@ -785,7 +822,8 @@ $(function(){
 
     // 정보
     $('#button_about').click(function(){
-        return alert($.lang[getLang()][1]);
+        return showMsgAlert(1);
+        //return showMsgAlert($.lang[getLang()][1]);
     });
     
     
@@ -795,7 +833,7 @@ $(function(){
                 window.open("https://umhxbl.wixsite.com/storage/forum/pideubaeg");
                 break;
             default:
-                alert("contact at hxb.nmh@gmail.com if you have bugs or other problems.");
+                showMsgAlert("contact at hxb.nmh@gmail.com if you have bugs or other problems.");
         }
     });
 
@@ -845,7 +883,17 @@ $(function(){
         let showObjectInfo = function(type){
             let st_prop = stadium[type];
             let task_prop = document.getElementById("task" + '_' + type);
-            task_prop.innerText = st_prop.length + '/' + maxLimit;
+            let stock = st_prop.length;
+            let capacity = maxLimit;
+            let getResult = function(s, c){
+                if(s > c) return "diagBad";
+                if(((s / c) * 100).toFixed(2) > 80) return "diagGood";
+                return "diagGreat";
+            }
+
+            test_me = task_prop;
+            task_prop.innerText = stock + '/' + capacity;
+            task_prop.className = getResult(stock, capacity);
         }
         types.forEach(t => showObjectInfo(t));
     });
@@ -1106,6 +1154,10 @@ $(function(){
         settings.preview = $('#pref_preview').hasClass('active');
         queue_render();
     });
+    
+    $('#pref_center').click(function(){
+        repositionViewport();
+    });
 
     $(".switch input").click(function(){
         let type = $(this).parents("div")[0].id;
@@ -1115,6 +1167,9 @@ $(function(){
         switch(type){
             case "cg_pp_storeCommand":              //  저장 명령어
                 parseCanBeStored(bool);
+                break;
+            case "cg_lp_diagnosis_limitAlert":      //  (실험 기능)
+                disableDiagLimitAlert(bool);
                 break;
             case "cg_lp_windows_transparent":       //  창 투명화(실험 기능)
                 enableTransparentWindows(bool);
@@ -1253,6 +1308,16 @@ function layer_popup(el){
         case 'layer_exit':      return openPop_txtovs($el, isDim);
         case 'layer_rename':    return openPop_about($el, isDim);
         case 'layer_spawnDist': return openPop_spawnDist($el, isDim);
+        default:
+            for(let e of [
+                'button.button_yes',    // 예
+                'button.button_no',     // 아니오
+                'a.btn-layerYes',       // 예
+                'a.btn-layerNo',        // 아니오
+                'a.btn-layerOk'         // 확인
+            ]){
+                $el.find(e).click(() => close_popup($el, isDim));
+            }
     }
 }
 
@@ -1299,16 +1364,25 @@ function openPop_lang(el, isDim){
 }
 
 function openPop_txtovs(el, isDim){
-    el.find('button.button_yes').click(()   => close_popup(el, isDim));     // 예
-    el.find('button.button_no').click(()    => close_popup(el, isDim));     // 아니오
-    el.find('a.btn-layerYes').click(()      => close_popup(el, isDim));     // 예
-    el.find('a.btn-layerNo').click(()       => close_popup(el, isDim));     // 아니오
+    for(let e of [
+        'button.button_yes',    // 예
+        'button.button_no',     // 아니오
+        'a.btn-layerYes',       // 예
+        'a.btn-layerNo',        // 아니오
+        'a.btn-layerOk'         // 확인
+    ]){
+        el.find(e).click(() => close_popup(el, isDim));
+    }
 }
 
 function openPop_about(el, isDim){
-    el.find('button.button_apply').click(()   => close_popup(el, isDim));     // 예
-    el.find('button.button_cancel').click(()  => close_popup(el, isDim));     // 아니오
-    el.find('#popups.btn_close').click(()    => close_popup(el, isDim));     // 닫기
+    for(let e of [
+        'button.button_apply',      // 예
+        'button.button_cancel',     // 아니오
+        '#popups.btn_close'         // 닫기
+    ]){
+        el.find(e).click(() => close_popup(el, isDim));
+    }
     let lrn = $("#layer_rename")[0];
     let st = stadium;
     let inptTitle = lrn.getElementsByTagName("input")[0];
@@ -1323,9 +1397,13 @@ function openPop_about(el, isDim){
 }
 
 function openPop_spawnDist(el, isDim){
-    el.find('button.button_apply').click(()   => close_popup(el, isDim));     // 예
-    el.find('button.button_cancel').click(()  => close_popup(el, isDim));     // 아니오
-    el.find('#popups.btn_close').click(()    => close_popup(el, isDim));     // 닫기
+    for(let e of [
+        'button.button_apply',      // 예
+        'button.button_cancel',     // 아니오
+        '#popups.btn_close'         // 닫기
+    ]){
+        el.find(e).click(() => close_popup(el, isDim));
+    }
     let dist = $("#layer_sp_spawnDistance")[0].getElementsByTagName("input")[0];
     let pntsRed = $("#layer_sp_pointsRed");
     let pntsBlue = $("#layer_sp_pointsBlue");
@@ -1400,9 +1478,9 @@ $.lang = {};
 $.lang.ko = {
     // 공통
     0: "HaxPuck(오프라인)",
-    1: "v1.24(베타) " + newLine + "2022년 8월 10일 최종 업데이트",
+    1: "v1.26(베타) " + newLine + "2022년 10월 19일 최종 업데이트",
     2: "언어를 선택하십시오",
-    3: "알림", 4: "주의", 5: "경고",
+    3: "알림", 4: "알림", 5: "경고",
     6: "Haxball Stadium Editor를 닫을까요?",
     7: "파일을 내보내는 도중 오류가 발생하였습니다. 나중에 다시 시도하십시오.",
     8: "오브젝트의 수가 너무 많아서 저장할 수 없습니다.",
@@ -1437,8 +1515,8 @@ $.lang.ko = {
 
     // 좌측 하단부 버튼
     40: "속성",         41: "도구",
-    42: "거울 복사",    43: "미리 보기",
-    44: "Find an Object by Index",
+    42: "거울 복사",    43: "미리 보기",    44: "가운데로 이동",
+    45: "Find an Object by Index",
 
     // 경기장 이름
     50: "새 경기장",
@@ -1511,14 +1589,15 @@ $.lang.ko = {
     280: "환경 설정",               // --------------------------
     281: "언어 변경",
     282: "오브젝트 진단",
-    283: "오브젝트 목록",
+    283: "오브젝트 검색",
     284: "인터페이스",
     285: "투명 효과",
     286: "창 자유 이동",
+    287: "제한 경고 무시",
 
     // 기타
     300: "열기", 301: "저장", 302: "닫기", 303: "내보내기",
-    304: "예", 305: "아니오", 306: "취소", 307: "확인", 308: "불러오기", 309: "적용",
+    304: "예", 305: "아니오", 306: "확인", 307: "취소", 308: "불러오기", 309: "적용",
     310: "활성화", 311: "비활성화",
     315: "공", 316: "플레이어",
     317: "최소", 318: "최대",
@@ -1592,6 +1671,7 @@ $.lang.ko = {
     + newLine + "•joint_content.",
     681: "•반전 복사 기능입니다.",
     682: "•게임 플레이에 보이는 맵의 모습입니다.",
+    683: "•경기장의 현재 위치에서 원점으로 이동합니다.",
 
     700: "•오브젝트의 튕김 수준입니다.",
     701: "중력", 
@@ -1651,6 +1731,13 @@ $.lang.ko = {
     852: "•킥 상태에서의 제동입니다.",
     853: "•킥 상태에서의 강도입니다.",
     869: "•\"최대\" or \"최소\"로 지정할 수 있습니다.",
+
+    // 간단 설명
+    900: "거울 복사",
+    901: "화면을 가운데로 초점을 맞춥니다",
+    902: "경기장 미리보기",
+    903: "창 최소화",
+    904: "확장",
 
     // 도움말 세부
     1000: "소스 코드",
@@ -1795,18 +1882,27 @@ $.lang.ko = {
     2311: "•속성에서 주석을 적을 수 있는 기능이 추가되었습니다"
     + newLine + "•속성을 지울 수 있는 버튼이 추가되었습니다."
     + newLine + "•일부 디스크가 입력된 색상 값과 다르게 표시되던 문제가 수정되었습니다."
+    + newLine + "•전반적인 최적화가 개선되었습니다.",
+    // (2022.08.22) v1.25
+    2321: "•화면 위치를 가운데로 이동하는 기능이 추가되었습니다."
+    + newLine + "•마우스 좌표 창이 위로 쏠리던 문제가 수정되었습니다."
+    + newLine + "•호환성이 개선되었습니다."
+    + newLine + "•전반적인 최적화가 개선되었습니다.",
+    // (2022.10.19) v1.26
+    2331: "•사용성이 향상되었습니다."
+    + newLine + "•파일을 정상적으로 불러올 수 없으면 로딩이 멈추지 않는 문제가 수정되었습니다."
     + newLine + "•전반적인 최적화가 개선되었습니다."
 };
 //  영어
 $.lang.en = {
     // Common
     0: "HaxPuck(OFFLINE)",
-    1: "v1.24(Beta); " + newLine + "This software was updated on 10th Aug, 2022",    
+    1: "v1.26(Beta); " + newLine + "This software was updated on 19th Oct, 2022",
     2: "Select your language",
     3: "Confirm", 4: "Alert", 5: "Warning",
     6: "Are you sure want to leave HBSE?",
     7: "Error during exporting process of the file. Please try again later.",
-    8: "Failed to save the file due to too many objects!",
+    8: "Failed to save the file due to lots of objects!",
     9: "Error during importing process of the file.",
 
     // Top quick-tool
@@ -1838,8 +1934,8 @@ $.lang.en = {
 
     // 좌측 하단부 버튼
     40: "Properties",          41: "Tools",
-    42: "Automatic Mirror",    43: "Preview",
-    44: "Find an Object by Index",
+    42: "Automatic Mirror",    43: "Preview",   44: "Reposition To Center",
+    45: "Find an Object by Index",
 
     // a name of defalut stadium
     50: "New Stadium",
@@ -1912,14 +2008,15 @@ $.lang.en = {
     280: "Preferences",               // --------------------------
     281: "Change language",
     282: "Object diagnosis",
-    283: "Object List",
+    283: "Object Finder",
     284: "Windows",
     285: "Transparent Effect",
     286: "Draggable Windows",
+    287: "Ignore Limit Alert",
 
     // ETC
     300: "Open", 301: "Save", 302: "Close", 303: "Download",
-    304: "Yes", 305: "No", 306: "Cancel", 307: "OK", 308: "Open", 309: "Apply",
+    304: "Yes", 305: "No", 306: "OK", 307: "Cancel", 308: "Open", 309: "Apply",
     310: "Enable", 311: "Disable",
     315: "Ball", 316: "Player",
     317: "Partial", 318: "Full",
@@ -1993,6 +2090,7 @@ $.lang.en = {
     + newLine + "•joint_content.",
     681: "•Most edits are mirrored horizontally and vertically to help design symmetrical stadiums.",
     682: "•Preview the stadium without any invisible shapes.",
+    683: "•Move the viewport to the center from the current location of the stadium.",
 
     700: "•How much bounce an object has."
     + newLine + "•Officially, this is a number between 0 and 1. Values below 0 and above 1 can also be used with care (and haxketball nets)."
@@ -2056,6 +2154,13 @@ $.lang.en = {
     852: "•Damping while trying to kick.",
     853: "•Strength of kicks.",
     869: "•Can be set to either \"full\" or \"partial\".",
+
+    // Tooltips
+    900: "Automatic Mirror",
+    901: "Reposition the viewport to center",
+    902: "Preview the stadium",
+    903: "Minimize",
+    904: "Maximize",
 
     // Help contents
     1000: "Source Code",
@@ -2190,7 +2295,15 @@ $.lang.en = {
     + newLine + "•Added Erase buttons of properties." 
     + newLine + "•Fixed an Issue that some disc objects rendered not exactly by their colors whether any values."
     + newLine + "•Improved Overall optimization.",
-    
+    // (2022.08.22) v1.25
+    2321: "•Added the button to move the viewport to the center from the current location of the stadium."
+    + newLine + "•Fixed an Issue that mouse coordinates view placed in a wrong position."
+    + newLine + "•Improved Compatibility for some stadiums."
+    + newLine + "•Improved Overall optimization.",
+    // (2022.10.19) v1.26
+    2331: "•Enchaned and Improved UX."
+    + newLine + "•Fixed an issue could not prograss loading invalid stadiums."
+    + newLine + "•Improved Overall optimization."
 };
 
 /**
@@ -2213,6 +2326,19 @@ function setLanguage(currentLanguage){
     $("#layer_rename_title input")[0].placeholder = $.lang[getLang()][50];
     $("#layer_rename_version input")[0].placeholder = $.lang[getLang()][57];
     $("#layer_rename_memo textarea")[0].placeholder = $.lang[getLang()][58];
+
+    //  툴팁 초기화
+    $("#button_mirror_mode")[0].title               = $.lang[getLang()][900];
+    $("#pref_center")[0].title                      = $.lang[getLang()][901];
+    $("#pref_preview")[0].title                     = $.lang[getLang()][902];
+    $("#button_download")[0].title                  = $.lang[getLang()][303];
+    $("#button_load")[0].title                      = $.lang[getLang()][308];
+    $("#button_options")[0].title                   = $.lang[getLang()][140];
+    $("#button_undo")[0].title                      = $.lang[getLang()][17];
+    $("#button_redo")[0].title                      = $.lang[getLang()][18];
+    $("#button_properties_spawnDist")[0].title      = $.lang[getLang()][27];
+    $(".btn_hide").each(function(index, item) { item.title = $.lang[getLang()][903]; });
+    $(".btn_show").each(function(index, item) { item.title = $.lang[getLang()][904]; });
 }
 
 function setColorTheme(currentTheme){
@@ -2234,13 +2360,19 @@ function enableTransparentWindows(bool){
 
     sl.forEach(e => {
         let target = $('#' + e)[0].style;
+        target.backgroundColor = '#' + (bool == true ? "73885C80" : "73885C");
         target.backdropFilter = (bool == true ? "blur(8px)" : "none");
     });
     let inpt = $("#cg_lp_windows_transparent").find("input")[0];
     if(inpt.checked != bool) inpt.checked = (bool == true);
 }
 
-function enableDraggableElement(bool){
+function enableDraggableElement(bool, target){
+    if(target){
+        target.draggable({ containment: "window", disabled: false });
+        return;
+    }
+
     let el = ["titlebar", "bottomboxes"];
     
     localStorage.setItem("enable-draggable-window", (bool == true));
@@ -2253,6 +2385,13 @@ function enableDraggableElement(bool){
 
     let inpt = $("#cg_lp_windows_draggable").find("input")[0];
 
+    if(inpt.checked != bool) inpt.checked = (bool == true);
+}
+
+function disableDiagLimitAlert(bool){
+    localStorage.setItem("ignore-diagnosis-limit", (bool == true));
+
+    let inpt = $("#cg_lp_diagnosis_limitAlert").find("input")[0];
     if(inpt.checked != bool) inpt.checked = (bool == true);
 }
 
@@ -2281,10 +2420,27 @@ function initLang(){
 
 function initTheme(){
     let localDrg = localStorage.getItem("enable-draggable-window");      //  로컬 데이터 읽기
-    if(localDrg != null) enableDraggableElement(localDrg == "true");
+    if(localDrg == null){
+        localStorage.setItem("enable-draggable-window", false);
+        localDrg = "false";
+    }
+    enableDraggableElement(localDrg == "true");
 
     let localTrans = localStorage.getItem("transparent-window");      //  로컬 데이터 읽기
-    if(localTrans != null) enableTransparentWindows(localTrans == "true");
+    if(localTrans == null){
+        localStorage.setItem("transparent-window", true);
+        localTrans = "true";
+    }
+    enableTransparentWindows(localTrans == "true");
+}
+
+function initPref(){
+    let localDgnLmt = localStorage.getItem("ignore-diagnosis-limit");      //  로컬 데이터 읽기
+    if(localDgnLmt == null){
+        localStorage.setItem("ignore-diagnosis-limit", false);
+        localDgnLmt = "false";
+    }
+    disableDiagLimitAlert(localDgnLmt == "true");
 }
 
 function getLang(){
@@ -2306,12 +2462,12 @@ function load(st){
     stadium = st;
 
     if(!st.bg) st.bg = {};
-    if(!st.vertexes) st.vertexes = {};
-    if(!st.segments) st.segments = {};
-    if(!st.discs) st.discs = {};
-    if(!st.goals) st.goals = {};
-    if(!st.planes) st.planes = {};
-    if(!st.joints) st.joints = {};
+    if(!st.vertexes) st.vertexes = [];
+    if(!st.segments) st.segments = [];
+    if(!st.discs) st.discs = [];
+    if(!st.goals) st.goals = [];
+    if(!st.planes) st.planes = [];
+    if(!st.joints) st.joints = [];
     if(!st.traits) st.traits = {};
 
     field_setters = $.grep(field_setters, function(f){ return f(); });
@@ -2358,10 +2514,16 @@ function resize(){
     //cdp.height(h - header);
 
     $('#bottomboxes')[0].style.bottom = (titlebar + btmBox - cd.height()) + "px";
+    $('#mousepos')[0].style.bottom = btmBox + "px";
     if(localStorage.getItem("enable-draggable-window") == "false"){     //  btmBox 위치 정렬
     }
 
     resize_canvas();
+}
+function repositionViewport(){
+    let se = document.querySelector("#canvas_div");
+    se.scrollLeft = (se.scrollWidth - se.clientWidth) / 2;
+    se.scrollTop = (se.scrollHeight - se.clientHeight) / 2;
 }
 
 // 맵 기본값
@@ -2474,8 +2636,8 @@ function display_propertiesMenu(name){
         }
     }
     let dv = getDisplayValue(name);
-    tabTool.style.float = (dv == 'none' ? "inherit" : "right");
-    tabProp.style.display = dv;
+    //tabTool.style.float = (dv == 'none' ? "inherit" : "right");
+    //tabProp.style.display = dv;
 
     
     let inpt = $('#color')[0];
@@ -2548,7 +2710,7 @@ function add_spawnPoint(team){
         prts.find(".btn_add")[0].style.display = "none";
         return;
     }
-    //if(spawnPoints.length >= 30) return alert("full");
+    //if(spawnPoints.length >= 30) return showMsgAlert("full");
 
     let target = $(prts).find("input")[sizePnts];
     let dv = $(prts).find("div")[sizePnts];
@@ -2694,7 +2856,6 @@ function hexToRgb(hex){
     let strToDual = (n) => parseInt(n, 16);
     return result ? ("rgb" + '(' + strToDual(result[1]) + ',' + strToDual(result[2]) + ',' + strToDual(result[3]) + ')') : null;
 }
-
 
 function center_canvas(pt){
     // TODO: this functions doesn't work when the div is hidden
@@ -3019,14 +3180,16 @@ function renderbg(st, ctx){
     switch(bg.type){
         case 'hockey':
         case 'grass':
+            let cr = bg.hasOwnProperty("cornerRadius") ? bg.cornerRadius : 0;
+
             ctx.beginPath();
             
-            ctx.moveTo(-bg.width + bg.cornerRadius, -bg.height);
+            ctx.moveTo(-bg.width + cr, -bg.height);
             // TODO: this border doesn't render well in iceweasel
-            ctx.arcTo(bg.width, -bg.height, bg.width, -bg.height + bg.cornerRadius, bg.cornerRadius);
-            ctx.arcTo(bg.width, bg.height, bg.width - bg.cornerRadius, bg.height, bg.cornerRadius);
-            ctx.arcTo(-bg.width, bg.height, -bg.width, bg.height - bg.cornerRadius, bg.cornerRadius);
-            ctx.arcTo(-bg.width, -bg.height, -bg.width + bg.cornerRadius, -bg.height, bg.cornerRadius);
+            ctx.arcTo(bg.width, -bg.height, bg.width, -bg.height + cr, cr);
+            ctx.arcTo(bg.width, bg.height, bg.width - cr, bg.height, cr);
+            ctx.arcTo(-bg.width, bg.height, -bg.width, bg.height - cr, cr);
+            ctx.arcTo(-bg.width, -bg.height, -bg.width + cr, -bg.height, cr);
 
             ctx.save();
             ctx.clip();
@@ -3989,9 +4152,9 @@ function load_tile(name){
 }
 
 function color_to_style(color, def, type){
-    if(color == 'transparent') return color;    //  투명색
     if(!color) return def ? def : 'rgb(0,0,0)';
     if(color.includes("rgb")) return color.split(",").map(c => c.replace(/[^0-9]/g, ''));
+    if(color.toLowerCase() == "transparent" || color.toLowerCase() == "ffffffff") return "transparent";    //  투명색
     if(color.length == 6) return '#' + color;
     return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
 }
@@ -5907,8 +6070,10 @@ function load_file(){           // 맵 불러오기
     function processFile(file) {
         let fr = new FileReader();
         fr.onload = function(e){
-            if(input.accept.includes(file.name.split('.').reverse()[0]) == false)
-                return alert($.lang[getLang()][124] + file.name);
+            if(input.accept.includes(file.name.split('.').reverse()[0]) == false){
+                showMsgAlert($.lang[getLang()][124] + file.name);
+                return endLoading();
+            }
             let rs = e.target.result;
             let st;
             try {
@@ -5918,8 +6083,14 @@ function load_file(){           // 맵 불러오기
                 jQuery('html > head > title').text($.lang[getLang()][0] + " - " + st.name);
             }
             catch(error){        
-                alert($.lang[getLang()][9]);
+                showMsgAlert($.lang[getLang()][9]);
             }
+
+            let bp = st.hasOwnProperty("ballPhysics") ? st.ballPhysics : null;
+            if(bp == "disc0" && st.discs.length < 1){
+                st.ballPhysics = {};
+            }
+
             modified();
             let propBgc = $("#prop_bg_color").parents("div")[0];
             let spn = $(propBgc).find("input")[0];
@@ -5934,9 +6105,12 @@ function load_file(){           // 맵 불러오기
                 }
             }
             endLoading();
-            let localTrans = (localStorage.getItem("transparent-window") != "false");      //  로컬 데이터 읽기
+            let localTrans = (localStorage.getItem("transparent-window") != "false");       //  로컬 데이터 읽기
             let inputTrans = $("#cg_lp_windows_transparent").find("input")[0];
-            if(st.width * st.height >= window.innerWidth * window.innerHeight * 4){       //  파일이 크면 투명 기능 비활성화
+
+            repositionViewport();                                                           //  가운데 정렬
+
+            if(st.width * st.height >= window.innerWidth * window.innerHeight * 4){         //  파일이 크면 투명 기능 비활성화
                 if(localTrans == true) enableTransparentWindows(false);
             }
             else if(localTrans != inputTrans.checked)
@@ -5949,12 +6123,12 @@ function load_file(){           // 맵 불러오기
 function login(){
     var error = function(e){
         // TODO: log to server
-        alert('Error during login. Please try again later. (' + e + ')');
+        showMsgAlert('Error during login. Please try again later. (' + e + ')');
     }
     var username = $('#login_name').val();
     $.ajax({
         type: 'POST',
-        url: 'http://web.archive.org/web/20181129142757/http://haxpuck.com/action/login', 
+        url: 'http://haxpuck.com/action/login', 
         dataType: 'json',
         data: {
             name: username,
@@ -5968,7 +6142,7 @@ function login(){
                 set_logged_in(login.id, username);
                 hide_box();
             }else{
-                alert('unable to login: ' + login.reason);
+                showMsgAlert('unable to login: ' + login.reason);
             }
         },
         error: function(x, e){
@@ -5980,11 +6154,11 @@ function login(){
 function register(){
     var error = function(e){
         // TODO: log to server
-        alert('Error during registration. Please try again later. (' + e + ')');
+        showMsgAlert('Error during registration. Please try again later. (' + e + ')');
     }
     $.ajax({
         type: 'POST',
-        url: 'http://web.archive.org/web/20181129142757/http://haxpuck.com/action/register', 
+        url: 'http://haxpuck.com/action/register', 
         dataType: 'json',
         data: {
             name: $('#register_name').val(),
@@ -5996,10 +6170,10 @@ function register(){
             if(!registration){
                 error('empty response from server');
             }else if(registration.success){
-                alert('Registration successful. Please open the link sent to your email to confirm your registration.');
+                showMsgAlert('Registration successful. Please open the link sent to your email to confirm your registration.');
                 hide_box();
             }else{
-                alert('unable to register: ' + registration.reason);
+                showMsgAlert('unable to register: ' + registration.reason);
             }
         },
         error: function(x, e){
@@ -6021,14 +6195,14 @@ function set_logged_out(){
 }
 
 function logout(){
-    $.ajax({type: 'POST', url: 'http://web.archive.org/web/20181129142757/http://haxpuck.com/action/logout', data: {sessionid: session_id}});
+    $.ajax({type: 'POST', url: 'http://haxpuck.com/action/logout', data: {sessionid: session_id}});
     set_logged_out();
 }
 
 function check_logged_in(){
     $.ajax({
         type: 'GET',
-        url: 'http://web.archive.org/web/20181129142757/http://haxpuck.com/action/session', 
+        url: 'http://haxpuck.com/action/session', 
         dataType: 'jsonp',
         success: function(session){
             session_id = session.sessionid;
@@ -6051,7 +6225,7 @@ function save(success_continuation){
 
     var error = function(e){
         // TODO: log to server
-        alert('Error during save. Please try again later. (' + e + ')');
+        showMsgAlert('Error during save. Please try again later. (' + e + ')');
     }
     $.ajax({
         type: 'POST',
@@ -6074,7 +6248,7 @@ function save(success_continuation){
                 if(success_continuation)
                     success_continuation(result.id);
             }else{
-                alert('unable to save: ' + result.reason);
+                showMsgAlert('unable to save: ' + result.reason);
             }
         },
         error: function(x, e){
@@ -6142,7 +6316,7 @@ function library_edit(){
         return;
     
     var error = function(e){
-        alert('Error while opening stadium: ' + e);
+        showMsgAlert('Error while opening stadium: ' + e);
     }
     $.ajax({
         type: 'POST',
@@ -6177,7 +6351,7 @@ function library_delete(){
         return;
 
     var error = function(e){
-        alert('Error while deleting stadium: ' + e);
+        showMsgAlert('Error while deleting stadium: ' + e);
     }
     $.ajax({
         type: 'POST',
@@ -6204,15 +6378,20 @@ function library_delete(){
 
 function download(st){
     if(!st){ 
-        alert($.lang[getLang()][7]);
+        showMsgAlert($.lang[getLang()][7]);
         return;		//	데이터가 없는 경우
     }
     let hasOverflow = function(st){
+        //  제한 경고 무시
+        let localLimit = (localStorage.getItem("ignore-diagnosis-limit") != "false");
+        if(localLimit == true) return false;
+
+        let maxLimit = 255;
         let types = [
             'segments', 'vertexes', 'discs', 'goals', 'planes', 'joints'
         ];
         let getAlertKeyword = function(st){
-            let hasValidAmount = (prp) => prp == undefined ? true : !(prp.length > 255);
+            let hasValidAmount = (prp) => prp == undefined ? true : !(prp.length > maxLimit);
             for(let i = 0; i < types.length; i++){
                 let prop = st[types[i]];
                 if(!hasValidAmount(prop)) return 33 + i;
@@ -6226,11 +6405,11 @@ function download(st){
                 if(index >= types.length) return [];
                 return st[types[index]];
             }
-            return getProp(str).length - 255;
+            return getProp(str).length - maxLimit;
         }
         let alertKeyword = getAlertKeyword(st);
         if(!alertKeyword) return false;
-        if(alertKeyword > 0) alert($.lang[getLang()][8]
+        if(alertKeyword > 0) showMsgAlert($.lang[getLang()][8]
         +"\n" + $.lang[getLang()][123] + $.lang[getLang()][alertKeyword] + '(' + getOverflow(alertKeyword) + ')');
         return true;
     }
