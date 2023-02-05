@@ -196,7 +196,7 @@ var properties = (function(p){return {
     d1:         p(525, true, 'ref'),
     //d0:         p(524, true, 'number'),
     //d1:         p(525, true, 'number'),
-    //length:     p(526, true, 'length'),
+    length:     p(526, true, 'length'),
     strength:   p(527, true, 'strength'),
     _comment:    p(530, false, 'string')
 };})(function(name, required, type, nodefault){
@@ -208,9 +208,9 @@ var type_properties = {
     segments: ['v0', 'v1', 'bCoef', 'curve', 'curveF', 'bias', 'cMask', 'cGroup', 'vis', 'color', 'trait', '_comment'],
     planes: ['normal', 'dist', 'bCoef', 'cMask', 'cGroup', 'trait', '_comment'],
     discs: ['pos', 'speed', 'gravity', 'radius', 'invMass',  'damping', 'color', 'bCoef', 'cMask', 'cGroup', 'trait', '_comment'],
+    //joints: ['d0', 'd1', 'strength', 'color', 'trait', '_comment'],
     goals: ['p0', 'p1', 'team', '_comment'],
-    joints: ['d0', 'd1', 'strength', 'color', 'trait', '_comment'],
-    //joints: ['d0', 'd1', 'length', 'strength', 'color']
+    joints: ['d0', 'd1', 'length', 'strength', 'color']
 };
 
 // TODO: complete this table
@@ -259,6 +259,15 @@ var file = document.querySelector('#stadfile');
 // Clipboard
 var clipboard;
 
+// excepted objects sorted by props
+var exceptProps = {
+    "vertexes"  : false,
+    "segments"  : false,
+    "discs"     : false,
+    "joints"    : false,
+    "goals"     : false
+}
+
 // center of rotation and scale
 var transformation_center = [0,0];
 
@@ -286,7 +295,8 @@ var can_leave = false;
 
 // Triggers
 
-triggers = {
+//triggers = {
+var triggers = {
     select: [],
     unselect: [],
     set_tool: [],
@@ -327,6 +337,7 @@ var library = {
     query: 'public',
     initialised: false
 }
+var publicStadiums = new Array();
 
 //===== Aliases
 
@@ -369,8 +380,9 @@ $(function(){
     $('#library_button_public').click(function(){
         if(!$(this).hasClass('active')){
             $(this).addClass('active').siblings().removeClass('active');
-            library.query = 'public';
-            library_query();
+
+            //library.query = 'public';
+            //library_query();
         }
     });
 
@@ -530,7 +542,7 @@ $(function(){
         layer_popup("#layer_exit");
     });
 
-    // 공통 응답: 예
+    //  공통 응답: 예
     $("#button_yes").click(function(){
         let $dw = $(this);
         let prts = $dw.parents("div");
@@ -559,9 +571,9 @@ $(function(){
                 }, 1000 * 3);
                 break;
         }
-        close_popup('#' + title.id);
+        close_popup(`#${title.id}`);
     });
-    // 공통 응답: 아니오
+    //  공통 응답: 아니오
     $("#button_no").click(function(){
         switch(getIndexPop()){
             case 120:           // 텍스트 모드: 시각 모드
@@ -571,7 +583,7 @@ $(function(){
         }
         close_popup("#layer_exit");
     });
-    // 공통 응답: 적용
+    //  공통 응답: 적용
     $("#popups").find(".button_apply").click(function(){
         $el = $(this);
         let prts = $el.parents("div")[3];
@@ -638,12 +650,19 @@ $(function(){
         close_popup('#' + prts.id);
         modified();
     });
-    // 공통 응답: 취소
+    //  공통 응답: 확인
+    $("#button_ok").click(function(){
+        let $dw = $(this);
+        let prts = $dw.parents("div");
+        let title = prts[prts.length - 2];
+        close_popup(`#${title.id}`);
+    });
+    //  공통 응답: 취소
     $(".button_cancel").click(function(){
         let $dw = $(this);
         let prts = $dw.parents("div");
         let title = prts[prts.length - 2];
-        close_popup('#' + title.id);
+        close_popup(`#${title.id}`);
     });
 
     $("#layer_spawnDist").find('.prop').on("change", function() {  //  스폰 좌표
@@ -712,7 +731,7 @@ $(function(){
 
     // 언어 변경
     $("#button_lang").click(function(){
-        //$('#table').hide();
+        //$('#screen-layout').hide();
         //$('#dw_lang').show();
         //layer_popup($(this).attr('href'));
         layer_popup("#layer_lang");
@@ -891,7 +910,6 @@ $(function(){
                 return "diagGreat";
             }
 
-            test_me = task_prop;
             task_prop.innerText = stock + '/' + capacity;
             task_prop.className = getResult(stock, capacity);
         }
@@ -938,13 +956,13 @@ $(function(){
         let $dw = $(this);
         let prts = $dw.parents("div");
         let title = prts[prts.length - 2];
-        close_popup('#' + title.id);
+        close_popup(`#${title.id}`);
     });
     $('#popups').find('.btn_close').click(function(){
         let $dw = $(this);
         let prts = $dw.parents("div");
         let title = prts[prts.length - 2];
-        close_popup('#' + title.id);
+        close_popup(`#${title.id}`);
     });
 
     $('#button_options_close').click(function(){    //  설정 닫기
@@ -1139,25 +1157,44 @@ $(function(){
     });
 
     $('#button_mirror_mode').click(function(){
-        mirror_mode = mirror_mode ? false : true;
-        if(mirror_mode){
-            $('#button_mirror_mode').addClass('active');
-            reset_mirror_data(stadium);
-        }else{
-            $('#button_mirror_mode').removeClass('active');
-            clear_mirror_data(stadium);
-        }
+        enableMirrorMode(!mirror_mode);
     });
 
     $('#pref_preview').click(function(){
-        $('#pref_preview').toggleClass('active');
-        settings.preview = $('#pref_preview').hasClass('active');
-        queue_render();
+        enablePreview(!settings.preview);
     });
     
     $('#pref_center').click(function(){
         repositionViewport();
     });
+
+
+    $("#button_include_vertexes").click(function(){
+        let e = $("#button_include_vertexes");
+        e.toggleClass("active");
+        exceptProps.vertexes = !e.hasClass("active");
+    });
+    $("#button_include_segments").click(function(){
+        let e = $("#button_include_segments");
+        e.toggleClass("active");
+        exceptProps.segments = !e.hasClass("active");
+    });
+    $("#button_include_discs").click(function(){
+        let e = $("#button_include_discs");
+        e.toggleClass("active");
+        exceptProps.discs = !e.hasClass("active");
+    });
+    $("#button_include_joints").click(function(){
+        let e = $("#button_include_joints");
+        e.toggleClass("active");
+        exceptProps.joints = !e.hasClass("active");
+    });
+    $("#button_include_goals").click(function(){
+        let e = $("#button_include_goals");
+        e.toggleClass("active");
+        exceptProps.goals = !e.hasClass("active");
+    });
+
 
     $(".switch input").click(function(){
         let type = $(this).parents("div")[0].id;
@@ -1168,7 +1205,7 @@ $(function(){
             case "cg_pp_storeCommand":              //  저장 명령어
                 parseCanBeStored(bool);
                 break;
-            case "cg_lp_diagnosis_limitAlert":      //  (실험 기능)
+            case "cg_lp_diagnosis_limitAlert":      //  제한 경고 무시(실험 기능)
                 disableDiagLimitAlert(bool);
                 break;
             case "cg_lp_windows_transparent":       //  창 투명화(실험 기능)
@@ -1178,6 +1215,9 @@ $(function(){
             case "cg_lp_windows_draggable":         //  창 자유 이동(실험 기능)
                 enableDraggableElement(bool);
                 break;
+            case "cg_lp_expanded_cntxtMenu":        //  확장 메뉴(실험 기능)
+                enableExpandedContextMenu(bool);
+                break;
         }
     });
 
@@ -1186,47 +1226,49 @@ $(function(){
     $('#canvas').ready(function(){
         //Show contextmenu:
         $('#canvas').contextmenu(function(e){
-          //Get window size:
-          var winWidth = $(window).width();
-          var winHeight = $(window).height();
-          
-          //Get pointer position:
-          var posX = e.pageX;
-          var posY = e.pageY;
-          //Get contextmenu size:
-          var menuWidth = $(".contextmenu").width();
-          var menuHeight = $(".contextmenu").height();
-          //Security margin:
-          var secMargin = 2;
-          //Prevent page overflow:
-          if(posX + menuWidth + secMargin >= winWidth
-          && posY + menuHeight + secMargin >= winHeight){
-            //Case 1: right-bottom overflow:
-            posLeft = posX - menuWidth - secMargin + "px";
-            posTop = posY - menuHeight - secMargin + "px";
-          }
-          else if(posX + menuWidth + secMargin >= winWidth){
-            //Case 2: right overflow:
-            posLeft = posX - menuWidth - secMargin + "px";
-            posTop = posY + secMargin + "px";
-          }
-          else if(posY + menuHeight + secMargin >= winHeight){
-            //Case 3: bottom overflow:
-            posLeft = posX + secMargin + "px";
-            posTop = posY - menuHeight - secMargin + "px";
-          }
-          else {
-            //Case 4: default values:
-            posLeft = posX + secMargin + "px";
-            posTop = posY + secMargin + "px";
-          };
-          //Display contextmenu:
-          $(".contextmenu").css({
-            "left": posLeft,
-            "top": posTop
-          }).show();
-          //Prevent browser default contextmenu.
-          return false;
+            if($("#bottomboxes .contents-area")[0].style.display != "none")
+                $(".secondToolSelector").addClass("hidden");
+            //Get window size:
+            var winWidth = $(window).width();
+            var winHeight = $(window).height();
+            
+            //Get pointer position:
+            var posX = e.pageX;
+            var posY = e.pageY;
+            //Get contextmenu size:
+            var menuWidth = $(".contextmenu").width();
+            var menuHeight = $(".contextmenu").height();
+            //Security margin:
+            var secMargin = 2;
+            //Prevent page overflow:
+            if(posX + menuWidth + secMargin >= winWidth
+            && posY + menuHeight + secMargin >= winHeight){
+              //Case 1: right-bottom overflow:
+              posLeft = posX - menuWidth - secMargin + "px";
+              posTop = posY - menuHeight - secMargin + "px";
+            }
+            else if(posX + menuWidth + secMargin >= winWidth){
+              //Case 2: right overflow:
+              posLeft = posX - menuWidth - secMargin + "px";
+              posTop = posY + secMargin + "px";
+            }
+            else if(posY + menuHeight + secMargin >= winHeight){
+              //Case 3: bottom overflow:
+              posLeft = posX + secMargin + "px";
+              posTop = posY - menuHeight - secMargin + "px";
+            }
+            else {
+              //Case 4: default values:
+              posLeft = posX + secMargin + "px";
+              posTop = posY + secMargin + "px";
+            };
+            //Display contextmenu:
+            $(".contextmenu").css({
+              "left": posLeft,
+              "top": posTop
+            }).show();
+            //Prevent browser default contextmenu.
+            return false;
         });
         /*
         //Hide contextmenu:
@@ -1478,7 +1520,7 @@ $.lang = {};
 $.lang.ko = {
     // 공통
     0: "HaxPuck(오프라인)",
-    1: "v1.26(베타) " + newLine + "2022년 10월 19일 최종 업데이트",
+    1: "v1.27(베타) " + newLine + "2023년 2월 6일 최종 업데이트",
     2: "언어를 선택하십시오",
     3: "알림", 4: "알림", 5: "경고",
     6: "Haxball Stadium Editor를 닫을까요?",
@@ -1546,6 +1588,11 @@ $.lang.ko = {
     142: "초기화",
     143: "이미 작업한 내용은 저장되지 않습니다. 경기장 데이터를 모두 지우시겠습니까?",
 
+    //  라이브러리
+    200: "Date", 201: "Repository", 202: "Name",
+    203: "Public Stadiums", 204: "Saved Stadiums",
+    205: "Edit",
+
     // 경기장 속성
     220: "경기장 속성",
     221: "일반",                    // --------------------------
@@ -1594,6 +1641,7 @@ $.lang.ko = {
     285: "투명 효과",
     286: "창 자유 이동",
     287: "제한 경고 무시",
+    288: "확장 메뉴",
 
     // 기타
     300: "열기", 301: "저장", 302: "닫기", 303: "내보내기",
@@ -1737,7 +1785,7 @@ $.lang.ko = {
     901: "화면을 가운데로 초점을 맞춥니다",
     902: "경기장 미리보기",
     903: "창 최소화",
-    904: "확장",
+    904: "이전 크기로 복원",
 
     // 도움말 세부
     1000: "소스 코드",
@@ -1891,13 +1939,18 @@ $.lang.ko = {
     // (2022.10.19) v1.26
     2331: "•사용성이 향상되었습니다."
     + newLine + "•파일을 정상적으로 불러올 수 없으면 로딩이 멈추지 않는 문제가 수정되었습니다."
-    + newLine + "•전반적인 최적화가 개선되었습니다."
+    + newLine + "•전반적인 최적화가 개선되었습니다.",
+    // (2023.02.06) v1.27
+    2341: ["•오브젝트 예외 선택 기능이 추가되었습니다.",
+    "•하단 작업 표시줄이 최소화 상태에서 우클릭을 누를 때, 표시되는 작업 동작 메뉴에서 오브젝트 선택 항목이 추가되었습니다.",
+    "•특정 상황에서 상단 퀵툴이 작동되지 않던 문제가 수정되었습니다.",
+    "•전반적인 최적화가 개선되었습니다."].join(newLine)
 };
 //  영어
 $.lang.en = {
     // Common
     0: "HaxPuck(OFFLINE)",
-    1: "v1.26(Beta); " + newLine + "This software was updated on 19th Oct, 2022",
+    1: "v1.27(Beta); " + newLine + "This software was updated on 6th Feb, 2023",
     2: "Select your language",
     3: "Confirm", 4: "Alert", 5: "Warning",
     6: "Are you sure want to leave HBSE?",
@@ -1965,6 +2018,11 @@ $.lang.en = {
     142: "Reset",
     143: "All data will be lost. Are you sure want to reset the stadium?",
 
+    //  Library
+    200: "Date", 201: "Repository", 202: "Name",
+    203: "Public Stadiums", 204: "Saved Stadiums",
+    205: "Edit",
+
     // Stadium Properties
     220: "Stadium Properties",
     221: "General",                // --------------------------
@@ -2013,6 +2071,7 @@ $.lang.en = {
     285: "Transparent Effect",
     286: "Draggable Windows",
     287: "Ignore Limit Alert",
+    288: "Expand Context Menu",
 
     // ETC
     300: "Open", 301: "Save", 302: "Close", 303: "Download",
@@ -2303,7 +2362,13 @@ $.lang.en = {
     // (2022.10.19) v1.26
     2331: "•Enchaned and Improved UX."
     + newLine + "•Fixed an issue could not prograss loading invalid stadiums."
-    + newLine + "•Improved Overall optimization."
+    + newLine + "•Improved Overall optimization.",
+    // (2023.02.06) v1.27,
+    // (2023.02.06) v1.27
+    2341: ["•Added feature for object exception by type in select tool.",
+    "•Expanded context menu is now available when bottom taskbar minimized.",
+    "•Fixed an issue top quick-tool did not working.",
+    "•Improved overall optimization."].join(newLine)
 };
 
 /**
@@ -2339,6 +2404,13 @@ function setLanguage(currentLanguage){
     $("#button_properties_spawnDist")[0].title      = $.lang[getLang()][27];
     $(".btn_hide").each(function(index, item) { item.title = $.lang[getLang()][903]; });
     $(".btn_show").each(function(index, item) { item.title = $.lang[getLang()][904]; });
+    //let tl = [
+    //    "select", "rotate", "scale", "segment", "vertex", "disc", "goal", "plane", "joint"
+    //];
+    let tl = [
+        "select", "rotate", "scale", "segment", "vertex", "disc", "goal", "plane"
+    ];
+    tl.forEach(b => $("#sec_button_tool_" + b)[0].title = $.lang[getLang()][30 + tl.indexOf(b)]);
 }
 
 function setColorTheme(currentTheme){
@@ -2349,43 +2421,77 @@ function setColorTheme(currentTheme){
 }
 
 function enableTransparentWindows(bool){
-    let el = ["titlebar", "bottomboxes"];
-    let sl = ["popups"];
+    let el = ["titlebar", "bottomboxes", "layer_objl"];
+    let sl = ["popups", "box-background"];
 
     el.forEach(e => {
         let target = $('#' + e)[0].style;
         target.backgroundColor = '#' + (bool == true ? "1A2125E0" : "1A2125");
-        target.backdropFilter = (bool == true ? "blur(8px)" : "none");
+        target.backdropFilter = (bool == true ? "blur(4px)" : "none");
     });
 
     sl.forEach(e => {
         let target = $('#' + e)[0].style;
         target.backgroundColor = '#' + (bool == true ? "73885C80" : "73885C");
-        target.backdropFilter = (bool == true ? "blur(8px)" : "none");
+        target.backdropFilter = (bool == true ? "blur(4px)" : "none");
     });
     let inpt = $("#cg_lp_windows_transparent").find("input")[0];
     if(inpt.checked != bool) inpt.checked = (bool == true);
 }
-
+function enableExpandedContextMenu(bool){
+    let inpt = $("#cg_lp_expanded_cntxtMenu").find("input")[0];
+    if(inpt.checked != bool) inpt.checked = (bool == true);
+    localStorage.setItem("enable-core-context", inpt.checked);
+    if(localStorage.getItem("enable-core-context") == "true")
+        $(".secondToolSelector").removeClass("hidden");
+    else
+        $(".secondToolSelector").addClass("hidden");
+}
 function enableDraggableElement(bool, target){
     if(target){
         target.draggable({ containment: "window", disabled: false });
         return;
     }
 
-    let el = ["titlebar", "bottomboxes"];
+    let el = ["titlebar", "bottomboxes", "layer_objl"];
     
     localStorage.setItem("enable-draggable-window", (bool == true));
 
     el.forEach(e => {
         let target = $('#' + e);
-        if(bool == true) target.draggable({ containment: "window", disabled: false });
-        else target.draggable({ disabled: true });
+        if(bool == true){
+            target.draggable({ containment: "window", disabled: false});
+            target.css("position", "absolute");
+            target[0].style.bottom = "8px";
+            target[0].style.left = "";
+        }
+        else{
+            target.draggable({ disabled: true });
+            target.css("position", "relative");
+        }
     });
 
     let inpt = $("#cg_lp_windows_draggable").find("input")[0];
 
     if(inpt.checked != bool) inpt.checked = (bool == true);
+}
+function enableMirrorMode(bool){
+    mirror_mode = bool;
+    let em = $("#button_mirror_mode");
+    let st = stadium;
+    if(bool){
+        em.addClass("active");
+        reset_mirror_data(st);
+    }
+    else{
+        em.removeClass("active");
+        clear_mirror_data(st);
+    }
+}
+function enablePreview(bool){
+    $("#pref_preview").toggleClass("active");
+    settings.preview = bool;
+    queue_render();
 }
 
 function disableDiagLimitAlert(bool){
@@ -2418,6 +2524,36 @@ function initLang(){
     }
 }
 
+function initStadiums(links){
+	links.forEach(st => {
+		let isValidHttpUrl = function(str){
+			let url;
+			try{
+				url = new URL(str);
+			} catch(_){
+				return false;
+			}
+			return ["https", "http"].includes(url.protocol.replace(':', ''));
+		}
+		if(isValidHttpUrl(st)) requestStadium(st)
+	});
+}
+let requestStadium = ln => fetch(ln).then((response) => response.text()).then(res => {
+	publicStadiums.push(res);
+});
+initStadiums([
+	"https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/big.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/big_easy.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/big_hockey.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/big_rounded.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/classic.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/easy.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/hockey.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/huge.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/rounded.hbs",
+    "https://raw.githubusercontent.com/haxball/haxball-issues/master/stadiums/small.hbs"
+]);
+
 function initTheme(){
     let localDrg = localStorage.getItem("enable-draggable-window");      //  로컬 데이터 읽기
     if(localDrg == null){
@@ -2426,12 +2562,20 @@ function initTheme(){
     }
     enableDraggableElement(localDrg == "true");
 
-    let localTrans = localStorage.getItem("transparent-window");      //  로컬 데이터 읽기
+    let localTrans = localStorage.getItem("transparent-window");        //  로컬 데이터 읽기
     if(localTrans == null){
         localStorage.setItem("transparent-window", true);
         localTrans = "true";
     }
     enableTransparentWindows(localTrans == "true");
+
+    let localCntx = localStorage.getItem("enable-core-context");
+    if(localCntx == null){
+        localStorage.setItem("enable-core-context", true);
+        localCntx = "true";
+    }
+    enableExpandedContextMenu(localCntx == "true");
+    $(".secondToolSelector").addClass("hidden");
 }
 
 function initPref(){
@@ -2495,10 +2639,10 @@ function resize(){
     let header = $('#top_header').outerHeight(true);
     let titlebar = $('#titlebar').outerHeight(true);
     let btmBox = $('#bottomboxes').outerHeight(true);
-    let canvasHeight = header + titlebar + btmBox;
-    //$('#table').innerHeight(h - canvasHeight);
-    //$('#table').height(h - 35);
-    //$('#box').height(h - 126);    //  크기 조절
+    let scr = $("#screen-layout").outerHeight(true);
+    //$('#screen-layout').innerHeight(h - canvasHeight);
+    //$('#screen-layout').height(h - 35);
+    //$("#box-container").height(h - 126);    //  크기 조절
     var w = $(window).width();
     window_width = w;
     var cdp = $('#canvas_div_placeholder');
@@ -2513,10 +2657,23 @@ function resize(){
     cd.height(h - header);
     //cdp.height(h - header);
 
-    $('#bottomboxes')[0].style.bottom = (titlebar + btmBox - cd.height()) + "px";
-    $('#mousepos')[0].style.bottom = btmBox + "px";
-    if(localStorage.getItem("enable-draggable-window") == "false"){     //  btmBox 위치 정렬
+    let hdb = $("#titlebar")[0];
+    let btb = $('#bottomboxes')[0];
+    let mpb = $('#mousepos')[0];
+    let isDraggable = localStorage.getItem("enable-draggable-window") != "false";
+    btb.style.bottom = (isDraggable ? 0 : (btmBox - scr)) + "px";
+    //btb.style.bottom = (isDraggable ? "8" : (btmBox - cd.height())) + "px";
+    if(isDraggable){
+        btb.style.left = (w - $("#bottomboxes").width()) / 2;
+        hdb.style.top = (header + 2) + "px";
+        hdb.style.left = (w - $("#titlebar").width()) / 2;
     }
+    else{
+        btb.style.left = 0;
+        hdb.style.top = "2px";
+        hdb.style.left = 0;
+    }
+    mpb.style.bottom = btmBox + "px";
 
     resize_canvas();
 }
@@ -2587,10 +2744,11 @@ function new_stadium(){
 }
 
 function show_box(name){
-    $('#table').addClass('hidden');
+    $("box-background").removeClass("hidden");
+    //$("#screen-layout").addClass("hidden");
     //$('#layer_objl').addClass('hidden');
-    $('#box' + name).removeClass('hidden').siblings().addClass('hidden');
-    $('#box').removeClass('hidden');
+    $(`#box${name}`).removeClass('hidden').siblings().addClass('hidden');
+    $("#box-container").removeClass('hidden');
     $('#titlebar').hide();
     $('#tab_sub').hide();
     $('#bottomboxes').hide();
@@ -2598,9 +2756,10 @@ function show_box(name){
 }
 
 function hide_box(name){
-    $('#box').addClass('hidden');
+    $("#box-container").addClass('hidden');
     //$('#layer_objl').addClass('hidden');
-    $('#table').removeClass('hidden');
+    $("box-background").addClass("hidden");
+    //$('#screen-layout').removeClass('hidden');
     $('#titlebar').show();
     $('#tab_sub').show();
     $('#bottomboxes').show();
@@ -2670,6 +2829,15 @@ function display_window(dw, isActive){
                 break;
             case 'bottomboxes':     //  하단 작업표시줄
                 parents.style.bottom = 0;
+                if(current_tool.name == "select"){
+                    let bil = ["vertexes", "segments", "discs", "goals"];
+                    //let bil = ["vertexes", "segments", "discs", "joints", "goals"];
+                    for(let e of bil){
+                        let be = $("#button_include_" + e)[0];
+                        be.className = "btn_include" + (exceptProps[e] ? '' : " active");
+                    }
+                }
+                $(".secondToolSelector").addClass("hidden");
                 $('#mousepos').toggle();
                 $('#mouseposClone').toggle();
                 break;
@@ -2686,6 +2854,16 @@ function display_window(dw, isActive){
                 break;
             case 'bottomboxes':     //  하단 작업표시줄
                 parents.style.bottom = "36px";
+                if(current_tool.name == "select"){
+                    let bil = ["vertexes", "segments", "discs", "goals"];
+                    //let bil = ["vertexes", "segments", "discs", "joints", "goals"];
+                    for(let e of bil){
+                        let be = $("#button_include_" + e)[0];
+                        be.className = "hidden";
+                    }
+                }
+                if(localStorage.getItem("enable-core-context") == "true")
+                    $(".secondToolSelector").removeClass("hidden");
                 $('#mouseposClone').toggle();
                 $('#mousepos').toggle();
                 break;
@@ -3140,30 +3318,15 @@ function render_joint_arc(ctx, joint, arc){
     ctx.moveTo(arc.a[0], arc.a[1]);
     ctx.lineTo(arc.b[0], arc.b[1]);
 
-    if(joint.vis !== false){
-        if(selected(joint) && !settings.preview){
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = colors.selected;
-            ctx.stroke();
-        }
-        ctx.lineWidth = 3;
-        let strokeColor = color_to_style(joint.color, haxball.segment_color);
-        ctx.strokeStyle = strokeColor == 'transparent' ? haxball.segment_color : strokeColor;
+    if(selected(joint) && !settings.preview){
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = colors.selected;
         ctx.stroke();
     }
-    else if(!settings.preview){
-        if(selected(joint)){
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = colors.selected;
-            ctx.stroke();
-        }
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = colors.invisible_thick;
-        ctx.stroke();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = colors.invisible_thin;
-        ctx.stroke();
-    }
+    ctx.lineWidth = 3;
+    let strokeColor = color_to_style(joint.color, haxball.segment_color);
+    ctx.strokeStyle = strokeColor == 'transparent' ? haxball.segment_color : strokeColor;
+    ctx.stroke();
 }
 function renderbg(st, ctx){
     let bg = st.bg;
@@ -3340,6 +3503,15 @@ function handle_key(ev){
             duplicate();
             modified();
             return false;
+        case 72:    //  H
+            repositionViewport();
+            return false;
+        case 77:    //  M
+            enableMirrorMode(!mirror_mode);
+            return false;
+        case 80:    //  P
+            enablePreview(!settings.preview);
+            return false;
         case 49: // 1
         case 50: // 2
         case 51: // 3
@@ -3400,8 +3572,11 @@ var tool_select = {
     },
     down: function(pt, ev){
         var shape = under_point(stadium, pt);
-        this.shape = shape;
-        //test_me = shape;
+        if(shape == undefined)
+            this.shape = shape;
+        else if(!Object.entries(exceptProps).some(([k, v]) => shape.type == k && v == true)){
+            this.shape = shape;
+        }
         if(!shape){
             this.drag_type = 'select';
             if(!(ev.shiftKey || ev.ctrlKey)){
@@ -3409,8 +3584,8 @@ var tool_select = {
             }
         }
         else{
-            if(shape.type == 'segments'){
-                this.drag_type = 'segment';
+            if(shape.type == "segments" && exceptProps.segments == false){
+                this.drag_type = "segment";
             }
             else{
                 this.drag_type = 'move';
@@ -3420,7 +3595,8 @@ var tool_select = {
                 this.shape_selected = false;
                 if(!this.keep_others)
                     clear_selection(stadium);
-                select_shape(stadium, shape);
+                if(!Object.entries(exceptProps).some(([k, v]) => shape.type == k && v == true))
+                    select_shape(stadium, shape);
             }
             else{
                 this.shape_selected = true;
@@ -3450,10 +3626,12 @@ var tool_select = {
         if(!shape){
             select_rect(stadium, from, to);
             update_savepoint();
-        }else if(shape.type == 'segments'){
+        }
+        else if(shape.type == "segments" && exceptProps.segments == false){
             curve_segment_to_point(stadium, shape.object, to);
             modified();
-        }else{
+        }
+        else{
             if(for_selected(stadium, move_obj, from, to)){
                 update_mirrored_geometry_selected(stadium);
                 resize_canvas();
@@ -3466,13 +3644,12 @@ var tool_select = {
     dragging: function(from, to, ev){
         this.drag_from = from;
         this.drag_to = to;
-
         this.transform = (
             this.drag_type == 'move' ? transform_drag_move :
                 this.drag_type == 'segment' ? transform_drag_curve :
                 false);
         queue_render();
-        if(this.drag_type == 'select'){
+        if(this.drag_type == "select"){
             let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
             $(mpObj).text(Math.abs(from[0]-to[0])+' x '+Math.abs(from[1]-to[1]));
             return false;
@@ -3480,7 +3657,8 @@ var tool_select = {
             // bad idea
             //$('#mousepos').text('V '+(to[0]-from[0])+', '+(to[1]-from[1]));
             //return false;
-        }else if(this.drag_type == 'segment'){
+        }
+        else if(this.drag_type == "segment" && exceptProps.segments == false){
             return false;
         }
     },
@@ -3572,8 +3750,11 @@ function angle_cs_three(o, from, to){
 function set_tool(t){
     var old_tool = current_tool;
     current_tool = t;
-    $('#button_tool_'+t.name).siblings('button').removeClass('active');
-    $('#button_tool_'+t.name).addClass('active');
+    for(let b of ["#button_tool_", "#sec_button_tool_"]){
+        if(old_tool) $(b + old_tool.name).toggleClass("active");
+        $(b + t.name).siblings("button").removeClass("active");
+        $(b + t.name).addClass("active");
+    }
     $(canvas).css('cursor', t.cursor);
     t.init();
     trigger('set_tool', t, old_tool);
@@ -3586,6 +3767,16 @@ function set_tool(t){
 
     display_propertiesMenu(t.name);
     queue_render();
+    if($("#taskbar")[0].style.display == "none") return;
+    if(t.name == "select" || old_tool.name == "select"){
+        let bil = ["vertexes", "segments", "discs", "goals"];
+        //let bil = ["vertexes", "segments", "discs", "joints", "goals"];
+        let isSelectTool = t.name == "select";
+        for(let e of bil){
+            let be = $("#button_include_" + e)[0];
+            be.className = isSelectTool ? "btn_include" + (exceptProps[e] ? '' : " active") : "hidden";
+        }
+    }
 }
 
 function unselect_shape(st, shape){
@@ -3598,30 +3789,39 @@ function unselect_shape(st, shape){
             if(selected(st.vertexes[s.v1]) == 'segment')
                 shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), false);
             break;
-        /*
         case 'joints':
             var s = shape.object;
-            if(selected(st.discs[s.v0]) == 'joint')
-                shape_set_selected(Shape('discs', st.discs[s.d0], s.d0), false);
-            if(selected(st.discs[s.v1]) == 'joint')
-                shape_set_selected(Shape('discs', st.discs[s.d1], s.d1), false);
+            let n = (st.ballPhysics != "disc0" ? -1 : 0);
+            if(selected(st.discs[s.v0 + n]) == 'joint')
+                shape_set_selected(Shape('discs', st.discs[s.d0 + n], s.d0 + n), false);
+            if(selected(st.discs[s.v1 + n]) == 'joint')
+                shape_set_selected(Shape('discs', st.discs[s.d1 + n], s.d1 + n), false);
             break;
-        */
     }
 }
 
 function select_shape(st, shape){
+    if(Object.entries(exceptProps).some(([k, v]) => shape.type == k && v == true)) return;
     shape_set_selected(shape, true);
-    switch(shape.type){
-        case 'segments':
-            var s = shape.object;
+    
+    var s = shape.object;
 
+    switch(shape.type){
+        case "segments":
             //shape_set_selected(Shape('vertexes', stadium.vertexes[shape.object.v0], shape.object.v0), 'segment');
 
             if(!selected(st.vertexes[s.v0]))
                 shape_set_selected(Shape('vertexes', st.vertexes[s.v0], s.v0), 'segment');
             if(!selected(st.vertexes[s.v1]))
                 shape_set_selected(Shape('vertexes', st.vertexes[s.v1], s.v1), 'segment');
+            break;
+        case "joints":
+            //shape_set_selected(Shape("discs", stadium.discs[shape.object.d0], shape.object.d0), "joint");
+            let n = (st.ballPhysics != "disc0" ? -1 : 0);
+            if(!selected(st.discs[s.d0 + n]))
+                shape_set_selected(Shape("discs", st.discs[s.d0 + n], s.d0 + n), "joint");
+            if(!selected(st.discs[s.d1 + n]))
+                shape_set_selected(Shape("discs", st.discs[s.d1 + n], s.d1 + n), "joint");
             break;
     }
 }
@@ -3728,7 +3928,6 @@ function under_point(st, pt, type){
         if(obj) return Shape('planes', obj, index);
     }
 
-    /*
     if(!type || type == 'joint'){
         eachRev(st.joints, function(i, joint){
             if(joint_contains(st, joint, pt, maximum_click_distance)){
@@ -3739,7 +3938,6 @@ function under_point(st, pt, type){
         });
         if(obj) return Shape('joints', obj, index);
     }
-    */
     
 }
 
@@ -3800,13 +3998,14 @@ function select_rect(st, a, b){
     var count = 0;
     // Segments after vertexes
     for_all_shapes(st, ['vertexes', 'goals', 'discs', 'segments', 'joints'], function(shape){
+        if(Object.entries(exceptProps).some(([k, v]) => shape.type == k && v == true)) return;
         var obj = shape.object;
         var o = complete(st, obj);
         switch(shape.type){
         case 'vertexes':
             if(rectangle_contains(a, b, [o.x, o.y])){
                 shape_set_selected(shape, true);
-                count ++;
+                count++;
             }
             break;
 
@@ -3814,7 +4013,7 @@ function select_rect(st, a, b){
             if(rectangle_contains(a, b, o.p0) &&
                rectangle_contains(a, b, o.p1)){
                 shape_set_selected(shape, true);
-                count ++;
+                count++;
             }                    
             break;
 
@@ -3827,24 +4026,22 @@ function select_rect(st, a, b){
                !near(p[1], a[1], r) &&
                !near(p[1], b[1], r)){
                 shape_set_selected(shape, true);
-                count ++;
+                count++;
             }
             break;
 
         case 'segments':
             if(selected(st.vertexes[o.v0]) && selected(st.vertexes[o.v1])){
                 shape_set_selected(shape, true);
-                count ++;
+                count++;
             }
             break;
-        /*
         case 'joints':
             if(selected(st.discs[o.d0 - 1]) && selected(st.discs[o.d1 - 1])){
                 shape_set_selected(shape, true);
                 count++;
             }
             break;
-        */
         }
     });
 
@@ -4002,10 +4199,7 @@ function add_joint(st, from, to, no_mirror){
 
     var obj = {
         d0: a.index + 1,    //  버그
-        d1: b.index + 1,
-        //length: null,
-        //strength: "rigid",
-        //color: "000000"
+        d1: b.index + 1
     };
 
     obj = $.extend({}, get_props_for_type('joints'), obj);
@@ -4061,6 +4255,7 @@ function add_vertex(st, pt, no_mirror){
     obj = $.extend({}, get_props_for_type('vertexes'), obj);
 
     st.vertexes.push(obj);
+
     var shape = Shape('vertexes', obj, st.vertexes.length - 1);
 
     if(mirror_mode && !no_mirror){
@@ -4182,7 +4377,6 @@ function segment_arc(st, segment){
 
 function joint_arc(st, joint){
     var jnt = joint_points(st, joint);
-
     var arc = data(joint, 'arc');
 
     if(arc && (arc.a[0] == jnt.a[0]) && (arc.a[1] == jnt.a[1]) &&
@@ -4497,7 +4691,7 @@ function segment_points(st, segment){
 
 function joint_points(st, joint){
     let hasDiscZero = (st.ballPhysics == "disc0");
-    let getValidPos = target => target.pos !== undefined ? target.pos : [0, 0];
+    let getValidPos = t => t == undefined || t.hasOwnProperty("pos") == false ? [0, 0] : t.pos;
     var a = joint.d0 < 1 && hasDiscZero == false ? st.ballPhysics : st.discs[joint.d0 - (hasDiscZero ? 0 : 1)];
     var b = joint.d1 < 1 && hasDiscZero == false ? st.ballPhysics : st.discs[joint.d1 - (hasDiscZero ? 0 : 1)];
     let pa = getValidPos(a), pb = getValidPos(b);
@@ -4583,36 +4777,56 @@ function redo(){
 }
 
 function delete_selected(st){
-    var vertex_del_log = [];
-    var count = 0;
+    let vertex_del_log  = [];
+    let disc_del_log    = [];
+    let count = 0;
     // delete segments BEFORE vertices
-    $.each(['segments', 'vertexes', 'goals', 'discs', 'planes', 'joints'], function(i, name){
+    $.each(['segments', 'vertexes', 'goals', 'joints', 'discs', 'planes'], function(i, name){
         var group = st[name];
          if(group){
             st[name] = $.grep(group, function(obj, i){
                 var del = selected(obj) === true; // possibly 'segment'
-                if(name == 'segments'){
-                    var a = st.vertexes[obj.v0];
-                    var b = st.vertexes[obj.v1];
-                    if(!del){
-                        if(selected(a) === true || selected(b) === true){
-                            del = true;
+                switch(name){
+                    case "segments":
+                        let va = st.vertexes[obj.v0];
+                        let vb = st.vertexes[obj.v1];
+
+                        if(!del){
+                            if(selected(va) === true || selected(vb) === true){
+                                del = true;
+                            }
                         }
-                    }
-                    if(del){
-                        if(selected(a) == 'segment'){
-                            shape_set_selected(Shape('vertexes', a, obj.v0),false);
+                        if(del){
+                            if(selected(va) == "segment") shape_set_selected(Shape("vertexes", va, obj.v0), false);
+                            if(selected(vb) == "segment") shape_set_selected(Shape("vertexes", vb, obj.v1), false);
                         }
-                        if(selected(b) == 'segment'){
-                            shape_set_selected(Shape('vertexes', b, obj.v1),false);
+                        break;
+                    case "joints":
+                        let n = (st.ballPhysics != "disc0" ? -1 : 0);
+                        let da = st.discs[obj.d0 + n];
+                        let db = st.discs[obj.d1 + n];
+
+                        if(!del){
+                            if(selected(da) === true || selected(db) === true){
+                                del = true;
+                            }
                         }
-                    }
+                        if(del){
+                            if(selected(da) == "joint") shape_set_selected(Shape("discs", da, obj.d0 + n), false);
+                            if(selected(db) == "joint") shape_set_selected(Shape("discs", db, obj.d1 + n), false);
+                        }
+                        break;
                 }
                 if(del){
-                    if(name == 'vertexes'){
-                        vertex_del_log.push(i);
+                    switch(name){
+                        case "vertexes":
+                            vertex_del_log.push(i);
+                            break;
+                        case "discs":
+                            disc_del_log.push(i);
+                            break;
                     }
-                    count ++;
+                    count++;
                     obj._deleted = true;
                     return false;
                 }
@@ -4621,6 +4835,7 @@ function delete_selected(st){
         }
     });
     fix_segments(st, vertex_del_log);
+    fix_joints(st, disc_del_log);
     resize_canvas();
     reset_selection();
     return count;
@@ -4636,7 +4851,7 @@ function fix_segments(st, vertex_del_log){
     for(var i = 0; i <= sz; i++){
         if(i == vertex_del_log[0]){
             vertex_del_log.shift();
-            diff ++;
+            diff++;
             new_index.push(false);
         }else{
             new_index.push(i - diff);
@@ -4645,6 +4860,27 @@ function fix_segments(st, vertex_del_log){
     $.each(st.segments, function(i, segment){
         segment.v0 = new_index[segment.v0];
         segment.v1 = new_index[segment.v1];
+    });
+}
+function fix_joints(st, disc_del_log){
+    if(disc_del_log.length === 0){
+        return;
+    }
+    var new_index = [];
+    var diff = 0;
+    var sz = st.discs.length + disc_del_log.length;
+    for(var i = 0; i <= sz; i++){
+        if(i == disc_del_log[0]){
+            disc_del_log.shift();
+            diff++;
+            new_index.push(false);
+        }else{
+            new_index.push(i - diff);
+        }
+    }
+    $.each(st.joints, function(i, joint){
+        joint.d0 = new_index[joint.d0];
+        joint.d1 = new_index[joint.d1];
     });
 }
 
@@ -4731,7 +4967,6 @@ var tool_plane = {
     moving: function(pt, ev){
         this.mouse_pos = pt;
         let mpObj = '#' + ($('#mouseposClone')[0].style.display != 'none' ? 'mouseposClone' : 'mousepos');
-        //test_me = mpObj;
         $(mpObj).text(pt[0] + ', ' + pt[1] + '; ' + Math.round(angle_to(pt, [0,0])/Math.PI*180)+'°');
         queue_render();
         return false;
@@ -4981,30 +5216,33 @@ function height_plane_point(st, plane, pt){
 }
 
 function add_tool(tool){
-    $('#button_tool_'+tool.name).click(function(){
-        switch(tool.name){
-            case "select":
-                //$('#layer_objl').removeClass('hidden');
-                break;
-            case "rotate":
-            case "scale":
-            case "segment":
-            case "vertex":
-            case "joint":
-            case "disc":
-            case "goal":
-            case "plane":
-                //$('#layer_objl').addClass('hidden');
-                break;
-        }
-        set_tool(tool);
-    });
+    for(let b of ["#button_tool_", "#sec_button_tool_"]){
+        $(b + tool.name).click(function(){
+            switch(tool.name){
+                case "select":
+                    //$('#layer_objl').removeClass('hidden');
+                    break;
+                case "rotate":
+                case "scale":
+                case "segment":
+                case "vertex":
+                case "joint":
+                case "disc":
+                case "goal":
+                case "plane":
+                    //$('#layer_objl').addClass('hidden');
+                    break;
+            }
+            set_tool(tool);
+        });
+    }
 }
 
 function select_all(test){
     if(!test)
         test = function(){ return true; };
     for_all_shapes(stadium, function(shape){
+        if(Object.entries(exceptProps).some(([k, v]) => shape.type == k && v == true)) return;
         shape_set_selected(shape, test(shape));
     });
     queue_render();
@@ -5068,7 +5306,6 @@ function resize_canvas(){
 
     canvas_rect = rect;
     var wh = { width: rect[2] - rect[0], height: rect[3] - rect[1]};
-    //test_me = wh;
     $(canvas).attr(wh);
     $(canvas).css(wh);
 
@@ -5393,10 +5630,6 @@ function get_prop_val(prop, def){
     var type = properties[prop].type;
     var val = inp.val();
     switch(type){
-        case 'point':
-            var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)[,;] ?(-?[0-9]+(\.[0-9]+)?)$/);
-            if(m) return [parseFloat(m[1]), parseFloat(m[3])];
-            break;
         case 'number':
             var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)$/);
             if(m) return parseFloat(m[1]);
@@ -5404,7 +5637,21 @@ function get_prop_val(prop, def){
         case 'color':
             //var m = val.match(/^[A-Z0-9]{6}$/i);
             //if(m) return m[0];
-            //test_me = def;
+            //var m = val.match(/\[(\d{1,3}), (\d{1,3}), (\d{1,3})\]/);
+            //var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)[,;] ?(-?[0-9]+(\.[0-9]+)?)[,;] ?(-?[0-9]+(\.[0-9]+)?)$/);
+            let hasVaildRange = function(n){
+                if(n > 255) return 255;
+                if(n < 0) return 0;
+                if(!Number.isInteger(n)) return -1;
+                return n;
+            }
+            /*
+            if(m != null){
+                let rgb = m.slice(1).map(n => parseInt(n));
+                if(!rgb.some(n => hasVaildRange(n) == -1)) return rgb;
+            }
+            */
+
             var m = parseColorExt(val);
             if(m != '') return m;
             break;
@@ -5422,11 +5669,15 @@ function get_prop_val(prop, def){
             if(good) return layers;
             break;
         case 'length':
+            //if(val == null) return val;   //  not working on null value
             var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)$/);
             if(m) return parseFloat(m[1]);
+        case 'point':
+            var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)[,;] ?(-?[0-9]+(\.[0-9]+)?)$/);
+            if(m) return [parseFloat(m[1]), parseFloat(m[3])];
             break;
         case 'strength':
-            if(val == 'rigid') return val[0];
+            if(val == 'rigid') return val;
             var m = val.match(/^(-?[0-9]+(\.[0-9]+)?)$/);
             if(m) return parseFloat(m[1]);
             break;
@@ -5696,15 +5947,27 @@ function clone_selected(st){
     for_all_shapes(st, function(shape){
         if(selected(shape.object)){
             snip.shapes.push(shape_clone(shape));
-            if(shape.type == 'segments'){
-                var a = st.vertexes[shape.object.v0];
-                if(!selected(a)){
-                    snip.shapes.push(shape_clone(Shape('vertexes', a, shape.object.v0)));
-                }
-                var b = st.vertexes[shape.object.v1];
-                if(!selected(b)){
-                    snip.shapes.push(shape_clone(Shape('vertexes', b, shape.object.v1)));
-                }
+            switch(shape.type){
+                case "segments":
+                    let va = st.vertexes[shape.object.v0];
+                    if(!selected(va)){
+                        snip.shapes.push(shape_clone(Shape("vertexes", va, shape.object.v0)));
+                    }
+                    let vb = st.vertexes[shape.object.v1];
+                    if(!selected(vb)){
+                        snip.shapes.push(shape_clone(Shape("vertexes", vb, shape.object.v1)));
+                    }
+                    break;
+                case "joints":
+                    let da = st.discs[shape.object.d0];
+                    if(!selected(da)){
+                        snip.shapes.push(shape_clone(Shape("discs", da, shape.object.d0)));
+                    }
+                    let db = st.discs[shape.object.d1];
+                    if(!selected(db)){
+                        snip.shapes.push(shape_clone(Shape("discs", db, shape.object.d1)));
+                    }
+                    break;
             }
         }
     });
@@ -5715,27 +5978,39 @@ function import_snippet(st, snip){
     if(!snip)
         return;
     clear_selection(st);
-    var svl = st.vertexes.length;
-    var newi = {};
+    let svl = st.vertexes.length;
+    let sdl = st.discs.length;
+    let newi = {};
     $.each(snip.shapes, function(i, shape){
         var index = st[shape.type].length;
         var copy = $.extend(true, {}, shape.object);
-        if(shape.type == 'vertexes'){
-            if(!(shape.index in newi)){
-                newi[shape.index] = svl++;
-            }
-            index = newi[shape.index];
-        }else if (shape.type == 'segments'){
-            var v0 = copy.v0;
-            var v1 = copy.v1;
+        switch(shape.type){
+            case "vertexes":
+                if(!(shape.index in newi)){
+                    newi[shape.index] = svl++;
+                }
+                index = newi[shape.index];
+                break;
+            case "segments":
+                let v0 = copy.v0;
+                let v1 = copy.v1;
 
-            if(!(v0 in newi))
-                newi[v0] = svl++;
-            copy.v0 = newi[v0];
-            
-            if(!(v1 in newi))
-                newi[v1] = svl++;
-            copy.v1 = newi[v1];
+                if(!(v0 in newi)) newi[v0] = svl++;
+                copy.v0 = newi[v0];
+                
+                if(!(v1 in newi)) newi[v1] = svl++;
+                copy.v1 = newi[v1];
+                break;
+            case "joints":
+                let d0 = copy.d0;
+                let d1 = copy.d1;
+
+                if(!(d0 in newi)) newi[d0] = sdl++;
+                copy.d0 = newi[d0];
+                
+                if(!(d1 in newi)) newi[d1] = sdl++;
+                copy.d1 = newi[d1];
+                break;
         }
         st[shape.type][index] = copy;
         shape_set_selected(Shape(shape.type, st[shape.type][index], index), true);
@@ -5745,7 +6020,6 @@ function import_snippet(st, snip){
 function eachRev(l, f){
     var n = l.length;
     if(!n) return;
-    //test_me = n;
     $.each(l.slice().reverse(), function(i, v){
         return f(n-i-1, v);
     });
@@ -5753,7 +6027,7 @@ function eachRev(l, f){
 
 function set_selection_range(el, start, end){
 
-    /* https://github.com/furf/jquery-textselection/blob/master/Selection-1.0.js */
+    /* https://github.com/furf/jquery-textselection/master/Selection-1.0.js */
     
     var value, range;
 
@@ -5866,7 +6140,6 @@ function reset_mirror_data(st){
                     }
                 });
                 break;
-            /*
             case 'joints':
                 var d0 = st.discs[sh1.object.d0 - 1];
                 var d1 = st.discs[sh1.object.d1 - 1];
@@ -5882,7 +6155,6 @@ function reset_mirror_data(st){
                     }
                 });
                 break;
-                */
             }
         });
     });

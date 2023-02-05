@@ -184,8 +184,8 @@ a:hover {
     height: auto;
     background: #1A2125E0;
     border: 1px solid #2F3C43;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     box-shadow: 0 0 2px #1A2125;
     border-radius: 10px;
     margin: 0;
@@ -269,8 +269,13 @@ a:hover {
 }
 
 .headerDiv {
-    display: table-row-group;
+    display: flex-root;
     z-index: 10;
+}
+.contents-area {
+    display: table;
+    background: #1A2125;
+    border-radius: 8px;
 }
 
 ul.menu {
@@ -308,7 +313,6 @@ ul.menu li a:visited {
 
 #taskbar {
     display: table;
-    border-top: 1px solid #222C31;
 }
 
 #topbox, #leftbox, #rightbox {
@@ -321,13 +325,28 @@ ul.menu li a:visited {
     display: table-row;
 }
 
+#box-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#box-background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #73885C80;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
 #box {
     width: 50vw;
     min-width: 900px;
     background: #1A2125;
     border: 1px solid #2F3C43;
     border-radius: 8px;
-    margin: 16px auto;
+    margin: 36px auto;
     padding: 0 2px;
     justify-content: center;
     position: relative;
@@ -349,7 +368,7 @@ ul.menu li a:visited {
     width: 100%;
 }
 
-#table {
+#screen-layout {
     width: 100%;
     height: 100%;
     top: 0;
@@ -361,16 +380,16 @@ ul.menu li a:visited {
     height: 104px;
     */
     position: relative;
+    display: table;
     padding: 0 2px;
     margin: 20px auto;
     border: 1px solid #2F3C43;
     border-radius: 8px;
-    display: table;
     justify-content: center;
     z-index: 8;
     background-color: #1A2125E0;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     box-shadow: 0 0 2px #1A2125;
 }
 
@@ -449,8 +468,8 @@ ul.menu li a:visited {
     position: absolute;
     top: 0;
     background-color: #73885C80;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 10;
 }
 #layer_sp_pointsRed, #layer_sp_pointsBlue {
@@ -524,6 +543,11 @@ button.btn_act, button.btn_show, button.btn_hide, button.btn_close {
 #button_properties_spawnDist {
     position: absolute;
     right: 0;
+}
+#button_include_vertexes,
+#button_include_segments,
+#button_include_discs {
+    float: right;
 }
 
 button.prop_erase {
@@ -634,8 +658,8 @@ details > ul {
     justify-content: center;
     margin: 8px auto;
     background-color: #1A2125E0;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     box-shadow: 0 0 2px #1A2125;
     padding: 2px;
     border: 1px solid #2F3C43;
@@ -890,8 +914,11 @@ textarea:focus {
     width: 120px;
     min-height: 24px;
     background-color: #1A2125E0;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     box-shadow: 0 0 2px #1A2125;
     color: rgb(197, 197, 197);
     border: 1px solid #222C31;
@@ -1129,6 +1156,16 @@ div.spinptArea {
     border-left: 3px solid #222C31;
     border-radius: 0;
 }
+.secondToolSelector {
+    display: table;
+    background: #3A4952;
+    padding: 0 0 8px 0;
+    margin: 4px;
+    border-radius: 4px;
+}
+.secondToolSelector.hidden {
+    display: none;
+}
 .color_preview {
     width: 16px;
     height: 16px;
@@ -1192,7 +1229,7 @@ input.color_palette {
     height: 32px;
 }
 
-#right_tabs button.active {
+#right_tabs button.active, .secondToolSelector .btn_toggle.active {
     background: #244967;
     border: 2px dotted #6A747C;
 }
@@ -1270,6 +1307,10 @@ body.logged-out .valid-user {
     background: #a05451;
 }
 
+#library_list {
+    display: flex;
+}
+
 #library_list tr.active {
     background: #705451;
 }
@@ -1280,35 +1321,47 @@ body.logged-out .valid-user {
 }
 
 #librarytable {
-    display: table;
-    margin-left: 5%;
-    margin-right: 5%;
-    width: 90%;
+    width: 100%;
+    height: 90%;
+    border-radius: 8px;
+    margin: auto;
+    overflow: auto;
 }
 
 /*#boxlibrary, #boxlibrary * {border: 1px solid red;}*/
 
 #librarytop {
-    display: table-row-group;
-    float: right;
+    margin: 4px 0;
 }
-
-#libraryright {
-    border: 2px solid black;
-    float: right;
-}
-
-#libraryleft {
-    width: 1%;
+#library_button_public, #library_button_saved {
     float: left;
 }
-#libraryleft, #libraryright {
-    display: table-row;
+#button_library_new, #button_library_edit, #button_library_delete {
+    float: right;
+}
+
+#librarybottom {
+    height: 80vh;
+    min-height: 600px;
+    display: flex;
+    position: relative;
+    border: 2px solid #2F3C43;
+    border-radius: 8px;
+    background: #111619;
+    color: #c5c5c5;
+    font-size: 15px;
+    caret-color: #00a2ff;
+    margin: 0 4px;
+    padding: 0 2px;
+    line-height: 20px;
+}
+#library_list_header {
+    display: flex;
     width: 100%;
 }
 
-#libraryright table {
-    width: 100%;
+#librarybottom pre {
+    display: table;
 }
 
 #boxlibrary.owner button.owner {
@@ -1320,12 +1373,18 @@ body.logged-out .valid-user {
 }
 
 
-button.btn_toggle, button.btn_add, button.btn_del {
+button.btn_toggle, button.btn_add, button.btn_del, button.btn_include {
     margin: 2px;
     width: 32px;
     height: 32px;
     background: #3A4952;
     border: 2px solid #3A4952;
+}
+button.btn_include {
+    background: #523B3A;
+    border: 2px solid #796464;
+    border-radius: 16px;
+    float: right;
 }
 button.btn_add, button.btn_del {
     width: 24px;
@@ -1343,7 +1402,11 @@ button.btn_del {
 }
 button.btn_toggle:hover, button.btn_add:hover {
     background: #6A747C;
-    border: 2px solid #1A2125;
+    border: 2px solid #ffffff;
+}
+button.btn_include:hover {
+    background: #3a4252;
+    border: 2px dotted #ffffff;
 }
 button.prop_erase:active {
     background: #5A1D1D;
@@ -1352,8 +1415,12 @@ button.btn_toggle.active {
     background: #6A747C;
     border: 2px dotted #FFFFFF;
 }
+button.btn_include.active {
+    background: #3a4252;
+    border: 2px solid #646b79;
+}
 
-.btn_toggle img {
+.btn_toggle img, .btn_include img {
     height: 16px;
     width: 16px;
     float: none;
@@ -1456,13 +1523,11 @@ button.btn_toggle.active {
     font-weight: 550;
     font-size: 1rem;
     text-align: center;
-    background: #1A2125;
-    border: 3px solid #222C31;
+    background: #3A4952;
     border-radius: 8px;
-    border-top: 0;
-    top: -5px;
-    padding: 5px;
-    padding-top: 10px;
+    padding: 4px;
+    margin: 2px 0 12px 0;
+    padding-top: 8px;
     position: relative;
     float: initial;
 }
@@ -1492,6 +1557,17 @@ button.btn_toggle.active {
 #popups .prop_element_title {
     font-size: 1.2rem;
     border: 0;
+}
+#librarybottom .prop_element {
+    margin: 2px 1px;
+}
+#librarybottom .prop_element_title {
+    display: flex;
+    position: relative;
+    padding: 4px 12px;
+    background: #3A4952;
+    border: none;
+    border-radius: 4px;
 }
 
 .prop_help {
